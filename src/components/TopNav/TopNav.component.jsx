@@ -6,8 +6,10 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import FormControl from 'react-bootstrap/FormControl';
 
+import './TopNav.styles.scss';
+
 export const TopNav = (props) => (
-  <Navbar bg="light" expand="lg">
+  <Navbar className="navigation" bg="#2e7d32" variant="dark" expand="lg">
     <Navbar.Brand href="#home">T</Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">

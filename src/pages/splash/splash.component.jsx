@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 
 import './splash.styles.scss';
 
-export const Splashpage = (props) => (
+const Splashpage = (props) => (
   <Container fluid>
     <Row>
       <Col>
@@ -21,3 +21,5 @@ export const Splashpage = (props) => (
     </Row>
   </Container>
 );
+
+export default Splashpage;

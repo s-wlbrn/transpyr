@@ -2,6 +2,10 @@ import React from 'react';
 
 import { LocationButton } from './components/LocationButton/LocationButton.component';
 import { FilterMenu } from './components/FilterMenu/FilterMenu.component';
+import { EventList } from './components/EventList/EventList.component';
+import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
+
+import { calculateEventInfo } from '../../libs/calculateEventInfo';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -12,10 +16,30 @@ import './homepage.styles.scss';
 class Homepage extends React.Component {
   constructor(props) {
     super();
-    this.state = {};
+    this.state = {
+      events: [],
+    };
+  }
+
+  componentDidMount() {
+    fetch('http://localhost:3000/api/events?sort=date')
+      .then((response) => response.json())
+      .then((data) => {
+        return data.data.data.map((el) => calculateEventInfo(el));
+      })
+      .then((events) => {
+        this.setState({ events });
+      });
   }
 
   render() {
+    const { events } = this.state;
+    const eventDisplay = events.length ? (
+      <EventList events={events} />
+    ) : (
+      <LoadingResource resource="events" />
+    );
+
     return (
       <Container>
         <Row>
@@ -35,6 +59,9 @@ class Homepage extends React.Component {
           <Col>
             <FilterMenu />
           </Col>
+        </Row>
+        <Row>
+          <Col>{eventDisplay}</Col>
         </Row>
       </Container>
     );

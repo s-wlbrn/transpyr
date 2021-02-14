@@ -25,5 +25,4 @@ yarn-error.log*
 .prettierrc
 .eslintcache
 
-reportWebVitals.js
 setupTests.js

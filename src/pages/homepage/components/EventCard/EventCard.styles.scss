@@ -1,0 +1,57 @@
+.event-card {
+  height: 6.5rem;
+  border-bottom: 1px solid black;
+
+  & div {
+    //border-top: 1px solid black;
+
+    p {
+      padding: 0;
+      margin: 0;
+
+      &:first-child {
+        padding-top: 1rem;
+      }
+    }
+
+    img {
+      // float: left;
+      width: 75px;
+      margin-top: 1rem;
+    }
+
+    &:nth-child(2) {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+
+    &:nth-child(3) {
+      padding-left: 0.5rem;
+
+      .price {
+        color: #00701a;
+        font-weight: bold;
+      }
+
+      .icons {
+        width: 90%;
+        padding-right: 15px;
+        position: absolute;
+        bottom: 1rem;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      div {
+        padding: 0;
+      }
+
+      p {
+        width: 100%;
+        text-align: center;
+      }
+
+      text-align: center;
+    }
+  }
+}
