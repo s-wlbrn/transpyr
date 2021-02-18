@@ -1,15 +1,18 @@
-.error {
-  position: absolute;
-  top: 10rem;
-  width: 100%;
-  text-align: center;
+.error-page {
+  .error {
+    position: absolute;
+    top: 10rem;
+    width: 100%;
+    text-align: center;
 
-  h1 {
-    color: #00701a;
-  }
+    h1 {
+      color: #00701a;
+      font-weight: bold;
+    }
 
-  &.error-message,
-  h2 {
-    font-size: 1.25em;
+    &.error-message,
+    h2 {
+      font-size: 1.25em;
+    }
   }
 }

@@ -18,8 +18,13 @@ export const calculateEventInfo = (event) => {
   let priceDisplay = prices[0] ? `$${prices[0]}` : 'Free';
   if (prices.pop() > prices[0]) priceDisplay += '+';
 
+  const dateStartObj = new Date(event.dateStart);
+  const dateEndObj = new Date(event.dateEnd);
+
   const updatedEvent = {
     ...event,
+    dateStart: dateStartObj,
+    dateEnd: dateEndObj,
     capacity: totalCapacity,
     online: isOnline,
     price: priceDisplay,

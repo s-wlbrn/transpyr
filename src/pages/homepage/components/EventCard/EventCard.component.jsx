@@ -7,18 +7,19 @@ import { IoHeartOutline } from 'react-icons/io5';
 import { IoHeart } from 'react-icons/io5';
 import { IoShareSocial } from 'react-icons/io5';
 
+import { EventStartDateShort } from '../../../../components/EventStartDateShort/EventStartDateShort.component';
+
 import './EventCard.styles.scss';
 
 export const EventCard = (props) => {
-  const { name, date, price } = props.event;
-  const formattedDate = new Date(date).toLocaleDateString();
+  const { name, dateStart, price } = props.event;
   return (
     <Row className="event-card">
       <Col xs={3}>
         <img src="/default.jpg" alt={name} />
       </Col>
-      <Col xs={6}>
-        <p>{formattedDate}</p>
+      <Col className="event-card-name-date" xs={6}>
+        <EventStartDateShort dateStart={dateStart} />
         <p>{name}</p>
       </Col>
       <Col xs={3}>
