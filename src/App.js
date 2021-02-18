@@ -9,9 +9,7 @@ import Homepage from './pages/homepage/homepage.component';
 import EventDetailsPage from './pages/event-details-page/event-details-page.component';
 import ErrorPage from './pages/error-page/error-page.component';
 
-import { Content } from './components/Content/Content.component';
 import { TopNav } from './components/TopNav/TopNav.component';
-
 import { Footer } from './components/Footer/Footer.component';
 
 function App() {
