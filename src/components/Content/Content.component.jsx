@@ -1,7 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import "./Content.styles.scss";
+import Container from 'react-bootstrap/Container';
+
+import './Content.styles.scss';
 
 export const Content = (props) => (
-  <section className="content">{props.children}</section>
+  <Container as="main" className="content" fluid>
+    {props.children}
+  </Container>
 );

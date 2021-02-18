@@ -1,5 +1,12 @@
 @import '~bootstrap/scss/bootstrap';
 
+main.container-fluid {
+  position: relative;
+  min-height: calc(100vh - 56px);
+  margin: 0;
+  padding: 0;
+}
+
 .app {
   height: 100%;
 }

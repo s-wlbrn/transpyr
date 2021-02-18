@@ -18,16 +18,14 @@ function App() {
   return (
     <div className="app">
       <TopNav />
-      <Content>
-        <Switch>
-          <Route exact path="/" component={Splashpage} />
-          <Route exact path="/events" component={Homepage} />
-          <Route exact path="/events/:id" component={EventDetailsPage} />
-          <Route path="*">
-            <ErrorPage code="404" message="Page not found." />
-          </Route>
-        </Switch>
-      </Content>
+      <Switch>
+        <Route exact path="/" component={Splashpage} />
+        <Route exact path="/events" component={Homepage} />
+        <Route exact path="/events/:id" component={EventDetailsPage} />
+        <Route path="*">
+          <ErrorPage code="404" message="Page not found." />
+        </Route>
+      </Switch>
       <Footer />
     </div>
   );

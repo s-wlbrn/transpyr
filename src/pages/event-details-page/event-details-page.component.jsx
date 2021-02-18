@@ -8,6 +8,8 @@ import { handleHTTPError } from '../../libs/handleHTTPError';
 import { EventDetails } from './components/EventDetails.component';
 import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
 
+import Container from 'react-bootstrap/Container';
+
 import './event-details-page.styles.scss';
 
 class EventDetailsPage extends React.Component {
@@ -29,9 +31,10 @@ class EventDetailsPage extends React.Component {
         return calculateEventInfo(data.data.data);
       })
       .then((eventData) => {
+        console.log(eventData);
         this.setState({
           event: {
-            details: eventData,
+            ...eventData,
           },
         });
       })
@@ -55,7 +58,11 @@ class EventDetailsPage extends React.Component {
     ) : (
       <ErrorPage {...error} />
     );
-    return <React.Fragment>{eventDisplay}</React.Fragment>;
+    return (
+      <Container as="main" className="event-details-page" fluid>
+        {eventDisplay}
+      </Container>
+    );
   }
 }
 

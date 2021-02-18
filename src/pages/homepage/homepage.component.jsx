@@ -28,20 +28,15 @@ class Homepage extends React.Component {
         return data.data.data.map((el) => calculateEventInfo(el));
       })
       .then((events) => {
+        console.log(events);
         this.setState({ events });
       });
   }
 
   render() {
     const { events } = this.state;
-    const eventDisplay = events.length ? (
-      <EventList events={events} />
-    ) : (
-      <LoadingResource resource="events" />
-    );
-
     return (
-      <Container>
+      <Container as="main" fluid>
         <Row>
           <Col>
             <p>Popular events...</p>
@@ -61,7 +56,13 @@ class Homepage extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col>{eventDisplay}</Col>
+          <Col>
+            {events.length ? (
+              <EventList events={events} />
+            ) : (
+              <LoadingResource resource="events" />
+            )}
+          </Col>
         </Row>
       </Container>
     );
