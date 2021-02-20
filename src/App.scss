@@ -1,5 +1,9 @@
 @import '~bootstrap/scss/bootstrap';
 
+* {
+  box-sizing: border-box;
+}
+
 main.container-fluid {
   position: relative;
   min-height: calc(100vh - 56px);
