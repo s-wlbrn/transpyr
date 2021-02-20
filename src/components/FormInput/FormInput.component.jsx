@@ -22,5 +22,3 @@ export const FormInput = ({ handleChange, label, ...otherAttr }) => {
     </div>
   );
 };
-
-//`${otherAttr.value.length} ? 'shrink' : ''
