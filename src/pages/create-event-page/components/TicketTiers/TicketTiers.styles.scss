@@ -1,0 +1,46 @@
+$darker-color: #00701a;
+$main-color: #43a047;
+$lighter-color: #76d275;
+
+.online-input-group {
+  display: flex;
+  flex-direction: column;
+
+  .online-input-label {
+    color: $darker-color;
+    font-weight: bold;
+    margin-bottom: 0;
+    text-align: center;
+
+    & + .form-input-group {
+      margin-top: 0;
+      text-align: center;
+
+      .form-input {
+        margin-top: 0.5rem;
+      }
+    }
+  }
+}
+
+.ticket-tiers-error {
+  min-height: 1rem;
+  margin: 0.5rem 0;
+  font-weight: bold;
+  font-size: 0.95em;
+  color: darkred;
+}
+
+.form-input-group {
+  margin: 1.25rem 0;
+
+  .form-input {
+    margin: 0;
+  }
+}
+
+.ticket-tiers-name-group {
+  .form-input-group {
+    margin-top: 0.5rem;
+  }
+}

@@ -8,7 +8,8 @@ import Splashpage from './pages/splash/splash.component';
 import Homepage from './pages/homepage/homepage.component';
 import EventDetailsPage from './pages/event-details-page/event-details-page.component';
 import ErrorPage from './pages/error-page/error-page.component';
-import SignInSignUpPage from './pages/sign-in-sign-up-page/sign-in-sign-up-page.component';
+import SignInSignUpPage from './pages/signin-signup-page/signin-signup-page.component';
+import CreateEventPage from './pages/create-event-page/create-event-page.component';
 
 import { TopNav } from './components/TopNav/TopNav.component';
 import { Footer } from './components/Footer/Footer.component';
@@ -50,8 +51,13 @@ class App extends React.Component {
         <Switch>
           <Route exact path="/" component={Splashpage} />
           <Route exact path="/events" component={Homepage} />
-          <Route exact path="/events/:id" component={EventDetailsPage} />
-          <Route exact path="/signin">
+          <Route
+            exact
+            path="/events/create-event"
+            component={CreateEventPage}
+          />
+          <Route exact path="/events/id/:id" component={EventDetailsPage} />
+          <Route exact path="/users/signin">
             <SignInSignUpPage signinUser={this.signinUser} />
           </Route>
           <Route path="*">

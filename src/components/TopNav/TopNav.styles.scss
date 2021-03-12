@@ -1,8 +1,84 @@
+$darker-color: #00701a;
+$main-color: #43a047;
+$lighter-color: #76d275;
+
 .navigation {
-  background-color: #2e7d32;
+  background-color: $darker-color;
+  border-bottom: solid 1px $main-color;
+
+  .navbar-toggler {
+    border: none;
+    padding-right: 0;
+  }
+
+  .topnav-link {
+    padding: 0.5rem 0;
+    color: white;
+  }
 }
 
-.nav-signin-signout {
-  padding: 0.5rem 0;
+.nav-contents {
+  justify-content: flex-end;
+  text-align: right;
   color: white;
+
+  .form-inline {
+    justify-content: center;
+    margin: 0.5rem 0;
+    flex-wrap: nowrap;
+
+    .form-control {
+      width: 100%;
+      margin: 0;
+    }
+
+    button {
+      //width: 20%;
+      color: white;
+      border: solid 1px white;
+    }
+  }
+}
+
+.nav-content-md {
+  display: none;
+
+  .signed-out-content {
+    width: 15rem;
+    justify-content: space-between;
+  }
+
+  .dropdown-toggle {
+    color: white;
+    background: none;
+    border: none;
+    padding-right: 0;
+  }
+
+  .dropdown-menu {
+    color: black;
+  }
+
+  .nav-link {
+    color: black;
+  }
+
+  .dropdown-signout {
+    color: black;
+  }
+}
+
+@media (min-width: 768px) {
+  .nav-content-xs {
+    display: none;
+  }
+  .nav-content-md {
+    display: flex;
+    color: white;
+  }
+
+  .nav-contents {
+    justify-content: flex-start;
+    padding-left: 1rem;
+  }
 }

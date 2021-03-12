@@ -1,0 +1,18 @@
+$darker-color: #00701a;
+$main-color: #43a047;
+$lighter-color: #76d275;
+
+.date-time-input-group {
+  .form-input-group {
+    margin-top: 0;
+
+    .form-input {
+      margin-top: 0;
+    }
+  }
+
+  [class$='label'] {
+    color: $darker-color;
+    font-weight: bold;
+  }
+}

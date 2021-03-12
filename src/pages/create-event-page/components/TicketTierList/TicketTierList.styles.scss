@@ -1,0 +1,35 @@
+$darker-color: #00701a;
+$main-color: #43a047;
+$lighter-color: #76d275;
+
+.tier-list-container {
+  margin: 1rem 0;
+
+  .tier-list {
+    position: relative;
+    width: 100%;
+    height: 15rem;
+    border: 1px solid $darker-color;
+    padding: 0.25rem;
+
+    .tier-list-empty {
+      text-align: center;
+      color: $darker-color;
+      font-weight: bold;
+      position: relative;
+      top: 40%;
+    }
+
+    .tier-list-item {
+      width: 100%;
+      list-style-type: none;
+
+      &.tier-edit {
+        background-color: $main-color;
+        color: white;
+        font-weight: bold;
+        padding-left: 0.25rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+$darker-color: #00701a;
+$main-color: #43a047;
+$lighter-color: #76d275;
+
+.form-dropdown-group {
+  margin-bottom: 2rem;
+
+  .form-dropdown-label {
+    font-weight: bold;
+    color: $darker-color;
+  }
+  .form-dropdown {
+    display: block;
+    height: 2.5rem;
+    font-weight: bold;
+    border: 1px solid $darker-color;
+    background: none;
+  }
+}

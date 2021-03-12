@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { withRouter } from 'react-router-dom';
 import { handleHTTPError } from '../../libs/handleHTTPError';
 
 import { Container, Row } from 'react-bootstrap';
@@ -7,7 +7,7 @@ import { Container, Row } from 'react-bootstrap';
 import { SignIn } from './components/SignIn/SignIn.component';
 import { SignUp } from './components/SignUp/SignUp.component';
 
-import './sign-in-sign-up-page.styles.scss';
+import './signin-signup-page.styles.scss';
 
 const initialState = {
   signin: {
@@ -29,7 +29,7 @@ class SignInSignUpPage extends React.Component {
     this.state = initialState;
   }
 
-  handleChangeSignin = (endpoint) => (e) => {
+  handleChange = (endpoint) => (e) => {
     const { value, name } = e.target;
     this.setState({
       [endpoint]: {
@@ -39,9 +39,8 @@ class SignInSignUpPage extends React.Component {
     });
   };
 
-  handleSubmitSignin = (endpoint) => (e) => {
+  handleSubmit = (endpoint) => (e) => {
     e.preventDefault();
-    console.log(this.state[endpoint]);
     fetch(`http://localhost:3000/api/users/${endpoint}`, {
       method: 'POST',
       mode: 'cors',
@@ -59,6 +58,7 @@ class SignInSignUpPage extends React.Component {
       })
       .then(() => {
         this.setState(initialState);
+        this.props.history.push('/events');
       })
       .catch((err) => console.log(err));
   };
@@ -68,14 +68,14 @@ class SignInSignUpPage extends React.Component {
       <Container as="main" fluid>
         <Row className="signin-signout">
           <SignIn
-            handleSubmit={this.handleSubmitSignin('signin')}
-            handleChange={this.handleChangeSignin('signin')}
+            handleSubmit={this.handleSubmit('signin')}
+            handleChange={this.handleChange('signin')}
             email={this.state.signin.email}
             password={this.state.signin.password}
           />
           <SignUp
-            handleSubmit={this.handleSubmitSignin('signup')}
-            handleChange={this.handleChangeSignin('signup')}
+            handleSubmit={this.handleSubmit('signup')}
+            handleChange={this.handleChange('signup')}
             name={this.state.signup.name}
             email={this.state.signup.email}
             password={this.state.signup.password}
@@ -86,4 +86,4 @@ class SignInSignUpPage extends React.Component {
     );
   }
 }
-export default SignInSignUpPage;
+export default withRouter(SignInSignUpPage);

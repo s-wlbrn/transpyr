@@ -37,15 +37,14 @@ export const FilterMenu = (props) => {
   };
   return (
     <div className="filters-bar">
-      {['Date', 'Category', 'Type', 'Language'].map((variant) => (
+      {['Date', 'Category', 'Type', 'Language'].map((type) => (
         <DropdownButton
           as={ButtonGroup}
-          key={variant}
-          id={`dropdown-variants-${variant}`}
-          variant={variant.toLowerCase()}
-          title={variant}
+          key={type}
+          id={`dropdown-${type}`}
+          title={type}
         >
-          {menuItems[variant].map((item, i) => (
+          {menuItems[type].map((item, i) => (
             //Pass active filter item as prop: active={props.active===variant ? "true" : "false"}
             <Dropdown.Item eventKey={i}>{`${item}`}</Dropdown.Item>
           ))}

@@ -1,0 +1,14 @@
+.create-event-name-title {
+  margin-bottom: 0;
+
+  & + .form-input-group {
+    margin-top: 0;
+  }
+}
+
+.create-event-category-format {
+  div {
+    margin: 1rem 0;
+  }
+  margin-bottom: 2rem;
+}
