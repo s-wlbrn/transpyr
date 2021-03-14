@@ -6,9 +6,9 @@ import { FormInput } from '../../../../components/FormInput/FormInput.component'
 import { TicketTierList } from '../TicketTierList/TicketTierList.component';
 import { CustomButton } from '../../../../components/CustomButton/CustomButton.component';
 
-import './TicketTiers.styles.scss';
+import './TicketTiersForm.styles.scss';
 
-class TicketTiers extends React.Component {
+class TicketTiersForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -42,7 +42,6 @@ class TicketTiers extends React.Component {
       let formComplete = true;
       //pop off the online boolean value
       tierValues.pop();
-      console.log(tierValues);
       //flag isFormComplete false if empty value found
       tierValues.forEach((value) => {
         if (!value) formComplete = false;
@@ -108,11 +107,9 @@ class TicketTiers extends React.Component {
   };
 
   handleTierChange = ({ target: { name, value } }) => {
-    console.log(name, value);
-    this.setState(
-      { currentTier: { ...this.state.currentTier, [name]: value } },
-      () => console.log(this.state)
-    );
+    this.setState({
+      currentTier: { ...this.state.currentTier, [name]: value },
+    });
   };
 
   handleOnlineCheckbox = () => {
@@ -294,4 +291,4 @@ class TicketTiers extends React.Component {
   }
 }
 
-export default TicketTiers;
+export default TicketTiersForm;

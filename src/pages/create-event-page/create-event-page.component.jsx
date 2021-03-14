@@ -1,10 +1,13 @@
 import React from 'react';
-
 import { Container, Row, Col } from 'react-bootstrap';
-import { DateTime } from './components/DateTime/DateTime.component';
-import TicketTiers from './components/TicketTiers/TicketTiers.component';
-import { NameTypeCategory } from './components/NameTypeCategory/NameTypeCategory.component';
-import { DescriptionEditor } from './components/DescriptionEditor/DescriptionEditor.component';
+
+import { isOnlineOnly } from '../../libs/isOnlineOnly';
+
+import { DateTimeForm } from './components/DateTimeForm/DateTimeForm.component';
+import TicketTiersForm from './components/TicketTiersForm/TicketTiersForm.component';
+import { NameTypeCategoryForm } from './components/NameTypeCategoryForm/NameTypeCategoryForm.component';
+import { DescriptionForm } from './components/DescriptionForm/DescriptionForm.component';
+import { LocationForm } from './components/LocationForm/LocationForm.component';
 
 import './create-event-page.styles.scss';
 
@@ -17,7 +20,7 @@ class CreateEventPage extends React.Component {
         description: '',
         tierList: [],
         address: '',
-        coordinates: '',
+        coordinates: [],
         dateStart: '',
         timeStart: '',
         dateEnd: '',
@@ -66,6 +69,8 @@ class CreateEventPage extends React.Component {
       timeEnd,
       description,
       tierList,
+      address,
+      coordinates,
     } = this.state.currentEvent;
     return (
       <Container as="main" className="create-event-page" fluid>
@@ -91,7 +96,13 @@ class CreateEventPage extends React.Component {
             description={description}
             handleChange={this.handleChange}
           /> */}
-          <TicketTiers tierList={tierList} />
+          {/* <TicketTiersForm tierList={tierList} /> */}
+          <LocationForm
+            onlineOnly={isOnlineOnly(tierList)}
+            address={address}
+            handleChange={this.handleChange}
+            coordinates={coordinates}
+          />
         </form>
       </Container>
     );

@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import { EventLocation } from './EventLocation/EventLocation.component';
-import { EventDetailsMap } from './EventDetailsMap/EventDetailsMap.component';
+import { EventDetailsMap } from '../../../components/EventDetailsMap/EventDetailsMap.component';
 import { EventDetailsDate } from './EventDetailsDate/EventDetailsDate.component';
 import { EventDescription } from '../../../components/EventDescription/EventDescription.component';
 

@@ -5,7 +5,7 @@ import * as Showdown from 'showdown';
 import { Row, Col } from 'react-bootstrap';
 
 import 'react-mde/lib/styles/scss/react-mde-all.scss';
-import './DescriptionEditor.styles.scss';
+import './DescriptionForm.styles.scss';
 
 const converter = new Showdown.Converter({
   tables: true,
@@ -14,7 +14,7 @@ const converter = new Showdown.Converter({
   tasklists: true,
 });
 
-export const DescriptionEditor = ({ description, handleChange }) => {
+export const DescriptionForm = ({ description, handleChange }) => {
   const [selectedTab, setSelectedTab] = useState('write');
   return (
     <Row>

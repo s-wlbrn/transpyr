@@ -1,4 +1,4 @@
-import MapContainer from '../../../../components/MapContainer/MapContainer.component';
+import MapContainer from '../MapContainer/MapContainer.component';
 
 import './EventDetailsMap.styles.scss';
 

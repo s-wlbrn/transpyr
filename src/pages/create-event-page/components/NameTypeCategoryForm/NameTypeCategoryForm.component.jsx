@@ -4,9 +4,9 @@ import { Row, Col } from 'react-bootstrap';
 
 import { FormInput } from '../../../../components/FormInput/FormInput.component';
 import { FormDropdown } from '../../../../components/FormDropdown/FormDropdown.component';
-
-import './NameTypeCategory.styles.scss';
 import { CustomButton } from '../../../../components/CustomButton/CustomButton.component';
+
+import './NameTypeCategoryForm.styles.scss';
 
 const eventTypes = ['Lecture', 'Performance', 'Social', 'Workshop'];
 const eventCategories = [
@@ -33,7 +33,7 @@ const eventCategories = [
   'Other',
 ];
 
-export const NameTypeCategory = ({ name, type, handleChange }) => {
+export const NameTypeCategoryForm = ({ name, type, handleChange }) => {
   return (
     <React.Fragment>
       <Row className="create-event-name-input">

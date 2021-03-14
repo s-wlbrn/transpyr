@@ -1,12 +1,11 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-import { DateTimeInput } from '../../../../components/DateTimeInput/DateTimeInput.component';
 import { FormInput } from '../../../../components/FormInput/FormInput.component';
 
-import './DateTime.styles.scss';
+import './DateTimeForm.styles.scss';
 
-export const DateTime = (props) => {
+export const DateTimeForm = (props) => {
   return (
     <React.Fragment>
       <Row className="date-time-input-group">
