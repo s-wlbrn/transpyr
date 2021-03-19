@@ -1,0 +1,23 @@
+$darker-color: #00701a;
+$main-color: #43a047;
+$lighter-color: #76d275;
+
+.location-form {
+  .address-label {
+    color: $darker-color;
+    font-weight: bold;
+    margin: 0.5rem 0 0 0;
+  }
+
+  .form-input-group {
+    margin-top: 0;
+
+    .form-input {
+      margin-top: 0;
+    }
+  }
+
+  .location-map {
+    margin-bottom: 1rem;
+  }
+}

@@ -1,13 +1,20 @@
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
+
+import { Col, Container, Row } from 'react-bootstrap';
 
 import { FormInput } from '../../../../components/FormInput/FormInput.component';
 
 import './DateTimeForm.styles.scss';
 
-export const DateTimeForm = (props) => {
+export const DateTimeForm = ({
+  dateStart,
+  timeStart,
+  dateEnd,
+  timeEnd,
+  handleChange,
+}) => {
   return (
-    <React.Fragment>
+    <Container fluid className="date-time-form">
       <Row className="date-time-input-group">
         <Col xs={12}>
           <h2>Enter the date and time for your event.</h2>
@@ -19,8 +26,8 @@ export const DateTimeForm = (props) => {
             type="date"
             id="start-date"
             min={Date.now()}
-            value={props.dateStart}
-            handleChange={props.handleChange}
+            value={dateStart}
+            handleChange={handleChange}
             required
           />
           <label htmlFor={'start-time'} className="date-input-label">
@@ -30,8 +37,8 @@ export const DateTimeForm = (props) => {
             name="timeStart"
             type="time"
             id="start-time"
-            value={props.timeStart}
-            handleChange={props.handleChange}
+            value={timeStart}
+            handleChange={handleChange}
             required
           />
         </Col>
@@ -43,9 +50,9 @@ export const DateTimeForm = (props) => {
             name="dateEnd"
             type="date"
             id="end-date"
-            min={props.dateStart}
-            value={props.dateEnd || props.dateStart}
-            handleChange={props.handleChange}
+            min={dateStart}
+            value={dateEnd || dateStart}
+            handleChange={handleChange}
           />
           <label htmlFor={'end-time'} className="date-input-label">
             End Time
@@ -54,13 +61,13 @@ export const DateTimeForm = (props) => {
             name="timeEnd"
             type="time"
             id="end-time"
-            min={!props.dateEnd ? props.timeStart : null}
-            value={props.timeEnd}
-            handleChange={props.handleChange}
+            min={!dateEnd ? timeStart : null}
+            value={timeEnd}
+            handleChange={handleChange}
             required
           />
         </Col>
       </Row>
-    </React.Fragment>
+    </Container>
   );
 };

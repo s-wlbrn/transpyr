@@ -27,7 +27,7 @@ class AddressAutocompleteInput extends React.Component {
     });
     this.props.handleChange({
       target: {
-        name: 'coordinates',
+        name: 'location',
         value: [
           addressObject.geometry.location.lng(),
           addressObject.geometry.location.lat(),
@@ -44,9 +44,11 @@ class AddressAutocompleteInput extends React.Component {
         type="text"
         id="autocomplete"
         onChange={(e) => {
-          this.props.setLocationValid(false);
+          if (this.props.setLocationValid === true)
+            this.props.setLocationValid(false);
         }}
         defaultValue={this.props.address}
+        disabled={this.props.disabled}
       />
     );
   }

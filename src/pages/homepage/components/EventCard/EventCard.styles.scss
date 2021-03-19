@@ -17,7 +17,9 @@
     img {
       // float: left;
       width: 75px;
+      height: 75px;
       margin-top: 1rem;
+      object-fit: cover;
     }
 
     &.event-card-name-date {

@@ -2,12 +2,16 @@ import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 
 import { isOnlineOnly } from '../../libs/isOnlineOnly';
+import { handleHTTPError } from '../../libs/handleHTTPError';
+import { combineDateTime } from '../../libs/combineDateTime';
 
 import { DateTimeForm } from './components/DateTimeForm/DateTimeForm.component';
 import TicketTiersForm from './components/TicketTiersForm/TicketTiersForm.component';
 import { NameTypeCategoryForm } from './components/NameTypeCategoryForm/NameTypeCategoryForm.component';
 import { DescriptionForm } from './components/DescriptionForm/DescriptionForm.component';
 import { LocationForm } from './components/LocationForm/LocationForm.component';
+
+import { CustomButton } from '../../components/CustomButton/CustomButton.component';
 
 import './create-event-page.styles.scss';
 
@@ -18,21 +22,21 @@ class CreateEventPage extends React.Component {
       currentEvent: {
         name: '',
         description: '',
-        tierList: [],
+        ticketTiers: [],
         address: '',
-        coordinates: [],
+        location: [],
         dateStart: '',
-        timeStart: '',
         dateEnd: '',
+        timeStart: '',
         timeEnd: '',
         type: '',
         category: '',
       },
+      currentStep: 1,
     };
   }
 
   handleChange = (e) => {
-    console.log(e);
     const { value, name } = e.target;
     this.setState(
       {
@@ -47,31 +51,118 @@ class CreateEventPage extends React.Component {
     );
   };
 
-  handleSubmit = () => {
-    //insert gangsta shit
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const formattedEvent = combineDateTime(this.state.currentEvent);
+    formattedEvent.location = {
+      type: 'Point',
+      coordinates: formattedEvent.location,
+    };
+    console.log(formattedEvent);
+    fetch(`http://localhost:3000/api/events`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...formattedEvent,
+      }),
+    })
+      .then((response) => response.json())
+      .then((response) => handleHTTPError(response))
+      .then((data) => {
+        console.log(data);
+      })
+      // .then(() => {
+      //   this.setState(initialState);
+      //   this.props.history.push(REDIRECT TO PHOTO UPLOAD);
+      // })
+      .catch((err) => console.log(err));
   };
 
-  __prev = () => {
-    //previous page
+  _prev = () => {
+    let { currentStep } = this.state;
+    currentStep = currentStep <= 1 ? 1 : currentStep - 1;
+    this.setState({
+      currentStep: currentStep,
+    });
   };
 
-  __next = () => {
-    //next page
+  _next = () => {
+    //next should also trigger validation
+    let { currentStep } = this.state;
+    currentStep = currentStep >= 4 ? 5 : currentStep + 1;
+    this.setState({
+      currentStep,
+    });
   };
 
-  render() {
+  renderSwitch(step) {
     const {
       name,
       type,
+      category,
       dateStart,
       dateEnd,
       timeStart,
       timeEnd,
       description,
-      tierList,
+      ticketTiers,
       address,
-      coordinates,
+      location,
     } = this.state.currentEvent;
+    switch (step) {
+      case 1:
+        return (
+          <NameTypeCategoryForm
+            handleChange={this.handleChange}
+            name={name}
+            type={type}
+            category={category}
+          />
+        );
+      case 2:
+        return (
+          <DescriptionForm
+            description={description}
+            handleChange={this.handleChange}
+          />
+        );
+      case 3:
+        return (
+          <DateTimeForm
+            handleChange={this.handleChange}
+            dateStart={dateStart}
+            dateEnd={dateEnd}
+            timeStart={timeStart}
+            timeEnd={timeEnd}
+          />
+        );
+      case 4:
+        return (
+          <TicketTiersForm
+            ticketTiers={ticketTiers}
+            handleChange={this.handleChange}
+          />
+        );
+      case 5:
+        return (
+          <LocationForm
+            onlineOnly={isOnlineOnly(ticketTiers)}
+            address={address}
+            handleChange={this.handleChange}
+            location={location}
+          />
+        );
+
+      default:
+        return null;
+    }
+  }
+
+  render() {
+    const { currentStep } = this.state;
     return (
       <Container as="main" className="create-event-page" fluid>
         <Row>
@@ -80,29 +171,27 @@ class CreateEventPage extends React.Component {
           </Col>
         </Row>
         <form id="create-event-form" onSubmit={this.handleSubmit}>
-          {/* <DateTime
-            handleChange={this.handleChange}
-            dateStart={dateStart}
-            dateEnd={dateEnd}
-            timeStart={timeStart}
-            timeEnd={timeEnd}
-          /> */}
-          {/* <NameTypeCategory
-            handleChange={this.handleChange}
-            name={name}
-            type={type}
-          /> */}
-          {/* <DescriptionEditor
-            description={description}
-            handleChange={this.handleChange}
-          /> */}
-          {/* <TicketTiersForm tierList={tierList} /> */}
-          <LocationForm
-            onlineOnly={isOnlineOnly(tierList)}
-            address={address}
-            handleChange={this.handleChange}
-            coordinates={coordinates}
-          />
+          {this.renderSwitch(currentStep)}
+          <Row>
+            <Col xs={6}>
+              {currentStep > 1 ? (
+                <CustomButton type="button" onClick={this._prev}>
+                  Previous
+                </CustomButton>
+              ) : null}
+            </Col>
+            <Col xs={6}>
+              {currentStep < 5 ? (
+                <CustomButton type="button" onClick={this._next}>
+                  Next
+                </CustomButton>
+              ) : (
+                <CustomButton type="button" onClick={this.handleSubmit}>
+                  Submit
+                </CustomButton>
+              )}
+            </Col>
+          </Row>
         </form>
       </Container>
     );

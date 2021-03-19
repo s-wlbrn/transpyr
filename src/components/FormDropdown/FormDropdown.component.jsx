@@ -26,7 +26,7 @@ export const FormDropdown = ({
       {...otherAttr}
     >
       {options.map((opt) => (
-        <option value={opt.toLowerCase()} key={opt}>
+        <option value={opt} key={opt}>
           {opt}
         </option>
       ))}

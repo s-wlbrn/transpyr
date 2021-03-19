@@ -4,7 +4,7 @@ import { format, isSameDay } from 'date-fns';
 import './EventDetailsDate.styles.scss';
 
 export const EventDetailsDate = ({ dateStart, dateEnd }) => {
-  const dateDisplay = isSameDay(dateStart, dateEnd) ? (
+  return isSameDay(dateStart, dateEnd) ? (
     <p>
       <time dateTime={dateStart}>{format(dateStart, 'PPPP')}</time>
       <br />
@@ -17,6 +17,4 @@ export const EventDetailsDate = ({ dateStart, dateEnd }) => {
       <time dateTime={dateEnd}>{format(dateEnd, 'PPPPp')}</time>
     </p>
   );
-
-  return [dateDisplay];
 };

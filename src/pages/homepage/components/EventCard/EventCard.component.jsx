@@ -12,19 +12,22 @@ import { EventStartDateShort } from '../../../../components/EventStartDateShort/
 import './EventCard.styles.scss';
 
 export const EventCard = (props) => {
-  const { name, dateStart, price } = props.event;
+  const { name, dateTimeStart, priceDisplay, _id } = props.event;
   return (
     <Row className="event-card">
       <Col xs={3}>
-        <img src="/default.jpg" alt={name} />
+        <img
+          src={`http://localhost:3000/static/img/events/${_id}.jpeg`}
+          alt={name}
+        />
       </Col>
       <Col className="event-card-name-date" xs={6}>
-        <EventStartDateShort dateStart={dateStart} />
+        <EventStartDateShort dateStart={dateTimeStart} />
         <p>{name}</p>
       </Col>
       <Col xs={3}>
         <Row>
-          <p className="price">{price}</p>
+          <p className="price">{priceDisplay}</p>
         </Row>
         <Row className="icons">
           <IoHeartOutline size={24} />

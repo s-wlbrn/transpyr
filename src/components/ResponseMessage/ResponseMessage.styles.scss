@@ -1,0 +1,19 @@
+$darker-color: #00701a;
+$main-color: #43a047;
+$lighter-color: #76d275;
+
+.response-error {
+  min-height: 1rem;
+  margin: 0.5rem 0;
+  font-weight: bold;
+  font-size: 0.95em;
+  color: darkred;
+}
+
+.response-message {
+  min-height: 1rem;
+  margin: 0.5rem 0;
+  font-weight: bold;
+  font-size: 0.95em;
+  color: $darker-color;
+}

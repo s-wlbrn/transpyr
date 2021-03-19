@@ -21,6 +21,7 @@ const MapContainer = ({ coordinates, google }) => {
       google={google}
       zoom={18}
       center={{ ...coords }}
+      initialCenter={{ ...coords }}
       containerStyle={{
         position: 'relative',
         width: '100%',

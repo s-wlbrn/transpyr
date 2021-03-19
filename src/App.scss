@@ -8,7 +8,7 @@ main.container-fluid {
   position: relative;
   min-height: calc(100vh - 56px);
   margin: 0;
-  padding: 0;
+  padding: 1rem 0;
 }
 
 .app {
@@ -18,4 +18,20 @@ main.container-fluid {
 div.container-fluid {
   margin: 0;
   padding: 0;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+h1 {
+  font-size: 1.75em;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+h3 {
+  font-size: 1.25em;
 }

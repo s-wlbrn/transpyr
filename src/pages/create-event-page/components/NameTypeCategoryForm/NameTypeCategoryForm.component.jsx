@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Container } from 'react-bootstrap';
 
 import { FormInput } from '../../../../components/FormInput/FormInput.component';
 import { FormDropdown } from '../../../../components/FormDropdown/FormDropdown.component';
-import { CustomButton } from '../../../../components/CustomButton/CustomButton.component';
 
 import './NameTypeCategoryForm.styles.scss';
 
-const eventTypes = ['Lecture', 'Performance', 'Social', 'Workshop'];
+const eventTypes = ['', 'Lecture', 'Performance', 'Social', 'Workshop'];
 const eventCategories = [
+  '',
   'Business',
   'Food',
   'Health & Lifestyle',
@@ -33,9 +33,15 @@ const eventCategories = [
   'Other',
 ];
 
-export const NameTypeCategoryForm = ({ name, type, handleChange }) => {
+export const NameTypeCategoryForm = ({
+  name,
+  type,
+  category,
+  handleChange,
+}) => {
+  console.log(category);
   return (
-    <React.Fragment>
+    <Container fluid className="name-type-category-form">
       <Row className="create-event-name-input">
         <Col xs={12}>
           <h2 className="create-event-name-title">
@@ -62,6 +68,7 @@ export const NameTypeCategoryForm = ({ name, type, handleChange }) => {
             options={eventTypes}
             handleChange={handleChange}
             label="Format"
+            value={type}
             required
           />
         </Col>
@@ -74,18 +81,11 @@ export const NameTypeCategoryForm = ({ name, type, handleChange }) => {
             options={eventCategories}
             handleChange={handleChange}
             label="Category"
+            value={category}
             required
           />
         </Col>
       </Row>
-      <Row>
-        <Col xs={{ span: 6, offset: 6 }}>
-          <CustomButton type="button">Next</CustomButton>
-        </Col>
-      </Row>
-    </React.Fragment>
-    //make a dropdown component? or use bootstrap?
-    //event type
-    //category
+    </Container>
   );
 };

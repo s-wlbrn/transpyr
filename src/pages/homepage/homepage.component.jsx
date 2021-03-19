@@ -22,7 +22,7 @@ class Homepage extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:3000/api/events?sort=date')
+    fetch('http://localhost:3000/api/events?sort=dateTimeStart')
       .then((response) => response.json())
       .then((data) => {
         return data.data.data.map((el) => calculateEventInfo(el));
@@ -36,7 +36,7 @@ class Homepage extends React.Component {
   render() {
     const { events } = this.state;
     return (
-      <Container as="main" fluid>
+      <Container as="main" fluid className="homepage">
         <Row>
           <Col>
             <p>Popular events...</p>

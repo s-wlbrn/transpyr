@@ -2,10 +2,15 @@ import React from 'react';
 
 import './FormInput.styles.scss';
 
-export const FormInput = ({ handleChange, label, ...otherAttr }) => {
+export const FormInput = ({ handleChange, label, disabled, ...otherAttr }) => {
   return (
     <div className="form-input-group">
-      <input className="form-input" onChange={handleChange} {...otherAttr} />
+      <input
+        className="form-input"
+        onChange={handleChange}
+        disabled={disabled}
+        {...otherAttr}
+      />
       {label ? (
         <label
           htmlFor={otherAttr.id}

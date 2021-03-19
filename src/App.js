@@ -10,6 +10,8 @@ import EventDetailsPage from './pages/event-details-page/event-details-page.comp
 import ErrorPage from './pages/error-page/error-page.component';
 import SignInSignUpPage from './pages/signin-signup-page/signin-signup-page.component';
 import CreateEventPage from './pages/create-event-page/create-event-page.component';
+import EditEventPage from './pages/edit-event-page/edit-event-page.component';
+import UploadEventPhotoPage from './pages/upload-event-photo/upload-event-photo-page.component';
 
 import { TopNav } from './components/TopNav/TopNav.component';
 import { Footer } from './components/Footer/Footer.component';
@@ -57,6 +59,12 @@ class App extends React.Component {
             component={CreateEventPage}
           />
           <Route exact path="/events/id/:id" component={EventDetailsPage} />
+          <Route exact path="/events/id/:id/edit" component={EditEventPage} />
+          <Route
+            exact
+            path="/events/id/:id/upload-photo"
+            component={UploadEventPhotoPage}
+          />
           <Route exact path="/users/signin">
             <SignInSignUpPage signinUser={this.signinUser} />
           </Route>

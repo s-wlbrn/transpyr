@@ -1,12 +1,13 @@
 import React from 'react';
 
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Container } from 'react-bootstrap';
 
 import { FormInput } from '../../../../components/FormInput/FormInput.component';
 import { TicketTierList } from '../TicketTierList/TicketTierList.component';
 import { CustomButton } from '../../../../components/CustomButton/CustomButton.component';
 
 import './TicketTiersForm.styles.scss';
+import { ResponseMessage } from '../../../../components/ResponseMessage/ResponseMessage.component';
 
 class TicketTiersForm extends React.Component {
   constructor(props) {
@@ -14,7 +15,6 @@ class TicketTiersForm extends React.Component {
 
     this.state = {
       currentTier: this.initialCurrentTier,
-      tierList: [],
       editMode: false,
       tierToEdit: '',
       error: '',
@@ -30,7 +30,8 @@ class TicketTiersForm extends React.Component {
   };
 
   isFormValid(validators) {
-    const { currentTier, tierList } = this.state;
+    const { currentTier } = this.state;
+    const { ticketTiers } = this.props;
     let formValid = true;
     let errors = [];
 
@@ -57,7 +58,7 @@ class TicketTiersForm extends React.Component {
       //trim whitespace from name
       currentTier.tierName = currentTier.tierName.trim();
       //collect all tier names and convert to lowercase
-      let names = tierList.map((tier) => tier.tierName.toLowerCase());
+      let names = ticketTiers.map((tier) => tier.tierName.toLowerCase());
       //name of new tier is unique if not included in names array
       let unique = !names.includes(currentTier.tierName.toLowerCase());
 
@@ -122,7 +123,8 @@ class TicketTiersForm extends React.Component {
   };
 
   handleTierSubmit = () => {
-    const { currentTier, tierList } = this.state;
+    const { currentTier } = this.state;
+    const { ticketTiers } = this.props;
     if (
       this.isFormValid({
         complete: true,
@@ -134,28 +136,33 @@ class TicketTiersForm extends React.Component {
       //Format tier data
       currentTier.capacity = Number(currentTier.capacity);
       currentTier.price = Number(currentTier.price);
-      //add to tierList
+      //add to ticketTiers
+      this.props.handleChange({
+        target: { name: 'ticketTiers', value: [...ticketTiers, currentTier] },
+      });
       this.setState({
         currentTier: this.initialCurrentTier,
-        tierList: [...tierList, currentTier],
         error: '',
       });
     }
   };
 
   handleTierEdit = () => {
-    const { currentTier, tierList, tierToEdit } = this.state;
+    const { currentTier, tierToEdit } = this.state;
+    const { ticketTiers } = this.props;
     if (this.isFormValid({ complete: true, capacity: true, price: true })) {
       //Format tier data
       currentTier.capacity = Number(currentTier.capacity);
       currentTier.price = Number(currentTier.price);
       //Set new tierList with tier replaced
-      const updatedTiers = tierList.map((tier) =>
+      const updatedTiers = ticketTiers.map((tier) =>
         tier.tierName === tierToEdit ? currentTier : tier
       );
+      this.props.handleChange({
+        target: { name: 'ticketTiers', value: updatedTiers },
+      });
       this.setState({
         currentTier: this.initialCurrentTier,
-        tierList: updatedTiers,
         editMode: false,
         tierToEdit: '',
         error: '',
@@ -164,13 +171,16 @@ class TicketTiersForm extends React.Component {
   };
 
   handleTierDelete = () => {
-    const { tierToEdit, tierList } = this.state;
-    const updatedTiers = tierList.filter(
+    const { tierToEdit } = this.state;
+    const { ticketTiers } = this.props;
+    const updatedTiers = ticketTiers.filter(
       (tier) => tier.tierName !== tierToEdit
     );
+    this.props.handleChange({
+      target: { name: 'ticketTiers', value: updatedTiers },
+    });
     this.setState({
       currentTier: this.initialCurrentTier,
-      tierList: updatedTiers,
       editMode: false,
       tierToEdit: '',
       error: '',
@@ -180,18 +190,18 @@ class TicketTiersForm extends React.Component {
   render() {
     const {
       currentTier: { tierName, tierDescription, online, capacity, price },
-      tierList,
       editMode,
       tierToEdit,
       error,
     } = this.state;
+    const { ticketTiers } = this.props;
     return (
-      <React.Fragment>
+      <Container fluid className="ticket-tiers-form">
         <Row>
           <Col xs={12}>
             <h2>Specify the ticket types available for the event.</h2>
             <TicketTierList
-              tierList={tierList}
+              tierList={ticketTiers}
               tierToEdit={tierToEdit}
               toggleEditMode={this.toggleEditMode}
             />
@@ -223,7 +233,9 @@ class TicketTiersForm extends React.Component {
         </Row>
         <Row>
           <Col xs={12}>
-            <div className="ticket-tiers-error">{error ? error : null}</div>
+            <div className="ticket-tiers-message">
+              {error && <ResponseMessage error>{error}</ResponseMessage>}
+            </div>
           </Col>
           <Col xs={12} className="ticket-tiers-name-group">
             <FormInput
@@ -286,7 +298,7 @@ class TicketTiersForm extends React.Component {
             />
           </Col>
         </Row>
-      </React.Fragment>
+      </Container>
     );
   }
 }
