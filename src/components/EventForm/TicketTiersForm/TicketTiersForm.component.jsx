@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Row, Col, Container } from 'react-bootstrap';
 
-import { FormInput } from '../../../../components/FormInput/FormInput.component';
+import { FormInput } from '../../FormInput/FormInput.component';
 import { TicketTierList } from '../TicketTierList/TicketTierList.component';
-import { CustomButton } from '../../../../components/CustomButton/CustomButton.component';
+import { CustomButton } from '../../CustomButton/CustomButton.component';
+import { ResponseMessage } from '../../ResponseMessage/ResponseMessage.component';
 
 import './TicketTiersForm.styles.scss';
-import { ResponseMessage } from '../../../../components/ResponseMessage/ResponseMessage.component';
 
 class TicketTiersForm extends React.Component {
   constructor(props) {
@@ -41,10 +41,10 @@ class TicketTiersForm extends React.Component {
       let tierValues = Object.values(currentTier);
 
       let formComplete = true;
-      //pop off the online boolean value
-      tierValues.pop();
+      //remove the online boolean value
+      const newTiers = tierValues.filter((e) => typeof e !== 'boolean');
       //flag isFormComplete false if empty value found
-      tierValues.forEach((value) => {
+      newTiers.forEach((value) => {
         if (!value) formComplete = false;
       });
 

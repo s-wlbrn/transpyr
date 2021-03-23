@@ -1,16 +1,10 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 
-import { isOnlineOnly } from '../../libs/isOnlineOnly';
 import { handleHTTPError } from '../../libs/handleHTTPError';
-import { combineDateTime } from '../../libs/combineDateTime';
+import { combineDateTime } from '../../libs/formatDateTime';
 
-import { DateTimeForm } from './components/DateTimeForm/DateTimeForm.component';
-import TicketTiersForm from './components/TicketTiersForm/TicketTiersForm.component';
-import { NameTypeCategoryForm } from './components/NameTypeCategoryForm/NameTypeCategoryForm.component';
-import { DescriptionForm } from './components/DescriptionForm/DescriptionForm.component';
-import { LocationForm } from './components/LocationForm/LocationForm.component';
-
+import { EventForm } from '../../components/EventForm/EventForm.component';
 import { CustomButton } from '../../components/CustomButton/CustomButton.component';
 
 import './create-event-page.styles.scss';
@@ -24,7 +18,10 @@ class CreateEventPage extends React.Component {
         description: '',
         ticketTiers: [],
         address: '',
-        location: [],
+        location: {
+          type: 'Point',
+          coordinates: [],
+        },
         dateStart: '',
         dateEnd: '',
         timeStart: '',
@@ -54,10 +51,6 @@ class CreateEventPage extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const formattedEvent = combineDateTime(this.state.currentEvent);
-    formattedEvent.location = {
-      type: 'Point',
-      coordinates: formattedEvent.location,
-    };
     console.log(formattedEvent);
     fetch(`http://localhost:3000/api/events`, {
       method: 'POST',
@@ -98,71 +91,8 @@ class CreateEventPage extends React.Component {
     });
   };
 
-  renderSwitch(step) {
-    const {
-      name,
-      type,
-      category,
-      dateStart,
-      dateEnd,
-      timeStart,
-      timeEnd,
-      description,
-      ticketTiers,
-      address,
-      location,
-    } = this.state.currentEvent;
-    switch (step) {
-      case 1:
-        return (
-          <NameTypeCategoryForm
-            handleChange={this.handleChange}
-            name={name}
-            type={type}
-            category={category}
-          />
-        );
-      case 2:
-        return (
-          <DescriptionForm
-            description={description}
-            handleChange={this.handleChange}
-          />
-        );
-      case 3:
-        return (
-          <DateTimeForm
-            handleChange={this.handleChange}
-            dateStart={dateStart}
-            dateEnd={dateEnd}
-            timeStart={timeStart}
-            timeEnd={timeEnd}
-          />
-        );
-      case 4:
-        return (
-          <TicketTiersForm
-            ticketTiers={ticketTiers}
-            handleChange={this.handleChange}
-          />
-        );
-      case 5:
-        return (
-          <LocationForm
-            onlineOnly={isOnlineOnly(ticketTiers)}
-            address={address}
-            handleChange={this.handleChange}
-            location={location}
-          />
-        );
-
-      default:
-        return null;
-    }
-  }
-
   render() {
-    const { currentStep } = this.state;
+    const { currentStep, currentEvent } = this.state;
     return (
       <Container as="main" className="create-event-page" fluid>
         <Row>
@@ -171,7 +101,11 @@ class CreateEventPage extends React.Component {
           </Col>
         </Row>
         <form id="create-event-form" onSubmit={this.handleSubmit}>
-          {this.renderSwitch(currentStep)}
+          <EventForm
+            event={currentEvent}
+            step={currentStep}
+            handleChange={this.handleChange}
+          />
           <Row>
             <Col xs={6}>
               {currentStep > 1 ? (

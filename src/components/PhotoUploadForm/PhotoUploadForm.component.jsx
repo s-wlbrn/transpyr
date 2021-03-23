@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 
 import { handleHTTPError } from '../../libs/handleHTTPError';
 
@@ -75,7 +76,7 @@ class PhotoUploadForm extends React.Component {
     fetch(
       `http://localhost:3000/api/${this.props.resource}/${this.props.resourceId}`,
       {
-        method: 'PATCH',
+        method: 'PUT',
         mode: 'cors',
         body: formData,
       }
@@ -89,7 +90,13 @@ class PhotoUploadForm extends React.Component {
             message: 'Photo uploaded successfully!',
           },
         });
-        //redirect
+        setTimeout(
+          () =>
+            this.props.history.push(
+              this.props.location.pathname.split('/').slice(0, -1).join('/')
+            ),
+          1000
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -112,7 +119,7 @@ class PhotoUploadForm extends React.Component {
             type="file"
             id="img"
             name="img"
-            accept=".jpg,.png"
+            accept=".jpg,.jpeg,.png"
             onChange={this.onFileChange}
           />
           {messageValidation && (
@@ -130,4 +137,4 @@ class PhotoUploadForm extends React.Component {
   }
 }
 
-export default PhotoUploadForm;
+export default withRouter(PhotoUploadForm);

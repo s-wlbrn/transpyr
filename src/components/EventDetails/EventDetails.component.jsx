@@ -1,5 +1,5 @@
 import React from 'react';
-import { format, isSameDay } from 'date-fns';
+import { format, parseISO, isSameDay } from 'date-fns';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -12,7 +12,7 @@ import { CustomButton } from '../CustomButton/CustomButton.component';
 
 export const EventDetails = ({
   editMode = false,
-  handleEdit = null,
+  handleEditStep = null,
   name,
   type,
   category,
@@ -25,6 +25,8 @@ export const EventDetails = ({
   online,
   id,
 }) => {
+  dateTimeStart = new Date(dateTimeStart);
+  dateTimeEnd = new Date(dateTimeEnd);
   return (
     <React.Fragment>
       <Row>
@@ -32,7 +34,7 @@ export const EventDetails = ({
           <div
             className="event-image-background"
             onClick={() => {
-              if (editMode) handleEdit('photo');
+              if (editMode) handleEditStep('photo');
             }}
           >
             <img
@@ -45,7 +47,7 @@ export const EventDetails = ({
         <Col
           xs={12}
           onClick={() => {
-            if (editMode) handleEdit('name');
+            if (editMode) handleEditStep('name');
           }}
         >
           <p className="event-detail-date">
@@ -72,7 +74,7 @@ export const EventDetails = ({
           xs={12}
           className="event-book-button"
           onClick={() => {
-            if (editMode) handleEdit('ticketTiers');
+            if (editMode) handleEditStep('ticketTiers');
           }}
         >
           <CustomButton type="button">
@@ -82,7 +84,7 @@ export const EventDetails = ({
         <Col
           xs={12}
           onClick={() => {
-            if (editMode) handleEdit('date');
+            if (editMode) handleEditStep('date');
           }}
         >
           <h2>When</h2>
@@ -111,7 +113,7 @@ export const EventDetails = ({
         <Col
           xs={12}
           onClick={() => {
-            if (editMode) handleEdit('location');
+            if (editMode) handleEditStep('location');
           }}
         >
           <h2>Where</h2>
@@ -128,7 +130,7 @@ export const EventDetails = ({
         <Col
           xs={12}
           onClick={() => {
-            if (editMode) handleEdit('description');
+            if (editMode) handleEditStep('description');
           }}
         >
           <h2>Description</h2>

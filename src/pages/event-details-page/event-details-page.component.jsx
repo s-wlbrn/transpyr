@@ -6,6 +6,7 @@ import { handleHTTPError } from '../../libs/handleHTTPError';
 import ErrorPage from '../error-page/error-page.component';
 import { EventDetails } from '../../components/EventDetails/EventDetails.component';
 import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
+import { OwnEventControl } from './components/OwnEventControl/OwnEventControl.component';
 
 import Container from 'react-bootstrap/Container';
 
@@ -17,7 +18,7 @@ class EventDetailsPage extends React.Component {
 
     this.state = {
       eventId: this.props.match.params.id,
-      event: {},
+      event: null,
       error: null,
     };
   }
@@ -46,21 +47,16 @@ class EventDetailsPage extends React.Component {
       });
   }
 
-  renderEvent() {
-    const { event } = this.state;
-    return Object.keys(event).length ? (
-      <EventDetails {...event} />
-    ) : (
-      <LoadingResource resource="event" />
-    );
-  }
-
   render() {
-    const { error } = this.state;
-    const eventDisplay = this.renderEvent();
+    const { error, event } = this.state;
+
+    if (error) return <ErrorPage {...error} />;
+    if (!event) return <LoadingResource resource="event" />;
+
     return (
       <Container as="main" className="event-details-page" fluid>
-        {!error ? eventDisplay : <ErrorPage {...error} />}
+        <OwnEventControl published={event.published} />
+        <EventDetails {...event} />
       </Container>
     );
   }

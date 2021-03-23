@@ -28,10 +28,13 @@ class AddressAutocompleteInput extends React.Component {
     this.props.handleChange({
       target: {
         name: 'location',
-        value: [
-          addressObject.geometry.location.lng(),
-          addressObject.geometry.location.lat(),
-        ],
+        value: {
+          type: 'Point',
+          coordinates: [
+            addressObject.geometry.location.lng(),
+            addressObject.geometry.location.lat(),
+          ],
+        },
       },
     });
     this.props.setLocationValid(true);

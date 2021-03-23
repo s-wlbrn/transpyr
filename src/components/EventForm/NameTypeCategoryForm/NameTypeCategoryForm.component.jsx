@@ -2,12 +2,26 @@ import React from 'react';
 
 import { Row, Col, Container } from 'react-bootstrap';
 
-import { FormInput } from '../../../../components/FormInput/FormInput.component';
-import { FormDropdown } from '../../../../components/FormDropdown/FormDropdown.component';
+import { FormInput } from '../../FormInput/FormInput.component';
+import { FormDropdown } from '../../FormDropdown/FormDropdown.component';
 
 import './NameTypeCategoryForm.styles.scss';
 
-const eventTypes = ['', 'Lecture', 'Performance', 'Social', 'Workshop'];
+const eventTypes = [
+  '',
+  'Lecture',
+  'Class',
+  'Performance',
+  'Social',
+  'Workshop',
+  'Conference',
+  'Convention',
+  'Expo',
+  'Game',
+  'Rally',
+  'Screening',
+  'Tour',
+];
 const eventCategories = [
   '',
   'Business',
@@ -25,9 +39,9 @@ const eventCategories = [
   'Politics',
   'Spirituality',
   'School',
-  'Science and Technology',
+  'Science & Technology',
   'Holiday',
-  'Sports and Fitness',
+  'Sports & Fitness',
   'Travel',
   'Outdoor & Recreation',
   'Other',

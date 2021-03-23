@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Col, Container, Row } from 'react-bootstrap';
 
-import { FormInput } from '../../../../components/FormInput/FormInput.component';
+import { FormInput } from '../../FormInput/FormInput.component';
 
 import './DateTimeForm.styles.scss';
 

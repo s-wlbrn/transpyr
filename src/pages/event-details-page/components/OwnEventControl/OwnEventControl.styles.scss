@@ -1,0 +1,19 @@
+.own-event-control {
+  padding: 0.5rem 0;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.5rem;
+
+    p {
+      margin: 0;
+      font-weight: bold;
+    }
+  }
+  .custom-button {
+    padding: 0;
+  }
+}

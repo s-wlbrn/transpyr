@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 
 import { Row, Col, Container } from 'react-bootstrap';
-import AddressAutocompleteInput from '../../../../components/AddressAutocompleteInput/AddressAutocompleteInput.component';
+import AddressAutocompleteInput from '../../AddressAutocompleteInput/AddressAutocompleteInput.component';
 
-import { EventDetailsMap } from '../../../../components/EventDetailsMap/EventDetailsMap.component';
-//import { MapContainer } from '../../../../components/MapContainer/MapContainer.component';
+import { EventDetailsMap } from '../../EventDetailsMap/EventDetailsMap.component';
 
 import './LocationForm.styles.scss';
 
@@ -54,9 +53,9 @@ export const LocationForm = ({
             disabled={onlineOnly ? true : false}
           />
         </Col>
-        {location.length ? (
+        {location.coordinates.length ? (
           <Col xs={12} className="location-map">
-            <EventDetailsMap coordinates={location} />
+            <EventDetailsMap coordinates={location.coordinates} />
           </Col>
         ) : null}
       </Row>
