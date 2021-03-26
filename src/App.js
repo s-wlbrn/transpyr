@@ -4,6 +4,8 @@ import { Switch, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 
+import { ProvideAuth } from './auth/use-auth';
+
 import Splashpage from './pages/splash/splash.component';
 import Homepage from './pages/homepage/homepage.component';
 import EventDetailsPage from './pages/event-details-page/event-details-page.component';
@@ -48,32 +50,37 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="app">
-        <TopNav user={this.state.currentUser} signoutUser={this.signoutUser} />
-        <Switch>
-          <Route exact path="/" component={Splashpage} />
-          <Route exact path="/events" component={Homepage} />
-          <Route
-            exact
-            path="/events/create-event"
-            component={CreateEventPage}
+      <ProvideAuth>
+        <div className="app">
+          <TopNav
+            user={this.state.currentUser}
+            signoutUser={this.signoutUser}
           />
-          <Route exact path="/events/id/:id" component={EventDetailsPage} />
-          <Route exact path="/events/id/:id/edit" component={EditEventPage} />
-          <Route
-            exact
-            path="/events/id/:id/upload-photo"
-            component={UploadEventPhotoPage}
-          />
-          <Route exact path="/users/signin">
-            <SignInSignUpPage signinUser={this.signinUser} />
-          </Route>
-          <Route path="*">
-            <ErrorPage code="404" message="Page not found." />
-          </Route>
-        </Switch>
-        <Footer />
-      </div>
+          <Switch>
+            <Route exact path="/" component={Splashpage} />
+            <Route exact path="/events" component={Homepage} />
+            <Route
+              exact
+              path="/events/create-event"
+              component={CreateEventPage}
+            />
+            <Route exact path="/events/id/:id" component={EventDetailsPage} />
+            <Route exact path="/events/id/:id/edit" component={EditEventPage} />
+            <Route
+              exact
+              path="/events/id/:id/upload-photo"
+              component={UploadEventPhotoPage}
+            />
+            <Route exact path="/users/signin">
+              <SignInSignUpPage signinUser={this.signinUser} />
+            </Route>
+            <Route path="*">
+              <ErrorPage code="404" message="Page not found." />
+            </Route>
+          </Switch>
+          <Footer />
+        </div>
+      </ProvideAuth>
     );
   }
 }

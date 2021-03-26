@@ -10,8 +10,8 @@ import './EventList.styles.scss';
 export const EventList = (props) => (
   <Container as="section" className="event-listing" fluid>
     {props.events.map((el) => (
-      <Link to={`/events/id/${el._id}`}>
-        <EventCard key={el._id} event={el} />
+      <Link to={`/events/id/${el.id}`}>
+        <EventCard key={el.id} event={el} />
       </Link>
     ))}
   </Container>

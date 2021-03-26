@@ -4,6 +4,8 @@ import { handleHTTPError } from '../../libs/handleHTTPError';
 
 import { Container, Row } from 'react-bootstrap';
 
+import authContext from '../../auth/use-auth';
+
 import { SignIn } from './components/SignIn/SignIn.component';
 import { SignUp } from './components/SignUp/SignUp.component';
 
@@ -23,6 +25,7 @@ const initialState = {
 };
 
 class SignInSignUpPage extends React.Component {
+  static contextType = authContext;
   constructor(props) {
     super(props);
 
@@ -31,6 +34,7 @@ class SignInSignUpPage extends React.Component {
 
   handleChange = (endpoint) => (e) => {
     const { value, name } = e.target;
+
     this.setState({
       [endpoint]: {
         ...this.state[endpoint],
@@ -39,28 +43,21 @@ class SignInSignUpPage extends React.Component {
     });
   };
 
-  handleSubmit = (endpoint) => (e) => {
-    e.preventDefault();
-    fetch(`http://localhost:3000/api/users/${endpoint}`, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...this.state[endpoint],
-      }),
-    })
-      .then((response) => response.json())
-      .then((response) => handleHTTPError(response))
-      .then((data) => {
-        this.props.signinUser(data.data.user);
-      })
-      .then(() => {
-        this.setState(initialState);
+  handleSubmit = (endpoint) => {
+    const auth = this.context;
+    const submitFunction = endpoint === 'signin' ? auth.signIn : auth.signUp;
+    const submitArguments = Object.values(this.state[endpoint]);
+
+    return async (e) => {
+      try {
+        e.preventDefault();
+        console.log('off we go');
+        await submitFunction(...submitArguments);
         this.props.history.push('/events');
-      })
-      .catch((err) => console.log(err));
+      } catch (err) {
+        console.log(err);
+      }
+    };
   };
 
   render() {
