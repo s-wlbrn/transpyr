@@ -19,8 +19,8 @@ export const TopNav = () => {
   const { user, signOut } = useAuth();
   const history = useHistory();
 
-  const signOutAndGoHome = () => {
-    signOut();
+  const signOutAndGoHome = async () => {
+    await signOut();
     history.push('/events');
   };
 

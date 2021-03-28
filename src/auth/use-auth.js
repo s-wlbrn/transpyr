@@ -9,6 +9,7 @@ const authContext = createContext();
 const useProvideAuth = () => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [expiresIn, setExpiresIn] = useState(null);
 
   const signIn = async (email, password) => {
     try {
@@ -16,11 +17,11 @@ const useProvideAuth = () => {
         email,
         password,
       });
-      console.log(response);
       setUser({ ...response.data.user });
-      setToken(response.data.token);
+      setToken(response.token);
+      setExpiresIn(response.expiresIn);
     } catch (err) {
-      return Promise.reject(err.response.data.message);
+      return Promise.reject(err.response.message);
     }
   };
 
@@ -33,29 +34,33 @@ const useProvideAuth = () => {
         passwordConfirm,
       });
       setUser({ ...response.data.user });
-      setToken(response.data.token);
+      setToken(response.token);
+      setExpiresIn(response.expiresIn);
     } catch (err) {
-      return Promise.reject(err.response.data.message);
+      return Promise.reject(err.response.message);
     }
   };
 
   const refreshToken = async () => {
     try {
       const response = await myAxios().post(`${baseUrl}/refresh-token`);
+      console.log(response);
       setUser({ ...response.data.user });
-      setToken(response.data.token);
+      setToken(response.token);
+      setExpiresIn(response.expiresIn);
     } catch (err) {
-      return Promise.reject(err.response.data.message);
+      return Promise.reject(err.response.message);
     }
   };
 
   const signOut = async () => {
     try {
       await myAxios(token).post(`${baseUrl}/revoke-token`);
-      setUser(null);
       setToken(null);
+      setUser(null);
+      setExpiresIn(null);
     } catch (error) {
-      console.log(error.response.data.message);
+      console.log(error.response.message);
     }
   };
 
@@ -64,6 +69,7 @@ const useProvideAuth = () => {
   return {
     user,
     token,
+    expiresIn,
     signIn,
     signUp,
     refreshToken,

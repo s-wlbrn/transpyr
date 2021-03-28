@@ -5,14 +5,13 @@ const myAxios = (token = null) => {
 
   axiosInstance.interceptors.request.use((config) => {
     if (token) {
-      console.log(token);
       config.headers['Authorization'] = `Bearer ${token}`;
     }
     config.withCredentials = true;
     return config;
   });
 
-  axios.interceptors.response.use(function (response) {
+  axiosInstance.interceptors.response.use(function (response) {
     return response.data;
   });
 
