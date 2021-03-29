@@ -1,6 +1,5 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { handleHTTPError } from '../../libs/handleHTTPError';
 
 import { Container, Row } from 'react-bootstrap';
 
@@ -51,14 +50,25 @@ class SignInSignUpPage extends React.Component {
     return async (e) => {
       try {
         e.preventDefault();
-        console.log('off we go');
         await submitFunction(...submitArguments);
-        this.props.history.push('/events');
+        let { from } = this.props.location.state || {
+          from: { pathname: '/events' },
+        };
+        this.props.history.push(from);
       } catch (err) {
         console.log(err);
       }
     };
   };
+
+  componentDidUpdate() {
+    if (this.context.user) {
+      let { from } = this.props.location.state || {
+        from: { pathname: '/events' },
+      };
+      this.props.history.push(from);
+    }
+  }
 
   render() {
     return (

@@ -12,6 +12,7 @@ const useProvideAuth = () => {
   const [expiresIn, setExpiresIn] = useState(null);
 
   const signIn = async (email, password) => {
+    console.log('test');
     try {
       const response = await myAxios().post(`${baseUrl}/signin`, {
         email,
@@ -21,7 +22,7 @@ const useProvideAuth = () => {
       setToken(response.token);
       setExpiresIn(response.expiresIn);
     } catch (err) {
-      return Promise.reject(err.response.message);
+      return Promise.reject(err.response.data);
     }
   };
 
@@ -37,7 +38,7 @@ const useProvideAuth = () => {
       setToken(response.token);
       setExpiresIn(response.expiresIn);
     } catch (err) {
-      return Promise.reject(err.response.message);
+      return Promise.reject(err.response.data);
     }
   };
 
@@ -49,7 +50,7 @@ const useProvideAuth = () => {
       setToken(response.token);
       setExpiresIn(response.expiresIn);
     } catch (err) {
-      return Promise.reject(err.response.message);
+      return Promise.reject(err.response.data);
     }
   };
 
@@ -59,8 +60,8 @@ const useProvideAuth = () => {
       setToken(null);
       setUser(null);
       setExpiresIn(null);
-    } catch (error) {
-      console.log(error.response.message);
+    } catch (err) {
+      return Promise.reject(err.response.data);
     }
   };
 

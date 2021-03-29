@@ -1,14 +1,15 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 
-import { handleHTTPError } from '../../libs/handleHTTPError';
-
 import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessage.component';
 import { CustomButton } from '../CustomButton/CustomButton.component';
 
 import './PhotoUploadForm.styles.scss';
+import myAxios from '../../auth/axios.config';
+import authContext from '../../auth/use-auth';
 
 class PhotoUploadForm extends React.Component {
+  static contextType = authContext;
   constructor(props) {
     super(props);
 
@@ -49,8 +50,9 @@ class PhotoUploadForm extends React.Component {
     this.reader.readAsDataURL(imageFile);
   };
 
-  handleUpload = (e) => {
+  handleUpload = async (e) => {
     e.preventDefault();
+    const { token } = this.context;
     const { selectedFile, messageValidation } = this.state;
 
     //Handle invalid image
@@ -73,40 +75,33 @@ class PhotoUploadForm extends React.Component {
     const formData = new FormData();
     formData.append('photo', selectedFile);
     //Call API
-    fetch(
-      `http://localhost:3000/api/${this.props.resource}/${this.props.resourceId}`,
-      {
-        method: 'PUT',
-        mode: 'cors',
-        body: formData,
-      }
-    )
-      .then((response) => response.json())
-      .then((response) => handleHTTPError(response))
-      .then((res) => {
-        this.setState({
-          messageResponse: {
-            isSuccess: true,
-            message: 'Photo uploaded successfully!',
-          },
-        });
-        setTimeout(
-          () =>
-            this.props.history.push(
-              this.props.location.pathname.split('/').slice(0, -1).join('/')
-            ),
-          1000
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-        this.setState({
-          messageResponse: {
-            isSuccess: false,
-            message: err.message,
-          },
-        });
+    try {
+      await myAxios(token).put(
+        `http://localhost:3000/api/${this.props.resource}/${this.props.resourceId}`,
+        formData
+      );
+
+      this.setState({
+        messageResponse: {
+          isSuccess: true,
+          message: 'Photo uploaded successfully!',
+        },
       });
+      setTimeout(
+        () =>
+          this.props.history.push(
+            this.props.location.pathname.split('/').slice(0, -1).join('/')
+          ),
+        1000
+      );
+    } catch (err) {
+      this.setState({
+        messageResponse: {
+          isSuccess: false,
+          message: err.response.data.error.message,
+        },
+      });
+    }
   };
 
   render() {

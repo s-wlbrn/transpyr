@@ -1,15 +1,18 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
+import authContext from '../../auth/use-auth';
 
-import { handleHTTPError } from '../../libs/handleHTTPError';
 import { combineDateTime } from '../../libs/formatDateTime';
 
 import { EventForm } from '../../components/EventForm/EventForm.component';
 import { CustomButton } from '../../components/CustomButton/CustomButton.component';
 
 import './create-event-page.styles.scss';
+import myAxios from '../../auth/axios.config';
 
 class CreateEventPage extends React.Component {
+  static contextType = authContext;
   constructor() {
     super();
     this.state = {
@@ -48,30 +51,31 @@ class CreateEventPage extends React.Component {
     );
   };
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
-    const formattedEvent = combineDateTime(this.state.currentEvent);
-    console.log(formattedEvent);
-    fetch(`http://localhost:3000/api/events`, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...formattedEvent,
-      }),
-    })
-      .then((response) => response.json())
-      .then((response) => handleHTTPError(response))
-      .then((data) => {
-        console.log(data);
-      })
-      // .then(() => {
-      //   this.setState(initialState);
-      //   this.props.history.push(REDIRECT TO PHOTO UPLOAD);
-      // })
-      .catch((err) => console.log(err));
+    const { currentEvent } = this.state;
+    const { token } = this.context;
+    let formattedEvent = { ...currentEvent };
+
+    //Fix automatically filled-in dateEnd not in state
+    if (!formattedEvent.dateEnd) {
+      formattedEvent.dateEnd = formattedEvent.dateStart;
+      console.log(formattedEvent);
+    }
+
+    formattedEvent = combineDateTime(formattedEvent);
+
+    try {
+      const response = await myAxios(token).post(
+        'http://localhost:3000/api/events',
+        formattedEvent
+      );
+      const { id } = response.data.data;
+      console.log(id);
+      this.props.history.push(`/events/id/${id}/upload-photo`);
+    } catch (err) {
+      console.log(err.response);
+    }
   };
 
   _prev = () => {
@@ -132,4 +136,4 @@ class CreateEventPage extends React.Component {
   }
 }
 
-export default CreateEventPage;
+export default withRouter(CreateEventPage);

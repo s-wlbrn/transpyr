@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { Switch, Route, useHistory } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 
 import { useAuth } from './auth/use-auth';
-import myAxios from './auth/axios.config';
+import { PrivateRoute } from './auth/PrivateRoute';
 
 import Splashpage from './pages/splash/splash.component';
 import Homepage from './pages/homepage/homepage.component';
@@ -20,17 +20,15 @@ import { TopNav } from './components/TopNav/TopNav.component';
 import { Footer } from './components/Footer/Footer.component';
 
 const App = () => {
-  console.log('app rendering');
   const auth = useAuth();
-  console.log(auth);
+
+  //Silent token refresh
   useEffect(() => {
     const silentRefresh = async () => {
       if (!auth.user) {
         await auth.refreshToken();
       } else if (auth.expiresIn) {
-        console.log(`refreshing in ${auth.expiresIn}ms.`);
         setTimeout(async () => {
-          console.log('refreshing');
           await auth.refreshToken();
         }, auth.expiresIn);
       }
@@ -45,9 +43,13 @@ const App = () => {
       <Switch>
         <Route exact path="/" component={Splashpage} />
         <Route exact path="/events" component={Homepage} />
-        <Route exact path="/events/create-event" component={CreateEventPage} />
+        <PrivateRoute exact path="/events/create-event">
+          <CreateEventPage />
+        </PrivateRoute>
         <Route exact path="/events/id/:id" component={EventDetailsPage} />
-        <Route exact path="/events/id/:id/edit" component={EditEventPage} />
+        <PrivateRoute exact path="/events/id/:id/edit">
+          <EditEventPage />
+        </PrivateRoute>
         <Route
           exact
           path="/events/id/:id/upload-photo"

@@ -1,6 +1,9 @@
 import React from 'react';
-import { handleHTTPError } from '../../libs/handleHTTPError';
 import { splitDateTime, combineDateTime } from '../../libs/formatDateTime';
+import { withRouter } from 'react-router-dom';
+
+import myAxios from '../../auth/axios.config';
+import authContext from '../../auth/use-auth';
 
 import { Col, Container, Row } from 'react-bootstrap';
 import ErrorPage from '../error-page/error-page.component';
@@ -13,17 +16,19 @@ import { CustomButton } from '../../components/CustomButton/CustomButton.compone
 import './edit-event-page.styles.scss';
 
 class EditEventPage extends React.Component {
+  static contextType = authContext;
   constructor(props) {
     super(props);
-
     this.state = {
-      eventId: this.props.match.params.id,
+      eventId: props.match.params.id,
       event: null,
       eventChanges: null,
       eventChanged: false,
       editStep: null,
       error: null,
     };
+
+    this.eventPath = props.location.pathname.split('/').slice(0, -1).join('/');
   }
 
   editStepMap = {
@@ -33,8 +38,6 @@ class EditEventPage extends React.Component {
     ticketTiers: 4,
     location: 5,
   };
-
-  eventPath = this.props.location.pathname.split('/').slice(0, -1).join('/');
 
   handleEditStep = (section) => {
     if (section === 'photo')
@@ -77,57 +80,64 @@ class EditEventPage extends React.Component {
     history.push(location.state.from || this.eventPath);
   };
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
     const { event, eventId } = this.state;
-    console.log(event);
-    fetch(`http://localhost:3000/api/events/${eventId}`, {
-      method: 'PATCH',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...event,
-      }),
-    })
-      .then((response) => response.json())
-      .then((response) => handleHTTPError(response))
-      .then((data) => {
-        console.log(data);
-      })
-      .then(() => {
-        this.props.history.push(this.eventPath);
-      })
-      .catch((err) => this.setState({ error: err }));
+    const { token } = this.context;
+
+    try {
+      await myAxios(token).patch(
+        `http://localhost:3000/api/events/${eventId}`,
+        event
+      );
+      this.props.history.push(this.eventPath);
+    } catch (err) {
+      this.setState({ error: { ...err.response.data } });
+    }
   };
 
-  componentDidMount() {
-    console.log(this.props.location, this.props.history, this.props.match);
-    fetch(`http://localhost:3000/api/events/${this.state.eventId}`)
-      .then((response) => response.json())
-      .then((response) => handleHTTPError(response))
-      .then((data) => {
-        return splitDateTime(data.data.data);
-      })
-      .then((eventData) => {
-        console.log(eventData);
-        this.setState({
-          event: {
-            ...eventData,
+  fetchEvent = async () => {
+    const { user } = this.context;
+    const response = await myAxios().get(
+      `http://localhost:3000/api/events/${this.state.eventId}`
+    );
+
+    //handle unauthorized
+    if (user._id !== response.data.data.organizer) {
+      return Promise.reject({
+        response: {
+          data: {
+            error: {
+              statusCode: 401,
+              message: 'You are not the organizer of this event.',
+            },
           },
-          eventChanges: {
-            ...eventData,
-          },
-        });
-      })
-      .catch((err) => {
-        this.setState({
-          error: {
-            ...err,
-          },
-        });
+        },
       });
+    }
+    console.log(response);
+    return response.data.data;
+  };
+
+  async componentDidMount() {
+    try {
+      const eventData = await this.fetchEvent();
+      const formattedData = splitDateTime(eventData);
+      this.setState({
+        event: {
+          ...formattedData,
+        },
+        eventChanges: {
+          ...formattedData,
+        },
+      });
+    } catch (err) {
+      this.setState({
+        error: {
+          ...err.response.data,
+        },
+      });
+    }
   }
 
   render() {
@@ -176,4 +186,4 @@ class EditEventPage extends React.Component {
   }
 }
 
-export default EditEventPage;
+export default withRouter(EditEventPage);
