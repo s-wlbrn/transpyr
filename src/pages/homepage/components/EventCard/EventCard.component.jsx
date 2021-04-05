@@ -18,7 +18,7 @@ export const EventCard = (props) => {
       <Col xs={3}>
         <img
           src={`http://localhost:3000/static/img/events/${id}.jpeg`}
-          alt={name}
+          alt="event img"
         />
       </Col>
       <Col className="event-card-name-date" xs={6}>

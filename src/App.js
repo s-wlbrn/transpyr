@@ -15,6 +15,7 @@ import SignInSignUpPage from './pages/signin-signup-page/signin-signup-page.comp
 import CreateEventPage from './pages/create-event-page/create-event-page.component';
 import EditEventPage from './pages/edit-event-page/edit-event-page.component';
 import UploadEventPhotoPage from './pages/upload-event-photo/upload-event-photo-page.component';
+import ForgotPasswordPage from './pages/forgot-password-page/forgot-password-page.component';
 
 import { TopNav } from './components/TopNav/TopNav.component';
 import { Footer } from './components/Footer/Footer.component';
@@ -58,8 +59,14 @@ const App = () => {
         <Route exact path="/users/signin">
           <SignInSignUpPage />
         </Route>
+        <Route path="/users/forgot-password" component={ForgotPasswordPage} />
+        {/* <Route>
+          exact
+          patch="/users/reset-password/:token"
+          component={ResetPasswordPage}
+        </Route> */}
         <Route path="*">
-          <ErrorPage code="404" message="Page not found." />
+          <ErrorPage statusCode="404" message="Page not found." />
         </Route>
       </Switch>
       <Footer />

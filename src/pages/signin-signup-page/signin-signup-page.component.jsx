@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 import { Container, Row } from 'react-bootstrap';
 
@@ -7,6 +7,7 @@ import authContext from '../../auth/use-auth';
 
 import { SignIn } from './components/SignIn/SignIn.component';
 import { SignUp } from './components/SignUp/SignUp.component';
+import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessage.component';
 
 import './signin-signup-page.styles.scss';
 
@@ -20,6 +21,10 @@ const initialState = {
     email: '',
     password: '',
     passwordConfirm: '',
+  },
+  response: {
+    signin: '',
+    signup: '',
   },
 };
 
@@ -51,12 +56,13 @@ class SignInSignUpPage extends React.Component {
       try {
         e.preventDefault();
         await submitFunction(...submitArguments);
+        // Redirect to 'from' route or default to home
         let { from } = this.props.location.state || {
           from: { pathname: '/events' },
         };
         this.props.history.push(from);
       } catch (err) {
-        console.log(err);
+        this.setState({ response: { [endpoint]: err.message } });
       }
     };
   };
@@ -73,12 +79,13 @@ class SignInSignUpPage extends React.Component {
   render() {
     return (
       <Container as="main" fluid>
-        <Row className="signin-signout">
+        <Row className="signin-signup">
           <SignIn
             handleSubmit={this.handleSubmit('signin')}
             handleChange={this.handleChange('signin')}
             email={this.state.signin.email}
             password={this.state.signin.password}
+            response={this.state.response.signin}
           />
           <SignUp
             handleSubmit={this.handleSubmit('signup')}
@@ -87,6 +94,7 @@ class SignInSignUpPage extends React.Component {
             email={this.state.signup.email}
             password={this.state.signup.password}
             passwordConfirm={this.state.signup.passwordConfirm}
+            response={this.state.response.signup}
           />
         </Row>
       </Container>

@@ -4,8 +4,7 @@ import Col from 'react-bootstrap/Col';
 
 import { CustomButton } from '../../../../components/CustomButton/CustomButton.component';
 import { FormInput } from '../../../../components/FormInput/FormInput.component';
-
-import './SignUp.styles.scss';
+import { ResponseMessage } from '../../../../components/ResponseMessage/ResponseMessage.component';
 
 export const SignUp = ({
   handleSubmit,
@@ -14,8 +13,9 @@ export const SignUp = ({
   email,
   password,
   passwordConfirm,
+  response,
 }) => (
-  <Col as="section" className="signin-signup" xs={12}>
+  <Col as="section" className="signup" xs={12}>
     <h2 className="signin-signup-title">Create an account</h2>
     <form onSubmit={handleSubmit}>
       <FormInput
@@ -56,5 +56,6 @@ export const SignUp = ({
       />
       <CustomButton type="submit">Submit</CustomButton>
     </form>
+    <ResponseMessage error>{response}</ResponseMessage>
   </Col>
 );
