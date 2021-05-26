@@ -1,12 +1,10 @@
-$darker-color: #00701a;
-$main-color: #43a047;
-$lighter-color: #76d275;
+@import '../../scss/colors';
 
 .custom-button {
   height: 3rem;
   width: 100%;
   letter-spacing: 0.5px;
-  padding: 0 35x;
+
   font-size: 1em;
   background-color: $darker-color;
   color: white;

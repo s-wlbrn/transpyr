@@ -13,7 +13,7 @@ export const EditEventControl = ({
 }) => (
   <Row className="edit-event-control">
     <Col xs={6} className="edit-event-title">
-      <h1>{`Editing Event`}</h1>
+      <h1>Editing event</h1>
       {!editStep && <h2>Select a field to edit.</h2>}
     </Col>
     {!editStep && (

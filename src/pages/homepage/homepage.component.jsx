@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { LocationButton } from './components/LocationButton/LocationButton.component';
 import { FilterMenu } from './components/FilterMenu/FilterMenu.component';
 import { EventList } from './components/EventList/EventList.component';
-import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
 
 import { calculateEventInfo } from '../../libs/calculateEventInfo';
 
@@ -12,61 +11,85 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import './homepage.styles.scss';
+import myAxios from '../../auth/axios.config';
+import { PageControl } from './components/PageControl/PageControl.component';
 
-class Homepage extends React.Component {
-  constructor(props) {
-    super();
-    this.state = {
-      events: [],
-    };
-  }
+const Homepage = (props) => {
+  const [isFetching, setIsFetching] = useState(true);
+  const [events, setEvents] = useState([]);
+  const [query, setQuery] = useState({
+    sort: 'dateTimeStart',
+    online: true,
+    paginate: { page: 1, limit: 10 },
+  });
+  const numberOfPagesRef = useRef(null);
 
-  componentDidMount() {
-    fetch('http://localhost:3000/api/events?sort=dateTimeStart')
-      .then((response) => response.json())
-      .then((data) => {
-        return data.data.data.map((el) => calculateEventInfo(el));
-      })
-      .then((events) => {
-        console.log(events);
-        this.setState({ events });
+  const handleChangeQuery = (selections) => {
+    setQuery({
+      ...query,
+      ...selections,
+    });
+  };
+
+  const handleChangePage = (page) => {
+    if (page > 0 && page <= numberOfPagesRef.current) {
+      handleChangeQuery({
+        paginate: {
+          ...query.paginate,
+          page,
+        },
       });
-  }
+    }
+  };
 
-  render() {
-    const { events } = this.state;
-    return (
-      <Container as="main" fluid className="homepage">
-        <Row>
-          <Col>
-            <p>Popular events...</p>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <LocationButton name="Online" />
-          </Col>
-          <Col>
-            <LocationButton name="Near you" />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <FilterMenu />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            {events.length ? (
-              <EventList events={events} />
-            ) : (
-              <LoadingResource resource="events" />
-            )}
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
-}
+  useEffect(() => {
+    const fetchEvents = async () => {
+      setIsFetching(true);
+      const response = await myAxios().get('http://localhost:3000/api/events', {
+        params: query,
+      });
+      const events = response.data.data.map((el) => calculateEventInfo(el));
+      console.log(events);
+      numberOfPagesRef.current = response.data.pages;
+      setEvents(events);
+      setIsFetching(false);
+    };
+
+    fetchEvents();
+  }, [query]);
+
+  return (
+    <Container as="main" fluid className="homepage">
+      <Row>
+        <Col xs={12} className="homepage-description">
+          Browse popular events...
+        </Col>
+      </Row>
+      <Row className="homepage-location-buttons">
+        <Col xs={6}>
+          <LocationButton
+            active={query.online}
+            handleChange={handleChangeQuery}
+            name="Online"
+          />
+        </Col>
+        <Col xs={6}>
+          <LocationButton
+            active={!query.online}
+            handleChange={handleChangeQuery}
+            name="Near you"
+          />
+        </Col>
+      </Row>
+      <FilterMenu query={query} handleChange={handleChangeQuery} />
+      <EventList isFetching={isFetching} events={events} />
+      <PageControl
+        page={query.paginate.page}
+        totalPages={numberOfPagesRef.current}
+        handleChange={handleChangePage}
+      />
+    </Container>
+  );
+};
 
 export default Homepage;

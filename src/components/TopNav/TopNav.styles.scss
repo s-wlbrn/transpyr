@@ -9,6 +9,8 @@ $lighter-color: #76d275;
   .navbar-toggler {
     border: none;
     padding-right: 0;
+    max-width: 90%;
+    text-align: end;
   }
 
   .topnav-link {
@@ -75,10 +77,23 @@ $lighter-color: #76d275;
   .nav-content-md {
     display: flex;
     color: white;
+    text-align: end;
+
+    .top-user-name {
+      max-width: 80%;
+    }
   }
 
   .nav-contents {
     justify-content: flex-start;
     padding-left: 1rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .nav-content-md {
+    .top-user-name {
+      max-width: none;
+    }
   }
 }

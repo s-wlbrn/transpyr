@@ -1,0 +1,50 @@
+@import '../../scss/colors';
+
+.form-input-toggle-group {
+  position: relative;
+  display: inline-block;
+  height: 2.45rem;
+  width: 4.5rem;
+
+  .form-input-toggle {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .form-input-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: $lighter-color;
+    transition: 0.5s;
+    border-radius: 2rem;
+  }
+
+  .form-input-toggle-slider:before {
+    position: absolute;
+    content: '';
+    height: 2rem;
+    width: 2rem;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+
+  .form-input-toggle:checked + .form-input-toggle-slider {
+    background-color: $darker-color;
+  }
+
+  .form-input-toggle:focus + .form-input-toggle-slider {
+    box-shadow: 0 0 1px $darker-color;
+  }
+
+  .form-input-toggle:checked + .form-input-toggle-slider:before {
+    transform: translateX(2rem);
+  }
+}

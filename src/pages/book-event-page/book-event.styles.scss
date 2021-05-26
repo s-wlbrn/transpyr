@@ -1,0 +1,48 @@
+@import '../../scss/colors';
+
+.confirm-booking-page {
+  header {
+    margin-bottom: 1rem;
+  }
+
+  .confirm-booking-table {
+    width: 100%;
+
+    .confirm-booking-labels {
+      background-color: $darker-color;
+
+      color: white;
+      font-weight: bold;
+
+      th:not(:first-child) {
+        text-align: center;
+        padding: 1rem 0;
+      }
+
+      :nth-child(1) {
+        width: 60%;
+        padding-left: 1rem;
+      }
+
+      :nth-child(2) {
+        width: 20%;
+      }
+
+      :nth-child(3) {
+        width: 20%;
+      }
+    }
+
+    &:nth-child(even) {
+      background-color: $lighter-color;
+    }
+  }
+
+  .confirm-booking-totals {
+    text-align: end;
+
+    .confirm-booking-total {
+      font-weight: bold;
+    }
+  }
+}

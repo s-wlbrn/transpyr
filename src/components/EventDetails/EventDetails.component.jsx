@@ -1,5 +1,5 @@
 import React from 'react';
-import { format, parseISO, isSameDay } from 'date-fns';
+import { format, isSameDay } from 'date-fns';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -23,123 +23,136 @@ export const EventDetails = ({
   location,
   address,
   online,
-  id,
-}) => {
-  dateTimeStart = new Date(dateTimeStart);
-  dateTimeEnd = new Date(dateTimeEnd);
-  return (
-    <React.Fragment>
-      <Row>
-        <Col xs={12} className="event-image-container">
-          <div
-            className="event-image-background"
-            onClick={() => {
-              if (editMode) handleEditStep('photo');
-            }}
-          >
-            <img
-              src={`http://localhost:3000/static/img/events/${id}.jpeg`}
-              alt={name}
-              className="event-detail-image"
-            />
+  photo,
+  handleBookNow,
+  soldOut,
+  published,
+  pastEvent,
+}) => (
+  <React.Fragment>
+    <Row>
+      <Col xs={12} className="event-image-container">
+        <div
+          className="event-image-background"
+          onClick={() => {
+            if (editMode) handleEditStep('photo');
+          }}
+        >
+          <img
+            src={`http://localhost:3000/static/img/events/${photo}`}
+            alt={name}
+            className="event-details-image"
+          />
+        </div>
+      </Col>
+      <Col
+        xs={12}
+        onClick={() => {
+          if (editMode) handleEditStep('name');
+        }}
+      >
+        <p className="event-details-date">{format(dateTimeStart, 'PPPPp O')}</p>
+        <h1 className="event-details-name">{name}</h1>
+        {editMode && (
+          <div className="event-edit-type-category">
+            <span>
+              <h2>Type:</h2>
+              {type}
+            </span>
+            <span>
+              <h2>Category:</h2>
+              {category}
+            </span>
           </div>
-        </Col>
-        <Col
-          xs={12}
-          onClick={() => {
-            if (editMode) handleEditStep('name');
-          }}
-        >
-          <p className="event-detail-date">
-            {format(dateTimeStart, 'PPPPp O')}
+        )}
+        <hr className="event-details-titlebreak" />
+      </Col>
+    </Row>
+    <Row className="event-details-body">
+      <Col
+        xs={12}
+        className="event-book-button"
+        onClick={() => {
+          if (editMode) {
+            handleEditStep('ticketTiers');
+          } else if (!soldOut && published && !pastEvent) {
+            handleBookNow();
+          }
+        }}
+      >
+        <CustomButton type="button">
+          {editMode
+            ? 'Ticket Types'
+            : soldOut
+            ? 'Sold Out'
+            : !published
+            ? 'Unpublished event'
+            : pastEvent
+            ? 'This is a past event.'
+            : 'Book now'}
+        </CustomButton>
+      </Col>
+      <Col
+        xs={12}
+        onClick={() => {
+          if (editMode) handleEditStep('date');
+        }}
+      >
+        <h2>When</h2>
+        {isSameDay(dateTimeStart, dateTimeEnd) ? (
+          <p>
+            <time dateTime={dateTimeStart}>
+              {format(dateTimeStart, 'PPPP')}
+            </time>
+            <br />
+            <time dateTime={dateTimeStart}>{format(dateTimeStart, 'p')}</time>
+            <span> to </span>
+            <time dateTime={dateTimeEnd}>{format(dateTimeEnd, 'p O')}</time>
           </p>
-          <h1 className="event-detail-name">{name}</h1>
-          {editMode && (
-            <div className="event-edit-type-category">
-              <span>
-                <h2>Type:</h2>
-                {type}
-              </span>
-              <span>
-                <h2>Category:</h2>
-                {category}
-              </span>
-            </div>
-          )}
-          <hr className="event-detail-titlebreak" />
-        </Col>
-      </Row>
-      <Row className="event-details">
-        <Col
-          xs={12}
-          className="event-book-button"
-          onClick={() => {
-            if (editMode) handleEditStep('ticketTiers');
-          }}
-        >
-          <CustomButton type="button">
-            {editMode ? 'Ticket Types' : 'Book now'}
-          </CustomButton>
-        </Col>
-        <Col
-          xs={12}
-          onClick={() => {
-            if (editMode) handleEditStep('date');
-          }}
-        >
-          <h2>When</h2>
-          {isSameDay(dateTimeStart, dateTimeEnd) ? (
-            <p>
-              <time dateTime={dateTimeStart}>
-                {format(dateTimeStart, 'PPPP')}
-              </time>
-              <br />
-              <time dateTime={dateTimeStart}>{format(dateTimeStart, 'p')}</time>
-              <span> to </span>
-              <time dateTime={dateTimeEnd}>{format(dateTimeEnd, 'p O')}</time>
-            </p>
-          ) : (
-            <p>
-              <time dateTime={dateTimeStart}>
-                {format(dateTimeStart, 'PPPPp')}
-              </time>
-              <span> -</span>
-              <br />
-              <time dateTime={dateTimeEnd}>{format(dateTimeEnd, 'PPPPp')}</time>
-            </p>
-          )}
-        </Col>
+        ) : (
+          <p>
+            <time dateTime={dateTimeStart}>
+              {format(dateTimeStart, 'PPPPp')}
+            </time>
+            <span> -</span>
+            <br />
+            <time dateTime={dateTimeEnd}>{format(dateTimeEnd, 'PPPPp')}</time>
+          </p>
+        )}
+        {pastEvent && (
+          <div className="event-details-past-event">This is a past event.</div>
+        )}
+      </Col>
 
-        <Col
-          xs={12}
-          onClick={() => {
-            if (editMode) handleEditStep('location');
-          }}
-        >
-          <h2>Where</h2>
-          {location.coordinates.length ? (
-            <React.Fragment>
-              {online && <p>Online and</p>}
-              <p className="event-details-address">{address}</p>
-              {!editMode && <a href="#event-map">See Map</a>}
-            </React.Fragment>
-          ) : (
-            <p className="event-details-online">This is an online event.</p>
-          )}
-        </Col>
-        <Col
-          xs={12}
-          onClick={() => {
-            if (editMode) handleEditStep('description');
-          }}
-        >
-          <h2>Description</h2>
-          <EventDescription convertedDescription={convertedDescription} />
-        </Col>
-      </Row>
-      {!editMode && location.coordinates.length ? (
-        <EventDetailsMap coordinates={location.coordinates} />
-      ) : null}
-    </React.Fragment>
-  );
-};
+      <Col
+        xs={12}
+        onClick={() => {
+          if (editMode) handleEditStep('location');
+        }}
+      >
+        <h2>Where</h2>
+        {location.coordinates.length ? (
+          <React.Fragment>
+            {online && <p>Online and</p>}
+            <p className="event-details-address">{address}</p>
+            {!editMode && <a href="#event-map">See Map</a>}
+          </React.Fragment>
+        ) : (
+          <p className="event-details-online">This is an online event.</p>
+        )}
+      </Col>
+      <Col
+        xs={12}
+        onClick={() => {
+          if (editMode) handleEditStep('description');
+        }}
+      >
+        <h2>Description</h2>
+        <EventDescription convertedDescription={convertedDescription} />
+      </Col>
+    </Row>
+    {!editMode && location.coordinates.length ? (
+      <EventDetailsMap coordinates={location.coordinates} />
+    ) : null}
+  </React.Fragment>
+);

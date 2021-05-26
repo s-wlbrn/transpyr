@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import { useHistory } from 'react-router';
 import PhotoUploadForm from '../../components/PhotoUploadForm/PhotoUploadForm.component';
 
 import './upload-event-photo-page.styles.scss';
 
-const UploadEventPhotoPage = (props) => {
+const UploadEventPhotoPage = ({ match }) => {
+  const history = useHistory();
+
+  const handlePhotoUploadSuccess = () => {
+    history.push(`/events/id/${match.params.id}`);
+  };
+
   return (
     <Container as="main" fluid className="upload-event-photo-page">
       <Row>
@@ -18,7 +25,8 @@ const UploadEventPhotoPage = (props) => {
         <Col xs={12}>
           <PhotoUploadForm
             resource="events"
-            resourceId={props.match.params.id}
+            resourceId={match.params.id}
+            successCallback={handlePhotoUploadSuccess}
           />
         </Col>
       </Row>

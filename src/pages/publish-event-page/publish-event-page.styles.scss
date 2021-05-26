@@ -1,0 +1,48 @@
+@import '../../scss/colors';
+
+.publish-event-page {
+  .confirm-publish-buttons {
+    display: flex;
+    justify-content: space-between;
+
+    button:first-child {
+      margin-right: 0.5rem;
+    }
+  }
+
+  .response-error {
+    margin: 0 0 1rem 0;
+  }
+
+  .publish-event-service-fee {
+    display: flex;
+    justify-content: space-between;
+
+    .form-input-group {
+      width: 50%;
+
+      input {
+        margin-top: 1rem;
+      }
+
+      label {
+        width: 100%;
+        position: relative;
+        left: 0;
+        top: -40px;
+        text-align: center;
+        font-size: 1rem;
+
+        &.shrink {
+          top: -40px;
+          color: $darker-color;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+
+  .form-text-area-group {
+    margin-bottom: 1rem;
+  }
+}

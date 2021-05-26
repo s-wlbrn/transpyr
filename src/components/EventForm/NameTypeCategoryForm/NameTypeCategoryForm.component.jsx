@@ -52,6 +52,7 @@ export const NameTypeCategoryForm = ({
   type,
   category,
   handleChange,
+  totalCapacity,
 }) => {
   console.log(category);
   return (
@@ -98,6 +99,29 @@ export const NameTypeCategoryForm = ({
             value={category}
             required
           />
+        </Col>
+      </Row>
+      <Row>
+        <Col xs={12}>
+          <h2>What is the event capacity?</h2>
+        </Col>
+        <Col xs={6} className="create-event-total-capacity">
+          <FormInput
+            name="totalCapacity"
+            type="number"
+            id="totalCapacity"
+            value={totalCapacity}
+            handleChange={handleChange}
+            label="Capacity"
+            required
+          />
+        </Col>
+        <Col xs={12}>
+          <p className="create-event-capacity-description">
+            This is the total capacity for your event. Specific ticket
+            capacities can be set later. A value of zero indicates there is no
+            maximum.
+          </p>
         </Col>
       </Row>
     </Container>

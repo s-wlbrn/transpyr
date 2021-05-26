@@ -30,7 +30,7 @@ export const TopNav = () => {
         T
       </Link>
       <Navbar.Toggle aria-controls="basic-navbar-nav">
-        {user ? <UserNamePicture name={user.name} img="" /> : null}
+        {user ? <UserNamePicture name={user.name} photo={user.photo} /> : null}
       </Navbar.Toggle>
       <Navbar.Collapse id="basic-navbar-nav" className="nav-contents">
         <Form inline>
@@ -43,7 +43,10 @@ export const TopNav = () => {
           </Link>
           {user ? (
             <React.Fragment>
-              <Link to="/user/settings" className="topnav-link">
+              <Link to="/users/edit-profile" className="topnav-link">
+                Edit Profile
+              </Link>
+              <Link to="/users/settings" className="topnav-link">
                 Settings
               </Link>
               <div className="topnav-link" onClick={signOutAndGoHome}>
@@ -66,14 +69,17 @@ export const TopNav = () => {
         {user ? (
           <Dropdown className="signed-in-dropdown" alignRight>
             <Dropdown.Toggle as="div" id="dropdown-basic">
-              <UserNamePicture name={user.name} img="" />
+              <UserNamePicture name={user.name} photo={user.photo} />
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
               <Link to="/events/create-event" className="nav-link">
                 Host an event
               </Link>
-              <Link to="/user/settings" className="nav-link">
+              <Link to="/users/edit-profile" className="nav-link">
+                Edit Profile
+              </Link>
+              <Link to="/users/settings" className="nav-link">
                 Settings
               </Link>
               <Dropdown.Divider />

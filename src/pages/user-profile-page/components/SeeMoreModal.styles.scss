@@ -1,0 +1,10 @@
+.see-more-modal {
+  .modal-body {
+    height: 50vh;
+    overflow-y: scroll;
+
+    .event-listing {
+      max-height: 50vh;
+    }
+  }
+}

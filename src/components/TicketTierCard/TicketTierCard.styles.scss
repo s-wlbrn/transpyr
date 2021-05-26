@@ -1,0 +1,70 @@
+.ticket-tier-card {
+  h1.ticket-card-name {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5em;
+    display: inline;
+  }
+
+  .ticket-card-description {
+    text-align: left;
+    font-size: 1.25em;
+    margin-bottom: 0;
+  }
+
+  .ticket-card-price {
+    font-size: 1.5em;
+    line-height: normal;
+  }
+
+  [class^='col'] {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &:nth-child(2) {
+      padding: 0 45px 0 0;
+      justify-content: flex-start;
+      text-align: center;
+
+      label {
+        display: inline;
+        width: 60%;
+      }
+
+      input {
+        width: 2rem;
+        display: inline;
+      }
+    }
+  }
+
+  .quantity {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+
+    .arrow {
+      cursor: pointer;
+      font-size: 1.5em;
+      font-weight: bolder;
+      line-height: 1.5em;
+      width: 2rem;
+      text-align: center;
+    }
+
+    .value {
+      margin: 0 5px;
+      font-size: 1.5em;
+      width: 22.56px;
+      text-align: center;
+    }
+
+    .limit-quantity {
+      width: 2rem;
+    }
+  }
+
+  hr {
+    width: 100%;
+  }
+}

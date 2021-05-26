@@ -1,19 +1,20 @@
+@import '../../scss/colors';
+
 main.homepage {
   padding: 0;
   overflow: hidden;
-}
 
-.col {
-  margin: 0;
-  padding: 0;
-
-  p {
-    margin: 0;
-    padding: 0.5em 0 0.5em 0.5em;
+  .homepage-description {
+    margin: 0.5rem 0;
   }
-}
 
-.row {
-  margin: 0;
-  padding: 0;
+  .homepage-location-buttons {
+    div {
+      padding: 0;
+    }
+  }
+
+  .event-listing {
+    min-height: 71vh;
+  }
 }

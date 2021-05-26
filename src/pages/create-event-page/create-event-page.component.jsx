@@ -31,6 +31,7 @@ class CreateEventPage extends React.Component {
         timeEnd: '',
         type: '',
         category: '',
+        totalCapacity: '',
       },
       currentStep: 1,
     };

@@ -4,7 +4,7 @@
   h1 {
     font-size: 1.75em;
 
-    &.event-detail-name {
+    &.event-details-name {
       margin: 0;
     }
   }
@@ -23,7 +23,7 @@
   }
 }
 
-.event-detail-date {
+.event-details-date {
   margin-top: 1rem;
   margin-bottom: 0;
 }
@@ -35,11 +35,11 @@
   background-color: black;
 }
 
-.event-detail-image {
+.event-details-image {
   height: 100%;
 }
 
-.event-details {
+.event-details-body {
   p {
     margin: 0;
   }
@@ -50,6 +50,11 @@
 
   h2 {
     font-size: 1.25em;
+    font-weight: bold;
+  }
+
+  .event-details-past-event {
+    color: darkred;
     font-weight: bold;
   }
 

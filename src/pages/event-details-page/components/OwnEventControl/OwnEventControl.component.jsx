@@ -28,7 +28,16 @@ export const OwnEventControl = ({ published }) => {
           </CustomButton>
         </Col>
         <Col xs={3}>
-          <CustomButton type="button">Publish</CustomButton>
+          <CustomButton
+            type="button"
+            onClick={() =>
+              history.push(`${location.pathname}/publish-event`, {
+                from: location.pathname,
+              })
+            }
+          >
+            Publish
+          </CustomButton>
         </Col>
       </Row>
     )

@@ -1,23 +1,26 @@
 export const calculateEventInfo = (event) => {
-  let isOnline = false;
-  // let totalCapacity = 0;
+  let tierPrices = event.ticketTiers.map((tier) => tier.price);
 
-  //Flag event 'online' if any ticket tier online
-  event.ticketTiers.forEach((tier) => {
-    //   totalCapacity += tier.capacity;
-    if (tier.online === true) isOnline = true;
+  //Get lowest ticket price, display + if higher-priced tickets offered
+  tierPrices.sort(function (a, b) {
+    return a - b;
   });
+  let priceDisplay = tierPrices[0] ? `$${tierPrices[0]}` : 'Free';
+  if (tierPrices.pop() > tierPrices[0]) priceDisplay += '+';
 
+  //format dates
   const dateStartObj = new Date(event.dateTimeStart);
   const dateEndObj = new Date(event.dateTimeEnd);
+
+  //flag if event has passed
+  const pastEvent = dateStartObj < Date.now();
 
   const updatedEvent = {
     ...event,
     dateTimeStart: dateStartObj,
     dateTimeEnd: dateEndObj,
-    // capacity: totalCapacity,
-    online: isOnline,
-    // price: priceDisplay,
+    priceDisplay,
+    pastEvent,
   };
   return updatedEvent;
 };

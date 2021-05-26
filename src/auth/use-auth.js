@@ -11,6 +11,12 @@ const useProvideAuth = () => {
   const [token, setToken] = useState(null);
   const [expiresIn, setExpiresIn] = useState(null);
 
+  const unmountUser = () => {
+    setToken(null);
+    setUser(null);
+    setExpiresIn(null);
+  };
+
   const signIn = async (email, password) => {
     console.log('test');
     try {
@@ -50,6 +56,7 @@ const useProvideAuth = () => {
       setToken(response.token);
       setExpiresIn(response.expiresIn);
     } catch (err) {
+      unmountUser();
       return Promise.reject(err.response.data);
     }
   };
@@ -57,15 +64,24 @@ const useProvideAuth = () => {
   const signOut = async () => {
     try {
       await myAxios(token).post(`${baseUrl}/revoke-token`);
-      setToken(null);
-      setUser(null);
-      setExpiresIn(null);
+      unmountUser();
     } catch (err) {
       return Promise.reject(err.response.data);
     }
   };
 
-  //password reset
+  const updatePassword = async (password, newPassword, newPasswordConfirm) => {
+    try {
+      await myAxios(token).patch(`${baseUrl}/update-password`, {
+        password,
+        newPassword,
+        newPasswordConfirm,
+      });
+      unmountUser();
+    } catch (err) {
+      return Promise.reject(err.response.data);
+    }
+  };
 
   return {
     user,
@@ -75,6 +91,7 @@ const useProvideAuth = () => {
     signUp,
     refreshToken,
     signOut,
+    updatePassword,
   };
 };
 

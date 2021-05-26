@@ -1,0 +1,39 @@
+@import '../../../../scss/colors';
+
+.page-control {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  height: 4rem;
+
+  div {
+    height: 100%;
+    line-height: 62px;
+    font-weight: bold;
+    color: $darker-color;
+
+    span {
+      height: 100%;
+      width: 50%;
+    }
+  }
+
+  .page-control-page {
+    width: 20%;
+  }
+
+  .page-control-back,
+  .page-control-forward,
+  .page-control-hidden {
+    display: flex;
+    width: 40%;
+  }
+
+  .page-control-back {
+    justify-content: flex-end;
+  }
+
+  .page-control-forward {
+    justify-content: flex-start;
+  }
+}

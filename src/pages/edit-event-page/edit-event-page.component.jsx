@@ -86,7 +86,7 @@ class EditEventPage extends React.Component {
     const { token } = this.context;
 
     try {
-      await myAxios(token).patch(
+      await myAxios(token).put(
         `http://localhost:3000/api/events/${eventId}`,
         event
       );
@@ -107,10 +107,8 @@ class EditEventPage extends React.Component {
       return Promise.reject({
         response: {
           data: {
-            error: {
-              statusCode: 401,
-              message: 'You are not the organizer of this event.',
-            },
+            statusCode: 403,
+            message: 'You are not the organizer of this event.',
           },
         },
       });
@@ -144,7 +142,7 @@ class EditEventPage extends React.Component {
     const { error, event, eventChanges, eventChanged, editStep } = this.state;
 
     if (error) return <ErrorPage {...error} />;
-    if (!event) return <LoadingResource resource="event" />;
+    if (!event) return <LoadingResource>Loading event...</LoadingResource>;
 
     return (
       <Container as="main" className="edit-event-page" fluid>

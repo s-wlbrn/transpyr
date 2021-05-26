@@ -1,59 +1,47 @@
 .event-card {
-  height: 6.5rem;
+  min-height: 6.5rem;
   border-bottom: 1px solid black;
 
-  & div {
-    //border-top: 1px solid black;
+  [class*='col'] {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
 
-    p {
-      padding: 0;
-      margin: 0;
+  img {
+    width: 75px;
+    height: 75px;
+    align-items: center;
 
-      &:first-child {
-        padding-top: 1rem;
-      }
-    }
+    object-fit: cover;
+  }
 
-    img {
-      // float: left;
-      width: 75px;
-      height: 75px;
-      margin-top: 1rem;
-      object-fit: cover;
-    }
+  .event-card-name-date {
+    font-weight: bold;
+    padding: 0 0 0 0.5rem;
+  }
 
-    &.event-card-name-date {
-      padding: 1rem 0 0 0.5rem;
+  .event-card-price-icons {
+    padding-left: 0.5rem;
+
+    .event-card-price,
+    .event-card-sold-out {
+      width: 100%;
+      color: #00701a;
       font-weight: bold;
-    }
-
-    &:nth-child(3) {
-      padding-left: 0.5rem;
-
-      .price {
-        color: #00701a;
-        font-weight: bold;
-      }
-
-      .icons {
-        width: 90%;
-        padding-right: 15px;
-        position: absolute;
-        bottom: 1rem;
-        display: flex;
-        justify-content: space-around;
-      }
-
-      div {
-        padding: 0;
-      }
-
-      p {
-        width: 100%;
-        text-align: center;
-      }
-
       text-align: center;
+      margin-bottom: 1rem;
     }
+
+    .event-card-icons {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    div {
+      padding: 0;
+    }
+
+    text-align: center;
   }
 }

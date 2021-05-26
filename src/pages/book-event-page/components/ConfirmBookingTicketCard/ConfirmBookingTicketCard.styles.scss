@@ -1,0 +1,21 @@
+.confirm-booking-ticket-card {
+  padding: 1rem 0;
+
+  td:not(:first-child) {
+    text-align: center;
+    padding: 1rem 0;
+  }
+
+  :nth-child(1) {
+    width: 60%;
+    padding-left: 1rem;
+  }
+
+  :nth-child(2) {
+    width: 20%;
+  }
+
+  :nth-child(3) {
+    width: 20%;
+  }
+}

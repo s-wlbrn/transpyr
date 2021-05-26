@@ -1,3 +1,5 @@
+@import '../../../../scss/colors';
+
 .dropdown-menu {
   max-height: 25vh;
   overflow-y: scroll;
@@ -7,13 +9,59 @@
   display: flex;
   justify-content: space-between;
 
-  .btn-group {
-    min-width: 0;
+  .filter-dropdown-group {
+    display: flex;
+    max-width: 25vw;
 
-    button {
-      border: none;
-      background: none;
-      color: black;
+    .dropdown-toggle-clear {
+      padding: 0 0.25rem;
+      font-size: 1.25rem;
+      line-height: 2rem;
+      background-color: $lighter-color;
+      border-radius: 0 0.25rem 0.25rem 0;
+    }
+
+    .dropdown {
+      width: 80%;
+
+      .btn-success {
+        width: 100%;
+        border: none;
+        background: none;
+        color: black;
+
+        &.dropdown-toggle-select {
+          background-color: $lighter-color;
+          overflow-x: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          padding-right: 0.5rem;
+          border-radius: 0.25rem 0 0 0.25rem;
+
+          &::after {
+            content: none;
+          }
+        }
+
+        &:focus {
+          box-shadow: none;
+        }
+      }
+
+      &.show {
+        .btn-success {
+          color: white;
+          background-color: $darker-color;
+          border: none;
+          box-shadow: 0 0 0 0.1rem $lighter-color;
+        }
+      }
+
+      .dropdown-item.active {
+        background-color: $lighter-color;
+        font-weight: bold;
+        color: black;
+      }
     }
   }
 }

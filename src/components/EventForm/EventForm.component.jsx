@@ -23,6 +23,7 @@ export const EventForm = ({ event, step, handleChange }) => {
     ticketTiers,
     address,
     location,
+    totalCapacity,
   } = event;
   switch (step) {
     case 1:
@@ -32,6 +33,7 @@ export const EventForm = ({ event, step, handleChange }) => {
           name={name}
           type={type}
           category={category}
+          totalCapacity={totalCapacity}
         />
       );
     case 2:

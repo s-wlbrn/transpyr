@@ -27,6 +27,7 @@ class TicketTiersForm extends React.Component {
     capacity: '',
     price: '',
     online: false,
+    limitPerCustomer: '',
   };
 
   isFormValid(validators) {
@@ -189,7 +190,14 @@ class TicketTiersForm extends React.Component {
 
   render() {
     const {
-      currentTier: { tierName, tierDescription, online, capacity, price },
+      currentTier: {
+        tierName,
+        tierDescription,
+        online,
+        capacity,
+        price,
+        limitPerCustomer,
+      },
       editMode,
       tierToEdit,
       error,
@@ -219,7 +227,7 @@ class TicketTiersForm extends React.Component {
               </CustomButton>
             )}
           </Col>
-          {editMode ? (
+          {editMode && (
             <Col xs={6}>
               <CustomButton
                 type="button"
@@ -229,7 +237,7 @@ class TicketTiersForm extends React.Component {
                 Delete Ticket
               </CustomButton>
             </Col>
-          ) : null}
+          )}
         </Row>
         <Row>
           <Col xs={12}>
@@ -250,7 +258,7 @@ class TicketTiersForm extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col xs={12}>
+          <Col xs={8}>
             <FormInput
               name="tierDescription"
               type="text"
@@ -259,6 +267,16 @@ class TicketTiersForm extends React.Component {
               handleChange={this.handleTierChange}
               label="Ticket Description"
               required
+            />
+          </Col>
+          <Col xs={4}>
+            <FormInput
+              name="limitPerCustomer"
+              type="number"
+              id="tier-limit"
+              value={limitPerCustomer}
+              handleChange={this.handleTierChange}
+              label="# Per Customer"
             />
           </Col>
         </Row>

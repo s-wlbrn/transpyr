@@ -1,0 +1,22 @@
+@import '../../scss/colors';
+
+.signin-or-guest-form {
+  .signin {
+    margin-bottom: 0;
+  }
+
+  .signin-signup-toggle {
+    color: $darker-color;
+    font-weight: bold;
+  }
+
+  .guest-form {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0;
+
+    .custom-button {
+      height: 4rem;
+    }
+  }
+}

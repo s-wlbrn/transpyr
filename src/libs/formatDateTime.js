@@ -1,10 +1,13 @@
-import { format, parseISO, formatISO } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 export const combineDateTime = (eventObj) => {
   const { dateStart, timeStart, dateEnd, timeEnd, ...restEvent } = eventObj;
-  const dateTimeStart = formatISO(new Date(`${dateStart}T${timeStart}`));
-  const dateTimeEnd = formatISO(new Date(`${dateEnd}T${timeEnd}`));
-
+  console.log(dateStart, timeStart);
+  console.log(dateEnd, timeEnd);
+  const dateTimeStart = new Date(`${dateStart}T${timeStart}`);
+  const dateTimeEnd = new Date(`${dateEnd}T${timeEnd}`);
+  console.log(dateTimeStart);
+  console.log(dateTimeEnd);
   const newEvent = {
     ...restEvent,
     dateTimeStart,
@@ -19,9 +22,9 @@ export const splitDateTime = (eventObj) => {
   dateTimeStart = parseISO(dateTimeStart);
   dateTimeEnd = parseISO(dateTimeEnd);
 
-  const dateStart = format(dateTimeStart, 'y-MM-d');
+  const dateStart = format(dateTimeStart, 'y-MM-dd');
   const timeStart = format(dateTimeStart, 'HH:mm');
-  const dateEnd = format(dateTimeEnd, 'y-MM-d');
+  const dateEnd = format(dateTimeEnd, 'y-MM-dd');
   const timeEnd = format(dateTimeEnd, 'HH:mm');
 
   const newEvent = {

@@ -1,0 +1,17 @@
+.edit-settings-page {
+  .edit-settings-forms {
+    [class^='edit-settings'] {
+      margin-bottom: 3rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .edit-settings-favorites {
+      .form-input-toggle-group {
+        text-align: center;
+      }
+    }
+  }
+}

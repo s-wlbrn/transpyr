@@ -73,11 +73,12 @@ class PhotoUploadForm extends React.Component {
 
     //Create form data object and add photo field
     const formData = new FormData();
+    const id = this.props.resourceId || '';
     formData.append('photo', selectedFile);
     //Call API
     try {
-      await myAxios(token).put(
-        `http://localhost:3000/api/${this.props.resource}/${this.props.resourceId}`,
+      await myAxios(token).patch(
+        `http://localhost:3000/api/${this.props.resource}/${id}`,
         formData
       );
 
@@ -87,18 +88,16 @@ class PhotoUploadForm extends React.Component {
           message: 'Photo uploaded successfully!',
         },
       });
-      setTimeout(
-        () =>
-          this.props.history.push(
-            this.props.location.pathname.split('/').slice(0, -1).join('/')
-          ),
-        1000
-      );
+
+      if (this.props.successCallback) {
+        this.props.successCallback();
+      }
     } catch (err) {
+      console.log(err.response);
       this.setState({
         messageResponse: {
           isSuccess: false,
-          message: err.response.data.error.message,
+          message: err.response.data.message,
         },
       });
     }
@@ -109,7 +108,11 @@ class PhotoUploadForm extends React.Component {
     return (
       <div className="photo-upload-container">
         {this.reader.result && <img src={this.reader.result} alt="Event" />}
-        <form className="photo-upload-form" onSubmit={this.handleUpload}>
+        <form
+          className="photo-upload-form"
+          id="photo-upload-form"
+          onSubmit={this.handleUpload}
+        >
           <input
             type="file"
             id="img"

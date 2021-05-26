@@ -1,0 +1,71 @@
+@import '../../scss/colors';
+
+main.user-profile-page {
+  display: flex;
+  flex-direction: column;
+  padding-top: 0;
+
+  .user-profile-intro {
+    flex: 0 0 auto;
+    background: linear-gradient(
+      $main-color,
+      $lighter-color,
+      rgba(255, 0, 0, 0)
+    );
+    padding-top: 1rem;
+    text-align: center;
+
+    .user-profile-photo {
+      width: 100%;
+      border: 4px solid black;
+      max-width: 200px;
+    }
+
+    .user-profile-name {
+      padding-top: 1rem;
+      font-size: 2rem;
+    }
+
+    hr {
+      position: relative;
+      top: -9rem;
+      width: 100%;
+      background-color: black;
+      border-width: 2px;
+      z-index: -1;
+      box-shadow: 0 2px 4px darkgray;
+    }
+  }
+
+  .user-profile-tagline {
+    flex: 0 0 auto;
+    text-align: center;
+    font-style: italic;
+    font-size: 1.25em;
+  }
+
+  .user-profile-content {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    .user-profile-events,
+    .user-profile-favorites {
+      h2 {
+        display: inline;
+      }
+    }
+
+    .user-profile-see-all {
+      margin-left: 0.5rem;
+    }
+
+    .event-listing {
+      max-height: 20rem;
+      overflow-y: scroll;
+      border: solid 1px black;
+      margin: 1rem 0;
+    }
+  }
+}
