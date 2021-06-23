@@ -1,0 +1,65 @@
+@import '../../scss/colors';
+
+.manage-event-page {
+  display: flex;
+  flex-direction: column;
+
+  .manage-event-tickets {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+    margin-bottom: 1rem;
+
+    .manage-event-table-container {
+      flex: 1 0 auto;
+      padding: 0;
+      min-height: 5rem;
+      border: 1px solid lightgray;
+      border-bottom: none;
+    }
+  }
+
+  .manage-event-info {
+    flex-direction: column;
+    flex: 1 0 auto;
+
+    .manage-event-sales {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      height: 12rem;
+
+      & > div {
+        flex: 1 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .manage-event-sales-value {
+        display: inline;
+        color: $darker-color;
+        font-size: 1em;
+        font-weight: bold;
+        margin-left: 1rem;
+      }
+
+      .manage-event-sales-earnings {
+        font-size: 1.25rem;
+      }
+    }
+  }
+
+  .manage-event-nav-buttons {
+    margin-bottom: 1rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .manage-event-page {
+    .manage-event-info {
+      flex-direction: row;
+    }
+  }
+}

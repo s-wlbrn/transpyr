@@ -1,0 +1,11 @@
+@import '../../../scss/colors';
+
+.manage-ticket-row {
+  height: 4rem;
+  align-content: center;
+
+  .manage-ticket-row-canceled {
+    font-weight: bold;
+    color: $warning;
+  }
+}

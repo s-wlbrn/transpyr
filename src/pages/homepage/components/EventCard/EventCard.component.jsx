@@ -7,6 +7,7 @@ import { IoHeartOutline } from 'react-icons/io5';
 import { IoHeart } from 'react-icons/io5';
 import { IoShareSocial } from 'react-icons/io5';
 
+import { EventThumbnail } from '../../../../components/EventThumbnail/EventThumbnail.component';
 import { EventStartDateShort } from '../../../../components/EventStartDateShort/EventStartDateShort.component';
 
 import './EventCard.styles.scss';
@@ -17,23 +18,25 @@ export const EventCard = ({
   toggleFavorite,
   favoritesMap,
 }) => {
-  const { _id, name, dateTimeStart, priceDisplay, photo, soldOut } = event;
+  const { _id, name, dateTimeStart, priceDisplay, photo, soldOut, canceled } =
+    event;
 
   return (
     <Row as="li" className="event-card" onClick={() => handleClick(_id)}>
       <Col xs={3}>
-        <img
+        <EventThumbnail
           src={`http://localhost:3000/static/img/events/${photo}`}
-          alt="event"
         />
       </Col>
       <Col className="event-card-name-date" xs={6}>
-        <EventStartDateShort dateStart={dateTimeStart} />
+        <EventStartDateShort dateTimeStart={dateTimeStart} />
         <div>{name}</div>
       </Col>
       <Col xs={3} className="event-card-price-icons">
         <Row>
-          {soldOut ? (
+          {canceled ? (
+            <div className="event-card-canceled">Canceled</div>
+          ) : soldOut ? (
             <div className="event-card-sold-out">Sold Out</div>
           ) : (
             <div className="event-card-price">{priceDisplay}</div>

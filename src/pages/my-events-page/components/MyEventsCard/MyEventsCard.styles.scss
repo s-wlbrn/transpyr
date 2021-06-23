@@ -1,0 +1,36 @@
+@import '../../../../scss/colors';
+
+.manage-events-card {
+  border-bottom: 1px solid lightgrey;
+  padding: 4px 0;
+
+  .manage-events-card-canceled {
+    color: $warning;
+    font-weight: bold;
+    font-size: 1.25em;
+  }
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    &:first-child {
+      padding-left: 0;
+      align-items: center;
+    }
+
+    &:nth-child(2) {
+      padding: 0;
+    }
+    &:nth-child(3) {
+      padding-right: 0;
+
+      .custom-button {
+        &:first-child {
+          margin-bottom: 0.3rem;
+        }
+      }
+    }
+  }
+}

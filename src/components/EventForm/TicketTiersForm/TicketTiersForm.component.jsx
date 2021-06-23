@@ -229,11 +229,7 @@ class TicketTiersForm extends React.Component {
           </Col>
           {editMode && (
             <Col xs={6}>
-              <CustomButton
-                type="button"
-                style={{ background: 'darkred' }}
-                onClick={this.handleTierDelete}
-              >
+              <CustomButton type="button" red onClick={this.handleTierDelete}>
                 Delete Ticket
               </CustomButton>
             </Col>

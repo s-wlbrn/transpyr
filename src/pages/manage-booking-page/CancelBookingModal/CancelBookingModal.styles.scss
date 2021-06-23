@@ -1,0 +1,11 @@
+.confirm-cancel-booking-modal {
+  .confirm-cancel-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    button {
+      width: 48%;
+    }
+  }
+}

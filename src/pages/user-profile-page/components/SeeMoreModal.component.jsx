@@ -17,17 +17,11 @@ export const SeeMoreModal = ({ resource }) => {
   const [error, setError] = useState(null);
   const history = useHistory();
   const match = useRouteMatch();
-  console.log(match);
   const handleClose = () => {
-    history.push(`http://localhost:3001/users/id/${match.params.id}`);
+    history.push(`/users/id/${match.params.id}`);
   };
 
   const getEvents = async (page = 1) => {
-    //current database design prevents pagination of user events field; all events must be loaded at once
-    if (resource === 'events') {
-      setHasMore(false);
-    }
-
     try {
       const response = await myAxios().get(
         `http://localhost:3000/api/users/profile/${match.params.id}?fields=${resource}&paginate[page]=${page}&paginate[limit]=10`
@@ -46,7 +40,7 @@ export const SeeMoreModal = ({ resource }) => {
       setError(error);
     }
   };
-  console.log(events);
+
   return (
     <Modal
       show={true}
@@ -66,7 +60,6 @@ export const SeeMoreModal = ({ resource }) => {
         ) : (
           <InfiniteScroll
             pageStart={1}
-            threshold={20}
             hasMore={hasMore}
             loadMore={getEvents}
             loader={

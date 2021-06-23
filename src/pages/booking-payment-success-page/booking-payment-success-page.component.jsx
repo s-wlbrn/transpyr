@@ -13,15 +13,12 @@ const BookingPaymentSuccessPage = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
 
-  console.log(search);
-
   useEffect(() => {
     const createBookings = async () => {
       try {
         const bookings = await myAxios().get(
           `http://localhost:3000/api/bookings/checkout-create-booking${search}}`
         );
-        console.log(bookings);
         setSuccess(true);
       } catch (err) {
         console.log(err.response);

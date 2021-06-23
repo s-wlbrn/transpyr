@@ -1,25 +1,27 @@
+@import '../../scss/colors';
+
 .ticket-tier-card {
-  h1.ticket-card-name {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.5em;
-    display: inline;
-  }
-
-  .ticket-card-description {
-    text-align: left;
-    font-size: 1.25em;
-    margin-bottom: 0;
-  }
-
-  .ticket-card-price {
-    font-size: 1.5em;
-    line-height: normal;
-  }
-
-  [class^='col'] {
+  & > div {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    h1.ticket-card-name {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.5em;
+      display: inline;
+    }
+
+    .ticket-card-description {
+      text-align: left;
+      font-size: 1.25em;
+      margin-bottom: 0;
+    }
+
+    .ticket-card-price {
+      font-size: 1.5em;
+      line-height: normal;
+    }
 
     &:nth-child(2) {
       padding: 0 45px 0 0;
@@ -34,6 +36,16 @@
       input {
         width: 2rem;
         display: inline;
+      }
+
+      &.ticket-card-unavailable {
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.25em;
+
+        .ticket-card-canceled {
+          color: $warning;
+        }
       }
     }
   }
@@ -63,8 +75,8 @@
       width: 2rem;
     }
   }
+}
 
-  hr {
-    width: 100%;
-  }
+hr {
+  width: 100%;
 }

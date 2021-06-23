@@ -1,0 +1,54 @@
+.refund-request-card {
+  border-bottom: 1px solid black;
+  padding: 0.5rem 0;
+  margin-bottom: 1rem;
+  -webkit-transition-duration: 150ms;
+  transition-duration: 150ms;
+
+  &.cleared {
+    transform: translate(-105%);
+    -webkit-transform: translate(-105%);
+  }
+
+  .refund-request-card-info {
+    div {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+
+  .refund-request-card-label {
+    font-size: 1em;
+    font-weight: bold;
+    margin-right: 0.5rem;
+  }
+
+  .refund-request-card-ticket-data {
+    margin-left: 2rem;
+  }
+
+  .refund-request-card-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+
+    & > button:first-child {
+      margin-bottom: 1rem;
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    .refund-request-card-buttons {
+      flex-direction: row;
+
+      button {
+        width: 48%;
+      }
+
+      & > button:first-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

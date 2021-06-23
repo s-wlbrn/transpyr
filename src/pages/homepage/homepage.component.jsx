@@ -19,6 +19,8 @@ const Homepage = (props) => {
   const [events, setEvents] = useState([]);
   const [query, setQuery] = useState({
     sort: 'dateTimeStart',
+    fields:
+      '_id,name,dateTimeStart,dateTimeEnd,photo,ticketTiers,totalBookings,soldOut,canceled',
     online: true,
     paginate: { page: 1, limit: 10 },
   });

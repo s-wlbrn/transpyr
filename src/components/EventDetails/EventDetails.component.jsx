@@ -28,6 +28,7 @@ export const EventDetails = ({
   soldOut,
   published,
   pastEvent,
+  canceled,
 }) => (
   <React.Fragment>
     <Row>
@@ -75,12 +76,12 @@ export const EventDetails = ({
         onClick={() => {
           if (editMode) {
             handleEditStep('ticketTiers');
-          } else if (!soldOut && published && !pastEvent) {
+          } else if (!soldOut && published && !pastEvent && !canceled) {
             handleBookNow();
           }
         }}
       >
-        <CustomButton type="button">
+        <CustomButton type="button" warning={canceled}>
           {editMode
             ? 'Ticket Types'
             : soldOut
@@ -89,6 +90,8 @@ export const EventDetails = ({
             ? 'Unpublished event'
             : pastEvent
             ? 'This is a past event.'
+            : canceled
+            ? 'Canceled'
             : 'Book now'}
         </CustomButton>
       </Col>

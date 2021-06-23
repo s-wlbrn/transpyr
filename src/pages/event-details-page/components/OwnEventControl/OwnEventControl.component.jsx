@@ -31,7 +31,7 @@ export const OwnEventControl = ({ published }) => {
           <CustomButton
             type="button"
             onClick={() =>
-              history.push(`${location.pathname}/publish-event`, {
+              history.push(`${location.pathname}/publish`, {
                 from: location.pathname,
               })
             }

@@ -18,7 +18,18 @@ export const TicketTierCard = ({
     online,
     limitPerCustomer,
     ticketSoldOut,
+    canceled,
   } = ticket;
+
+  const ticketUnavailable = (
+    <Col xs={4} className="ticket-card-unavailable">
+      {ticketSoldOut ? (
+        <div className="ticket-card-sold-out">Sold Out</div>
+      ) : (
+        <div className="ticket-card-canceled">Canceled</div>
+      )}
+    </Col>
+  );
 
   return (
     <Row className="ticket-tier-card">
@@ -29,7 +40,7 @@ export const TicketTierCard = ({
         } ${tierDescription}`}</div>
         {limitPerCustomer ? <div>{`(Limit ${limitPerCustomer})`}</div> : null}
       </Col>
-      {!ticketSoldOut ? (
+      {!ticketSoldOut && !canceled ? (
         <Col xs={4}>
           <div className="ticket-card-price">{`$${price}`}</div>
           <div className="quantity">
@@ -65,9 +76,7 @@ export const TicketTierCard = ({
           </div>
         </Col>
       ) : (
-        <Col xs={4}>
-          <div className="ticket-card-sold-out">Sold Out</div>
-        </Col>
+        ticketUnavailable
       )}
       <hr />
     </Row>

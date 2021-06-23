@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
-import { useHistory } from 'react-router';
-import qs from 'qs';
-
+import { Col, Row, Modal, Container } from 'react-bootstrap';
+import { useHistory, useRouteMatch } from 'react-router';
+//import qs from 'qs';
 import { CustomButton } from '../CustomButton/CustomButton.component';
 import { ResponseMessage } from '../ResponseMessage/ResponseMessage.component';
 import { TicketTierCard } from '../TicketTierCard/TicketTierCard.component';
@@ -19,6 +18,11 @@ export const EventBookingForm = ({ ticketTiers, eventName, eventPath }) => {
   }, {});
 
   const history = useHistory();
+  const match = useRouteMatch();
+
+  const handleClose = () => {
+    history.push(`/events/id/${match.params.id}`);
+  };
 
   const handleChange = (value, ticketId) => {
     const newQuantity = value < 0 ? 0 : value;
@@ -51,12 +55,7 @@ export const EventBookingForm = ({ ticketTiers, eventName, eventPath }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isValid(ticketKeys)) {
-      // qs.stringify({
-      //   eventName,
-      //   ticketSelections: { ...quantities }
-      // })
-
-      history.push(`${eventPath}/book-event`, {
+      history.push(`${eventPath}/book`, {
         eventName,
         ticketSelections: { ...quantities },
         ticketKeys,
@@ -73,52 +72,57 @@ export const EventBookingForm = ({ ticketTiers, eventName, eventPath }) => {
   }, 0);
 
   return (
-    <Container fluid className="event-booking-form">
-      <Row>
-        <Col xs={12}>
-          <h1>Select Tickets</h1>
-          <hr />
-        </Col>
-      </Row>
+    <Modal show={true} onHide={handleClose} className="event-booking-form">
+      <Modal.Header closeButton>
+        <Modal.Title>Select Tickets</Modal.Title>
+      </Modal.Header>
       <form onSubmit={handleSubmit}>
-        {ticketTiers.map((ticket) => (
-          <TicketTierCard
-            key={ticket.id}
-            ticket={ticket}
-            quantity={quantities[ticket.id]}
-            handleDecreaseQuantity={handleDecreaseQuantity}
-            handleIncreaseQuantity={handleIncreaseQuantity}
-            handleChange={handleChange}
-          />
-        ))}
-        <Row>
-          <Col
-            xs={12}
-            className="event-booking-subtotal"
-          >{`Subtotal (before tax and fees): $${subtotal}`}</Col>
-        </Row>
-        <Row>
-          <Col xs={6}>
-            <CustomButton
-              type="button"
-              style={{ background: 'darkred' }}
-              onClick={() => history.push(eventPath)}
-            >
-              Cancel
-            </CustomButton>
-          </Col>
-          <Col xs={6}>
-            <CustomButton type="submit">Submit</CustomButton>
-          </Col>
-        </Row>
-        {response && (
-          <Row>
-            <Col xs={12}>
-              <ResponseMessage error>{response}</ResponseMessage>
-            </Col>
-          </Row>
-        )}
+        <Modal.Body>
+          <Container>
+            {ticketTiers.map((ticket) => (
+              <TicketTierCard
+                key={ticket.id}
+                ticket={ticket}
+                quantity={quantities[ticket.id]}
+                handleDecreaseQuantity={handleDecreaseQuantity}
+                handleIncreaseQuantity={handleIncreaseQuantity}
+                handleChange={handleChange}
+              />
+            ))}
+          </Container>
+        </Modal.Body>
+        <Modal.Footer>
+          <Container>
+            <Row>
+              <Col
+                xs={12}
+                className="event-booking-subtotal"
+              >{`Subtotal (before tax and fees): $${subtotal}`}</Col>
+            </Row>
+            <Row>
+              <Col xs={6}>
+                <CustomButton
+                  type="button"
+                  style={{ background: 'darkred' }}
+                  onClick={handleClose}
+                >
+                  Cancel
+                </CustomButton>
+              </Col>
+              <Col xs={6}>
+                <CustomButton type="submit">Submit</CustomButton>
+              </Col>
+            </Row>
+            {response && (
+              <Row>
+                <Col xs={12}>
+                  <ResponseMessage error>{response}</ResponseMessage>
+                </Col>
+              </Row>
+            )}
+          </Container>
+        </Modal.Footer>
       </form>
-    </Container>
+    </Modal>
   );
 };

@@ -7,9 +7,11 @@ const authContext = createContext();
 
 //create auth object, manage state
 const useProvideAuth = () => {
+  console.log('auth updating');
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [expiresIn, setExpiresIn] = useState(null);
+  const [refreshed, setRefreshed] = useState(false);
 
   const unmountUser = () => {
     setToken(null);
@@ -49,14 +51,19 @@ const useProvideAuth = () => {
   };
 
   const refreshToken = async () => {
+    if (expiresIn) {
+      console.log('setting expiresIn null');
+      setExpiresIn(null);
+    }
     try {
       const response = await myAxios().post(`${baseUrl}/refresh-token`);
-      console.log(response);
       setUser({ ...response.data.user });
       setToken(response.token);
+      setRefreshed(true);
       setExpiresIn(response.expiresIn);
     } catch (err) {
       unmountUser();
+      setRefreshed(true);
       return Promise.reject(err.response.data);
     }
   };
@@ -87,6 +94,7 @@ const useProvideAuth = () => {
     user,
     token,
     expiresIn,
+    refreshed,
     signIn,
     signUp,
     refreshToken,

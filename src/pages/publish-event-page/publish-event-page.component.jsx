@@ -39,10 +39,9 @@ export const PublishEventPage = () => {
         const response = await myAxios().get(
           `http://localhost:3000/api/events/${match.params.id}?fields=organizer`
         );
-
         const event = response.data.data;
+        //handle event alrady published
         if (event.published) history.push(`/events/id/${match.params.id}`);
-
         //handle unauthorized
         if (user._id !== event.organizer) {
           setError({
@@ -101,7 +100,7 @@ export const PublishEventPage = () => {
           <div className="confirm-publish-buttons">
             <CustomButton
               type="button"
-              style={{ background: 'darkred' }}
+              red
               onClick={() => setShowConfirm(false)}
             >
               Go back

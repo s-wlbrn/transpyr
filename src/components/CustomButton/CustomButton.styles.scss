@@ -15,4 +15,12 @@
   &:hover {
     background-color: $main-color;
   }
+
+  &.warning {
+    background: $warning;
+
+    &:hover {
+      background-color: $light-warning;
+    }
+  }
 }

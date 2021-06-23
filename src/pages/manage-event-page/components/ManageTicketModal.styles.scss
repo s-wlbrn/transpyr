@@ -1,0 +1,29 @@
+@import '../../../scss/colors';
+
+.manage-ticket-modal {
+  .container,
+  [class^='col'] {
+    padding: 0;
+  }
+
+  .manage-ticket-modal-canceled {
+    padding: 0;
+    margin-bottom: 0.5rem;
+    color: $warning;
+    font-weight: bold;
+  }
+
+  .manage-ticket-modal-footer {
+    flex-direction: column;
+    align-items: flex-start;
+
+    [class^='response'] {
+      margin-left: 0.25rem;
+    }
+  }
+  .confirm-cancel-buttons {
+    :first-child {
+      margin-bottom: 0.5rem;
+    }
+  }
+}

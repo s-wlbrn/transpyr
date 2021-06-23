@@ -77,11 +77,13 @@ class EventDetailsPage extends React.Component {
             )
           : null}
         <Route exact path={`${this.props.match.path}/tickets`}>
-          <EventBookingForm
-            eventName={event.name}
-            eventPath={this.eventPath}
-            ticketTiers={event.ticketTiers}
-          />
+          {!event.canceled && !event.soldOut ? (
+            <EventBookingForm
+              eventName={event.name}
+              eventPath={this.eventPath}
+              ticketTiers={event.ticketTiers}
+            />
+          ) : null}
         </Route>
         <EventDetails {...event} handleBookNow={this.handleBookNow} />
       </Container>

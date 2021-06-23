@@ -1,0 +1,41 @@
+@import '../../scss/colors';
+
+.my-events-page {
+  display: flex;
+  flex-direction: column;
+
+  .my-events-content {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+
+    .my-events-list {
+      flex: 1 0 auto;
+      display: flex;
+      flex-direction: column;
+      margin-top: 1rem;
+
+      .manage-events-list {
+        flex: 1 0 auto;
+      }
+    }
+
+    .highlighted {
+      background-color: hsl(119, 51%, 85%);
+    }
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .my-events-page {
+    .my-events-content {
+      flex-direction: row;
+
+      .my-events-list {
+        overflow-x: hidden;
+        margin-top: 57px;
+        padding-left: 0;
+      }
+    }
+  }
+}

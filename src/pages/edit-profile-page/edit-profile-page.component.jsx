@@ -34,7 +34,6 @@ const EditProfilePage = () => {
         bio,
         interests,
       });
-
       setResponse({ error: false, message: 'Profile saved!' });
     } catch (err) {
       setResponse({ error: true, message: err.response.data.message });

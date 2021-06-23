@@ -1,6 +1,8 @@
 @import '../../scss/colors';
 
 main.homepage {
+  display: flex;
+  flex-direction: column;
   padding: 0;
   overflow: hidden;
 
@@ -12,6 +14,10 @@ main.homepage {
     div {
       padding: 0;
     }
+  }
+
+  .loading {
+    flex: 1 0 auto;
   }
 
   .event-listing {

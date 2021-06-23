@@ -1,0 +1,52 @@
+@import '../../scss/colors';
+
+.custom-table-container {
+  padding: 0;
+  min-height: 5rem;
+
+  &.table-grow {
+    flex: 1 0 auto;
+  }
+
+  &.table-border {
+    border: 1px solid lightgray;
+    border-bottom: none;
+  }
+
+  .custom-table {
+    width: 100%;
+
+    thead {
+      tr {
+        background-color: $darker-color;
+        color: white;
+        font-weight: bold;
+      }
+    }
+
+    tbody {
+      tr {
+        height: 4rem;
+        align-items: center;
+      }
+    }
+
+    tr {
+      flex-wrap: nowrap;
+
+      &:nth-child(even) {
+        background-color: $lightest-color;
+      }
+
+      &.selected {
+        background-color: $selected-color;
+      }
+    }
+
+    td {
+      &.centered {
+        text-align: center;
+      }
+    }
+  }
+}

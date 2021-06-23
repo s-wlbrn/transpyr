@@ -15,57 +15,66 @@ import CreateEventPage from './pages/create-event-page/create-event-page.compone
 import EditEventPage from './pages/edit-event-page/edit-event-page.component';
 import UploadEventPhotoPage from './pages/upload-event-photo/upload-event-photo-page.component';
 import ForgotPasswordPage from './pages/forgot-password-page/forgot-password-page.component';
-import { BookEventPage } from './pages/book-event-page/book-event.component';
+import BookEventPage from './pages/book-event-page/book-event-page.component';
 import BookingPaymentSuccessPage from './pages/booking-payment-success-page/booking-payment-success-page.component';
 import { PublishEventPage } from './pages/publish-event-page/publish-event-page.component';
 import EditProfilePage from './pages/edit-profile-page/edit-profile-page.component';
 import EditSettingsPage from './pages/edit-settings-page/edit-settings-page.component';
 import UserProfilePage from './pages/user-profile-page/user-profile-page.component';
+import MyEventsPage from './pages/my-events-page/my-events-page.component';
+import ManageEventPage from './pages/manage-event-page/manage-event-page.component';
+import MyBookingsPage from './pages/my-bookings-page/my-bookings-page.component';
+import RefundRequestsPage from './pages/refund-requests-page/RefundRequestsPage.component';
 
 import { TopNav } from './components/TopNav/TopNav.component';
 import { Footer } from './components/Footer/Footer.component';
+import ManageBookingPage from './pages/manage-booking-page/manage-booking-page.component';
 
 const App = () => {
-  const auth = useAuth();
+  const { user, expiresIn, refreshToken } = useAuth();
 
   //Silent token refresh
   useEffect(() => {
     const silentRefresh = async () => {
-      if (!auth.user) {
-        await auth.refreshToken();
-      } else if (auth.expiresIn) {
+      if (!user) {
+        await refreshToken();
+      } else if (expiresIn) {
         setTimeout(async () => {
-          await auth.refreshToken();
-        }, auth.expiresIn);
+          await refreshToken();
+        }, expiresIn);
       }
     };
-
     silentRefresh();
-  }, [auth]);
+  }, [user, expiresIn, refreshToken]);
 
   return (
     <div className="app">
       <TopNav />
       <Switch>
-        <PrivateRoute exact path="/events/id/:id/publish-event">
+        <PrivateRoute path="/events/id/:id/manage">
+          <ManageEventPage />
+        </PrivateRoute>
+        <PrivateRoute exact path="/events/id/:id/publish">
           <PublishEventPage />
         </PrivateRoute>
         <PrivateRoute exact path="/events/id/:id/edit">
           <EditEventPage />
+        </PrivateRoute>
+        <PrivateRoute exact path="/events/id/:id/refund-requests">
+          <RefundRequestsPage url="http://localhost:3000/api/bookings/refund-request/event" />
         </PrivateRoute>
         <Route
           exact
           path="/events/id/:id/upload-photo"
           component={UploadEventPhotoPage}
         />
-        <Route
-          exact
-          path="/events/id/:id/book-event"
-          component={BookEventPage}
-        />
+        <Route exact path="/events/id/:id/book" component={BookEventPage} />
         <Route path="/events/id/:id" component={EventDetailsPage} />
-        <PrivateRoute exact path="/events/create-event">
+        <PrivateRoute exact path="/events/create">
           <CreateEventPage />
+        </PrivateRoute>
+        <PrivateRoute exact path="/events/my-events">
+          <MyEventsPage />
         </PrivateRoute>
         <Route exact path="/events" component={Homepage} />
 
@@ -84,6 +93,15 @@ const App = () => {
           component={ResetPasswordPage}
         </Route> */}
 
+        <PrivateRoute exact path="/bookings/refund-requests/:id">
+          <RefundRequestsPage url="http://localhost:3000/api/bookings/refund-request" />
+        </PrivateRoute>
+        <PrivateRoute path="/bookings/my-bookings/event/:id">
+          <ManageBookingPage />
+        </PrivateRoute>
+        <PrivateRoute path="/bookings/my-bookings">
+          <MyBookingsPage />
+        </PrivateRoute>
         <Route path="/bookings/create" component={BookingPaymentSuccessPage} />
 
         <Route exact path="/">
