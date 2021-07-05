@@ -1,27 +1,34 @@
 import React, { useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { useAuth } from '../../auth/use-auth';
+import { useResponse } from '../../libs/useResponse';
 import { CustomButton } from '../CustomButton/CustomButton.component';
 import { FormInput } from '../FormInput/FormInput.component';
+import { validationSchema } from './GuestForm.schema';
 
 import { SignIn } from '../SignIn/SignIn.component';
 import { SignUp } from '../SignUp/SignUp.component';
 
 import './SigninOrGuestForm.styles.scss';
+import { ResponseMessage } from '../ResponseMessage/ResponseMessage.component';
 
 export const SigninOrGuestForm = ({ setGuest }) => {
-  //const { signIn, signUp } = useAuth();
   const [signupForm, setSignupForm] = useState(false);
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
+  const { response, createResponse } = useResponse();
 
-  const handleSubmitGuest = (e) => {
-    e.preventDefault();
-    //validation here
-    setGuest({
-      name,
-      email,
-    });
+  const handleSubmitGuest = async (e) => {
+    try {
+      e.preventDefault();
+      await validationSchema.validate({ name, email });
+
+      setGuest({
+        name,
+        email,
+      });
+    } catch (err) {
+      createResponse(err);
+    }
   };
 
   return (
@@ -60,6 +67,7 @@ export const SigninOrGuestForm = ({ setGuest }) => {
             required
           />
           <CustomButton type="submit">Submit</CustomButton>
+          <ResponseMessage response={response} />
         </form>
       </Col>
     </Row>

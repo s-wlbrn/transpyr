@@ -2,50 +2,12 @@ import React from 'react';
 
 import { Row, Col, Container } from 'react-bootstrap';
 
+import { eventTypes } from './eventTypes';
+import { eventCategories } from './eventCategories';
 import { FormInput } from '../../FormInput/FormInput.component';
 import { FormDropdown } from '../../FormDropdown/FormDropdown.component';
 
 import './NameTypeCategoryForm.styles.scss';
-
-const eventTypes = [
-  '',
-  'Lecture',
-  'Class',
-  'Performance',
-  'Social',
-  'Workshop',
-  'Conference',
-  'Convention',
-  'Expo',
-  'Game',
-  'Rally',
-  'Screening',
-  'Tour',
-];
-const eventCategories = [
-  '',
-  'Business',
-  'Food',
-  'Health & Lifestyle',
-  'Music',
-  'Vehicle',
-  'Charity',
-  'Community',
-  'Fashion',
-  'Film',
-  'Home',
-  'Hobbies',
-  'Performing & Visual Arts',
-  'Politics',
-  'Spirituality',
-  'School',
-  'Science & Technology',
-  'Holiday',
-  'Sports & Fitness',
-  'Travel',
-  'Outdoor & Recreation',
-  'Other',
-];
 
 export const NameTypeCategoryForm = ({
   name,
@@ -54,7 +16,6 @@ export const NameTypeCategoryForm = ({
   handleChange,
   totalCapacity,
 }) => {
-  console.log(category);
   return (
     <Container fluid className="name-type-category-form">
       <Row className="create-event-name-input">
@@ -80,7 +41,7 @@ export const NameTypeCategoryForm = ({
             name="type"
             id="type"
             formId="create-event-form"
-            options={eventTypes}
+            options={[''].concat(eventTypes)}
             handleChange={handleChange}
             label="Format"
             value={type}
@@ -93,7 +54,7 @@ export const NameTypeCategoryForm = ({
             name="category"
             id="category"
             formId="create-event-form"
-            options={eventCategories}
+            options={[''].concat(eventCategories)}
             handleChange={handleChange}
             label="Category"
             value={category}

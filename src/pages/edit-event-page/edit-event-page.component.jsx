@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { splitDateTime, combineDateTime } from '../../libs/formatDateTime';
-import { withRouter } from 'react-router-dom';
+import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
+import { Col, Container, Row } from 'react-bootstrap';
+import { useErrorHandler } from 'react-error-boundary';
 
 import myAxios from '../../auth/axios.config';
-import authContext from '../../auth/use-auth';
+import { useAuth } from '../../auth/use-auth';
+import AppError from '../../libs/AppError';
 
-import { Col, Container, Row } from 'react-bootstrap';
-import ErrorPage from '../error-page/error-page.component';
 import { EventDetails } from '../../components/EventDetails/EventDetails.component';
 import { EventForm } from '../../components/EventForm/EventForm.component';
 import { EditEventControl } from './components/EditEventControl/EditEventControl.component';
@@ -14,24 +15,53 @@ import { LoadingResource } from '../../components/LoadingResource/LoadingResourc
 import { CustomButton } from '../../components/CustomButton/CustomButton.component';
 
 import './edit-event-page.styles.scss';
+import { validationSchemaArray } from '../../components/EventForm/EventForm.schema';
+import { useResponse } from '../../libs/useResponse';
+import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessage.component';
+import { isOnlineOnly } from '../../libs/isOnlineOnly';
 
-class EditEventPage extends React.Component {
-  static contextType = authContext;
-  constructor(props) {
-    super(props);
-    this.state = {
-      eventId: props.match.params.id,
-      event: null,
-      eventChanges: null,
-      eventChanged: false,
-      editStep: null,
-      error: null,
+const EditEventPage = () => {
+  const { user, token } = useAuth();
+  const [event, setEvent] = useState({});
+  const [eventChanges, setEventChanges] = useState({});
+  const [eventChanged, setEventChanged] = useState(false);
+  const [dataFetched, setDataFetched] = useState(false);
+  const [editStep, setEditStep] = useState(null);
+  const location = useLocation();
+  const match = useRouteMatch();
+  const history = useHistory();
+  const handleError = useErrorHandler();
+  const { response, createResponse, clearResponse } = useResponse();
+
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const response = await myAxios().get(
+          `http://localhost:3000/api/events/${match.params.id}`
+        );
+
+        //handle unauthorized
+        if (user._id !== response.data.data.organizer) {
+          return handleError(
+            new AppError('You are not the organizer of this event.', 403)
+          );
+        }
+        const formattedData = splitDateTime(response.data.data);
+        formattedData.locationValid = true;
+        formattedData.capacitiesValid = true;
+        formattedData.onlineOnly = isOnlineOnly(formattedData.ticketTiers);
+
+        setEvent(formattedData);
+        setEventChanges(formattedData);
+        setDataFetched(true);
+      } catch (err) {
+        handleError(err);
+      }
     };
+    fetchEvent();
+  }, [handleError, match.params.id, user._id]);
 
-    this.eventPath = props.location.pathname.split('/').slice(0, -1).join('/');
-  }
-
-  editStepMap = {
+  const editStepMap = {
     name: 1,
     description: 2,
     date: 3,
@@ -39,149 +69,139 @@ class EditEventPage extends React.Component {
     location: 5,
   };
 
-  handleEditStep = (section) => {
+  const handleEditStep = (section) => {
     if (section === 'photo')
-      this.props.history.push(`${this.eventPath}/upload-photo`);
-    this.setState({ editStep: section });
+      history.push(`/events/id/${match.params.id}/upload-photo`);
+    setEditStep(section);
+    clearResponse();
   };
 
-  handleChange = (e) => {
-    const { value, name } = e.target;
-    this.setState({
-      eventChanges: {
-        ...this.state.eventChanges,
-        [name]: value,
-      },
+  const handleChange = ({ target: { name, value } }) => {
+    setEventChanges({
+      ...eventChanges,
+      [name]: value,
     });
   };
 
-  handleEditCancel = () => {
-    this.setState({ eventChanges: { ...this.state.event }, editStep: null });
+  const handleEditCancel = () => {
+    setEventChanges({ ...event });
+    setEditStep(null);
+    clearResponse();
   };
 
-  handleEditSubmit = () => {
-    this.setState(
-      {
-        event: { ...combineDateTime(this.state.eventChanges) },
-        eventChanged: true,
-        editStep: null,
-      },
-      () => console.log(this.state.event)
-    );
-  };
-
-  handleDiscard = () => {
-    const { location, history } = this.props;
-
-    if (!location.state) {
-      return history.push(this.eventPath);
-    }
-
-    history.push(location.state.from || this.eventPath);
-  };
-
-  handleSubmit = async (e) => {
-    e.preventDefault();
-    const { event, eventId } = this.state;
-    const { token } = this.context;
-
+  const handleEditSubmit = async () => {
     try {
+      //validate step submitted
+      await validationSchemaArray[editStepMap[editStep] - 1].validate(
+        eventChanges,
+        {
+          abortEarly: false,
+        }
+      );
+      //recheck for onlineOnly if ticketTiers step was submitted
+      if (editStep === 'ticketTiers') {
+        const onlineOnly = isOnlineOnly(eventChanges.ticketTiers);
+
+        setEventChanges({
+          ...eventChanges,
+          onlineOnly,
+          //clear location fields if event is online only
+          address: onlineOnly ? undefined : eventChanges.address,
+          location: onlineOnly
+            ? { type: 'Point', coordinates: [] }
+            : eventChanges.location,
+          locationValid:
+            event.onlineOnly !== onlineOnly && onlineOnly === false
+              ? false
+              : true,
+        });
+      }
+
+      setEvent({
+        ...combineDateTime(eventChanges),
+      });
+      setEventChanged(true);
+      setEditStep(null);
+      clearResponse();
+    } catch (err) {
+      createResponse(err);
+    }
+  };
+
+  const handleDiscard = () => {
+    // navigate to event page if no location state
+    if (!location.state) {
+      return history.push(`/events/id/${match.params.id}`);
+    }
+    // navigate to route stored in state or event page
+    history.push(location.state.from || `/events/id/${match.params.id}`);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (event.locationValid === false) {
+        throw new Error('Please specify an event location.');
+      }
+
+      //validate ticketTiers again
+      await validationSchemaArray[3].validate(event, { abortEarly: false });
+
       await myAxios(token).put(
-        `http://localhost:3000/api/events/${eventId}`,
+        `http://localhost:3000/api/events/${match.params.id}`,
         event
       );
-      this.props.history.push(this.eventPath);
+      history.push(`/events/id/${match.params.id}`);
     } catch (err) {
-      this.setState({ error: { ...err.response.data } });
+      createResponse(err);
     }
   };
 
-  fetchEvent = async () => {
-    const { user } = this.context;
-    const response = await myAxios().get(
-      `http://localhost:3000/api/events/${this.state.eventId}`
-    );
+  if (!dataFetched) return <LoadingResource>Loading event...</LoadingResource>;
 
-    //handle unauthorized
-    if (user._id !== response.data.data.organizer) {
-      return Promise.reject({
-        response: {
-          data: {
-            statusCode: 403,
-            message: 'You are not the organizer of this event.',
-          },
-        },
-      });
-    }
-    console.log(response);
-    return response.data.data;
-  };
-
-  async componentDidMount() {
-    try {
-      const eventData = await this.fetchEvent();
-      const formattedData = splitDateTime(eventData);
-      this.setState({
-        event: {
-          ...formattedData,
-        },
-        eventChanges: {
-          ...formattedData,
-        },
-      });
-    } catch (err) {
-      this.setState({
-        error: {
-          ...err.response.data,
-        },
-      });
-    }
-  }
-
-  render() {
-    const { error, event, eventChanges, eventChanged, editStep } = this.state;
-
-    if (error) return <ErrorPage {...error} />;
-    if (!event) return <LoadingResource>Loading event...</LoadingResource>;
-
-    return (
-      <Container as="main" className="edit-event-page" fluid>
-        <EditEventControl
-          editStep={editStep}
-          eventChanged={eventChanged}
-          handleSubmit={this.handleSubmit}
-          handleDiscard={this.handleDiscard}
-        />
-        {editStep ? (
-          <form>
-            <EventForm
-              event={eventChanges}
-              step={this.editStepMap[editStep]}
-              handleChange={this.handleChange}
-            />
-            <Row>
-              <Col xs={6}>
-                <CustomButton type="button" onClick={this.handleEditCancel}>
-                  Cancel
-                </CustomButton>
-              </Col>
-              <Col xs={6}>
-                <CustomButton type="button" onClick={this.handleEditSubmit}>
-                  Submit
-                </CustomButton>
-              </Col>
-            </Row>
-          </form>
-        ) : (
-          <EventDetails
-            editMode={true}
-            handleEditStep={this.handleEditStep}
-            {...event}
+  return (
+    <Container as="main" className="edit-event-page" fluid>
+      <EditEventControl
+        editStep={editStep}
+        eventChanged={eventChanged}
+        handleSubmit={handleSubmit}
+        handleDiscard={handleDiscard}
+        response={response}
+      />
+      {editStep ? (
+        <form>
+          <EventForm
+            event={eventChanges}
+            step={editStepMap[editStep]}
+            handleChange={handleChange}
           />
-        )}
-      </Container>
-    );
-  }
-}
+          <Row>
+            <Col xs={6}>
+              <CustomButton type="button" onClick={handleEditCancel}>
+                Cancel
+              </CustomButton>
+            </Col>
+            <Col xs={6}>
+              <CustomButton type="button" onClick={handleEditSubmit}>
+                Submit
+              </CustomButton>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <ResponseMessage response={response} />
+            </Col>
+          </Row>
+        </form>
+      ) : (
+        <EventDetails
+          editMode={true}
+          handleEditStep={handleEditStep}
+          {...event}
+        />
+      )}
+    </Container>
+  );
+};
 
-export default withRouter(EditEventPage);
+export default EditEventPage;

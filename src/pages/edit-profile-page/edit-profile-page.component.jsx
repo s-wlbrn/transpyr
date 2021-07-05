@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+
 import myAxios from '../../auth/axios.config';
 import { useAuth } from '../../auth/use-auth';
+import { useResponse } from '../../libs/useResponse';
+import { validationSchema } from './edit-profile-page.schema';
+
 import { CustomButton } from '../../components/CustomButton/CustomButton.component';
 import { FormInput } from '../../components/FormInput/FormInput.component';
 import { FormInputTextArea } from '../../components/FormInputTextArea/FormInputTextArea.components';
@@ -14,8 +18,8 @@ const EditProfilePage = () => {
   const [tagline, setTagline] = useState('');
   const [bio, setBio] = useState('');
   const [interests, setInterests] = useState('');
-  const [response, setResponse] = useState({ error: false, message: '' });
-  const { user, token } = useAuth();
+  const { user, token, refreshToken } = useAuth();
+  const { response, createResponse } = useResponse();
 
   useEffect(() => {
     if (user) {
@@ -29,14 +33,17 @@ const EditProfilePage = () => {
     e.preventDefault();
 
     try {
+      await validationSchema.validate({ tagline, bio, interests });
+
       await myAxios(token).patch('http://localhost:3000/api/users/me', {
         tagline,
         bio,
         interests,
       });
-      setResponse({ error: false, message: 'Profile saved!' });
+      await refreshToken();
+      createResponse({ message: 'Profile saved!' });
     } catch (err) {
-      setResponse({ error: true, message: err.response.data.message });
+      createResponse(err);
     }
   };
 
@@ -110,13 +117,9 @@ const EditProfilePage = () => {
         <Row>
           <Col xs={6} offset={6}>
             <CustomButton type="submit">Submit</CustomButton>
+            <ResponseMessage response={response} />
           </Col>
         </Row>
-        {response.message && (
-          <ResponseMessage error={response.error}>
-            {response.message}
-          </ResponseMessage>
-        )}
       </form>
     </Container>
   );

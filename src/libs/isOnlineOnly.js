@@ -1,10 +1,10 @@
 export const isOnlineOnly = (tierList) => {
   let onlineOnly = true;
-  for (const tier of tierList) {
-    if (tier.online !== true) {
+  tierList.forEach((tier) => {
+    if (tier.online === false) {
       onlineOnly = false;
     }
-  }
+  });
 
   return onlineOnly;
 };

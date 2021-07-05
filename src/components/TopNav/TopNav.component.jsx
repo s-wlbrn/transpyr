@@ -38,11 +38,17 @@ export const TopNav = () => {
           <Button variant="outline-success">Search</Button>
         </Form>
         <Nav className="nav-content-xs">
-          <Link to="/events/create-event" className="topnav-link">
+          <Link to="/events/create" className="topnav-link">
             Host an event
           </Link>
           {user ? (
             <React.Fragment>
+              <Link to="/bookings/my-bookings" className="nav-link">
+                My bookings
+              </Link>
+              <Link to="/events/my-events" className="nav-link">
+                My events
+              </Link>
               <Link to="/users/edit-profile" className="topnav-link">
                 Edit Profile
               </Link>
@@ -73,8 +79,14 @@ export const TopNav = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Link to="/events/create-event" className="nav-link">
+              <Link to="/events/create" className="nav-link">
                 Host an event
+              </Link>
+              <Link to="/bookings/my-bookings" className="nav-link">
+                My bookings
+              </Link>
+              <Link to="/events/my-events" className="nav-link">
+                My events
               </Link>
               <Link to="/users/edit-profile" className="nav-link">
                 Edit Profile
@@ -90,7 +102,7 @@ export const TopNav = () => {
           </Dropdown>
         ) : (
           <Nav className="signed-out-content">
-            <Link to="/events/create-event" className="topnav-link">
+            <Link to="/events/create" className="topnav-link">
               Host an event
             </Link>
             <Link to="/users/signin" className="topnav-link">

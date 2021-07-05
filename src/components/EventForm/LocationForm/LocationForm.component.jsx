@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Row, Col, Container } from 'react-bootstrap';
 import AddressAutocompleteInput from '../../AddressAutocompleteInput/AddressAutocompleteInput.component';
@@ -12,8 +12,9 @@ export const LocationForm = ({
   onlineOnly,
   address,
   location,
+  locationValid,
 }) => {
-  const [locationValid, setLocationValid] = useState(false);
+  //bypass location validation if event is online-only
   console.log(locationValid);
   return (
     <Container fluid className="location-form">
@@ -49,7 +50,7 @@ export const LocationForm = ({
           <AddressAutocompleteInput
             address={address}
             handleChange={handleChange}
-            setLocationValid={setLocationValid}
+            locationValid={locationValid}
             disabled={onlineOnly ? true : false}
           />
         </Col>

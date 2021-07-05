@@ -7,8 +7,8 @@ import { CustomButton } from '../../../../components/CustomButton/CustomButton.c
 import './OwnEventControl.styles.scss';
 
 export const OwnEventControl = ({ published }) => {
-  let history = useHistory();
-  let location = useLocation();
+  const history = useHistory();
+  const location = useLocation();
   return (
     !published && (
       <Row className="own-event-control">

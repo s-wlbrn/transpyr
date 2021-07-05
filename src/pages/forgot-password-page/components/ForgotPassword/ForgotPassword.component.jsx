@@ -33,7 +33,7 @@ export const ForgotPassword = () => {
       <Col xs={12} md={6}>
         <p className="forgot-password-text">
           Enter your email adress below. If there is an account associated with
-          it, a link to reset the passowrd will be sent to that email address.
+          it, a link to reset the password will be sent to that email address.
         </p>
       </Col>
       <Col xs={12} md={6}>

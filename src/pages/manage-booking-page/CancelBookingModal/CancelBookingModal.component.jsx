@@ -54,13 +54,8 @@ export const CancelBookingModal = ({
           <CustomButton type="submit" warning onClick={requestRefund}>
             Request cancelation
           </CustomButton>
-
-          {response.message && (
-            <ResponseMessage error={response.error}>
-              {response.message}
-            </ResponseMessage>
-          )}
         </div>
+        <ResponseMessage response={response} />
       </Modal.Footer>
     </Modal>
   );

@@ -15,7 +15,9 @@ export const FormInput = ({ handleChange, label, disabled, ...otherAttr }) => {
         <label
           htmlFor={otherAttr.id}
           className={
-            otherAttr.value ? 'shrink form-input-label' : 'form-input-label'
+            typeof otherAttr.value === 'number' || otherAttr.value
+              ? 'shrink form-input-label'
+              : 'form-input-label'
           }
         >
           {label}

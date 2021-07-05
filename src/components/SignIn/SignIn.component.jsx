@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-
 import { useHistory } from 'react-router';
+
 import { useAuth } from '../../auth/use-auth';
+import { validationSchema } from './SignIn.schema';
+import { useResponse } from '../../libs/useResponse';
+
 import { CustomButton } from '../CustomButton/CustomButton.component';
 import { FormInput } from '../FormInput/FormInput.component';
 import { ResponseMessage } from '../ResponseMessage/ResponseMessage.component';
@@ -11,22 +14,27 @@ import './SignIn.styles.scss';
 export const SignIn = ({ location }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [response, setResponse] = useState('');
+  const { response, createResponse } = useResponse();
 
   const { signIn } = useAuth();
   const history = useHistory();
-
+  console.log(response);
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
+      await validationSchema.validate(
+        { email, password },
+        { abortEarly: false }
+      );
       await signIn(email, password);
       // Redirect to 'from' route or default to home
-      let { from } = this.props.location.state || {
+      let { from } = location.state || {
         from: { pathname: '/events' },
       };
-      this.props.history.push(from);
+      history.push(from);
     } catch (err) {
-      setResponse(err.message);
+      createResponse(err);
     }
   };
 
@@ -64,7 +72,7 @@ export const SignIn = ({ location }) => {
           </CustomButton>
         </div>
       </form>
-      <ResponseMessage error>{response}</ResponseMessage>
+      <ResponseMessage response={response} />
     </div>
   );
 };

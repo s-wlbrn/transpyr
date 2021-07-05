@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Col, Row, Modal, Container } from 'react-bootstrap';
 import { useHistory, useRouteMatch } from 'react-router';
+import { useResponse } from '../../libs/useResponse';
 //import qs from 'qs';
 import { CustomButton } from '../CustomButton/CustomButton.component';
 import { ResponseMessage } from '../ResponseMessage/ResponseMessage.component';
@@ -10,7 +11,6 @@ import './EventBookingForm.styles.scss';
 
 export const EventBookingForm = ({ ticketTiers, eventName, eventPath }) => {
   const [quantities, setQuantities] = useState({});
-  const [response, setResponse] = useState(null);
   const ticketKeys = Object.keys(quantities);
   const ticketTiersMap = ticketKeys.reduce((acc, ticketId) => {
     const ticket = ticketTiers.find((el) => el.id === ticketId);
@@ -19,6 +19,7 @@ export const EventBookingForm = ({ ticketTiers, eventName, eventPath }) => {
 
   const history = useHistory();
   const match = useRouteMatch();
+  const { response, createResponse } = useResponse();
 
   const handleClose = () => {
     history.push(`/events/id/${match.params.id}`);
@@ -48,21 +49,20 @@ export const EventBookingForm = ({ ticketTiers, eventName, eventPath }) => {
       console.log(quantities[ticket]);
       if (quantities[ticket]) return true;
     }
-
     return false;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isValid(ticketKeys)) {
-      history.push(`${eventPath}/book`, {
+      history.push(`/events/id/${match.params.id}/book`, {
         eventName,
         ticketSelections: { ...quantities },
         ticketKeys,
         ticketTiersMap,
       });
     } else {
-      setResponse('No ticket quantities specified.');
+      createResponse(new Error('No ticket quantities specified.'));
     }
   };
 
@@ -116,7 +116,7 @@ export const EventBookingForm = ({ ticketTiers, eventName, eventPath }) => {
             {response && (
               <Row>
                 <Col xs={12}>
-                  <ResponseMessage error>{response}</ResponseMessage>
+                  <ResponseMessage response={response} />
                 </Col>
               </Row>
             )}

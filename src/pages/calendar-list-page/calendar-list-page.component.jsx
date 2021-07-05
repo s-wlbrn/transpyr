@@ -1,11 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { addMonths, parseISO, startOfMonth } from 'date-fns';
+import { useHistory } from 'react-router';
+import { useErrorHandler } from 'react-error-boundary';
 import { Col, Container, Row } from 'react-bootstrap';
-import { EventCalendar } from '../../components/EventCalendar/EventCalendar.component';
+
 import myAxios from '../../auth/axios.config';
 import { useAuth } from '../../auth/use-auth';
+
+import { EventCalendar } from '../../components/EventCalendar/EventCalendar.component';
+
 import './calendar-list-page.styles.scss';
-import { useHistory } from 'react-router';
 
 const CalendarListPage = ({ manageResource, url, card }) => {
   const [events, setEvents] = useState([]);
@@ -13,24 +17,29 @@ const CalendarListPage = ({ manageResource, url, card }) => {
   const calendarRef = useRef({});
   const listRef = useRef({});
   const history = useHistory();
+  const handleError = useErrorHandler();
 
   const getMonthlyEvents = useCallback(
     async (date) => {
-      const upperBound = addMonths(date, 1);
-      const response = await myAxios(token).get(
-        `${url}dateTimeStart[gt]=${date}&dateTimeStart[lt]=${upperBound}`
-      );
-      const calendarEvents = response.data.data.map((el) => {
-        // calendar expects 'date' and 'title' properties
-        el.date = parseISO(el.dateTimeStart);
-        el.title = el.name;
-        el.dateTimeStart = new Date(el.dateTimeStart);
-        el.dateTimeEnd = new Date(el.dateTimeEnd);
-        return el;
-      });
-      setEvents(calendarEvents);
+      try {
+        const upperBound = addMonths(date, 1);
+        const response = await myAxios(token).get(
+          `${url}dateTimeStart[gt]=${date}&dateTimeStart[lt]=${upperBound}&sort=dateTimeStart`
+        );
+        const calendarEvents = response.data.data.map((el) => {
+          // calendar expects 'date' and 'title' properties
+          el.date = parseISO(el.dateTimeStart);
+          el.title = el.name;
+          el.dateTimeStart = new Date(el.dateTimeStart);
+          el.dateTimeEnd = new Date(el.dateTimeEnd);
+          return el;
+        });
+        setEvents(calendarEvents);
+      } catch (err) {
+        handleError(err);
+      }
     },
-    [token, url]
+    [token, url, handleError]
   );
 
   useEffect(() => {

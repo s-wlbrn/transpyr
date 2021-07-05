@@ -1,0 +1,18 @@
+@import '../../scss/colors';
+
+.refund-requests-page {
+  display: flex;
+  flex-direction: column;
+
+  .refund-requests-list {
+    flex: 1 0 auto;
+  }
+
+  .refund-requests-none {
+    color: $darker-color;
+    text-align: center;
+    margin-top: 4rem;
+    font-weight: bold;
+    font-size: 1.25em;
+  }
+}

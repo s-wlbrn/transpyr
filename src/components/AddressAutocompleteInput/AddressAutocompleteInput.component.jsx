@@ -21,7 +21,6 @@ class AddressAutocompleteInput extends React.Component {
 
   handlePlaceSelect = () => {
     let addressObject = this.autocomplete.getPlace();
-    console.log(addressObject.geometry.location.lat());
     this.props.handleChange({
       target: { name: 'address', value: addressObject.formatted_address },
     });
@@ -37,7 +36,8 @@ class AddressAutocompleteInput extends React.Component {
         },
       },
     });
-    this.props.setLocationValid(true);
+    //Set location valid only if real address has been selected from autocomplete
+    this.props.handleChange({ target: { name: 'locationValid', value: true } });
   };
 
   render() {
@@ -47,8 +47,11 @@ class AddressAutocompleteInput extends React.Component {
         type="text"
         id="autocomplete"
         onChange={(e) => {
-          if (this.props.setLocationValid === true)
-            this.props.setLocationValid(false);
+          if (this.props.locationValid === true)
+            //Set location invalid when manually typed
+            this.props.handleChange({
+              target: { name: 'locationValid', value: false },
+            });
         }}
         defaultValue={this.props.address}
         disabled={this.props.disabled}

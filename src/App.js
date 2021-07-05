@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import { ErrorBoundary, useErrorHandler } from 'react-error-boundary';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
@@ -29,6 +30,7 @@ import RefundRequestsPage from './pages/refund-requests-page/RefundRequestsPage.
 import { TopNav } from './components/TopNav/TopNav.component';
 import { Footer } from './components/Footer/Footer.component';
 import ManageBookingPage from './pages/manage-booking-page/manage-booking-page.component';
+import AppError from './libs/AppError';
 
 const App = () => {
   const { user, expiresIn, refreshToken } = useAuth();
@@ -36,12 +38,16 @@ const App = () => {
   //Silent token refresh
   useEffect(() => {
     const silentRefresh = async () => {
-      if (!user) {
-        await refreshToken();
-      } else if (expiresIn) {
-        setTimeout(async () => {
+      try {
+        if (!user) {
           await refreshToken();
-        }, expiresIn);
+        } else if (expiresIn) {
+          setTimeout(async () => {
+            await refreshToken();
+          }, expiresIn);
+        }
+      } catch (err) {
+        console.log(err);
       }
     };
     silentRefresh();
@@ -50,68 +56,79 @@ const App = () => {
   return (
     <div className="app">
       <TopNav />
-      <Switch>
-        <PrivateRoute path="/events/id/:id/manage">
-          <ManageEventPage />
-        </PrivateRoute>
-        <PrivateRoute exact path="/events/id/:id/publish">
-          <PublishEventPage />
-        </PrivateRoute>
-        <PrivateRoute exact path="/events/id/:id/edit">
-          <EditEventPage />
-        </PrivateRoute>
-        <PrivateRoute exact path="/events/id/:id/refund-requests">
-          <RefundRequestsPage url="http://localhost:3000/api/bookings/refund-request/event" />
-        </PrivateRoute>
-        <Route
-          exact
-          path="/events/id/:id/upload-photo"
-          component={UploadEventPhotoPage}
-        />
-        <Route exact path="/events/id/:id/book" component={BookEventPage} />
-        <Route path="/events/id/:id" component={EventDetailsPage} />
-        <PrivateRoute exact path="/events/create">
-          <CreateEventPage />
-        </PrivateRoute>
-        <PrivateRoute exact path="/events/my-events">
-          <MyEventsPage />
-        </PrivateRoute>
-        <Route exact path="/events" component={Homepage} />
+      <ErrorBoundary FallbackComponent={ErrorPage}>
+        <Switch>
+          <PrivateRoute path="/events/id/:id/manage/refund-requests">
+            <RefundRequestsPage url="http://localhost:3000/api/bookings/refund-requests/event" />
+          </PrivateRoute>
+          <PrivateRoute path="/events/id/:id/manage">
+            <ManageEventPage />
+          </PrivateRoute>
+          <PrivateRoute exact path="/events/id/:id/publish">
+            <PublishEventPage />
+          </PrivateRoute>
+          <PrivateRoute exact path="/events/id/:id/edit">
+            <EditEventPage />
+          </PrivateRoute>
+          <Route
+            exact
+            path="/events/id/:id/upload-photo"
+            component={UploadEventPhotoPage}
+          />
+          <Route exact path="/events/id/:id/book" component={BookEventPage} />
+          <Route path="/events/id/:id" component={EventDetailsPage} />
+          <PrivateRoute exact path="/events/create">
+            <CreateEventPage />
+          </PrivateRoute>
+          <PrivateRoute exact path="/events/my-events">
+            <MyEventsPage />
+          </PrivateRoute>
+          <Route exact path="/events" component={Homepage} />
 
-        <PrivateRoute exact path="/users/edit-profile">
-          <EditProfilePage />
-        </PrivateRoute>
-        <PrivateRoute exact path="/users/settings">
-          <EditSettingsPage />
-        </PrivateRoute>
-        <Route exact path="/users/signin" component={SignInSignUpPage} />
-        <Route path="/users/forgot-password" component={ForgotPasswordPage} />
-        <Route path="/users/id/:id" component={UserProfilePage} />
-        {/* <Route>
+          <PrivateRoute exact path="/users/edit-profile">
+            <EditProfilePage />
+          </PrivateRoute>
+          <PrivateRoute exact path="/users/settings">
+            <EditSettingsPage />
+          </PrivateRoute>
+          <Route exact path="/users/signin" component={SignInSignUpPage} />
+          <Route path="/users/forgot-password" component={ForgotPasswordPage} />
+          <Route path="/users/id/:id" component={UserProfilePage} />
+          {/* <Route>
           exact
           patch="/users/reset-password/:token"
           component={ResetPasswordPage}
         </Route> */}
 
-        <PrivateRoute exact path="/bookings/refund-requests/:id">
-          <RefundRequestsPage url="http://localhost:3000/api/bookings/refund-request" />
-        </PrivateRoute>
-        <PrivateRoute path="/bookings/my-bookings/event/:id">
-          <ManageBookingPage />
-        </PrivateRoute>
-        <PrivateRoute path="/bookings/my-bookings">
-          <MyBookingsPage />
-        </PrivateRoute>
-        <Route path="/bookings/create" component={BookingPaymentSuccessPage} />
+          <PrivateRoute exact path="/bookings/refund-requests/:id">
+            <RefundRequestsPage url="http://localhost:3000/api/bookings/refund-requests" />
+          </PrivateRoute>
+          <PrivateRoute path="/bookings/my-bookings/event/:id">
+            <ManageBookingPage />
+          </PrivateRoute>
+          <PrivateRoute path="/bookings/my-bookings">
+            <MyBookingsPage />
+          </PrivateRoute>
+          <Route
+            path="/bookings/create"
+            component={BookingPaymentSuccessPage}
+          />
 
-        <Route exact path="/">
-          <Redirect to="/events" />
-        </Route>
+          <Route exact path="/">
+            <Redirect to="/events" />
+          </Route>
 
-        <Route path="*">
-          <ErrorPage statusCode="404" message="Page not found." />
-        </Route>
-      </Switch>
+          <Route
+            path="*"
+            render={() => {
+              throw new AppError('Page not found.', 404);
+            }}
+          />
+          {/* <ErrorPage
+              error={{ statusCode: '404', message: 'Page not found.' }}
+            /> */}
+        </Switch>
+      </ErrorBoundary>
       <Footer />
     </div>
   );

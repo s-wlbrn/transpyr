@@ -8,6 +8,7 @@ import { formatPriceUSD } from '../../../libs/formatPriceUSD';
 import myAxios from '../../../auth/axios.config';
 import { useAuth } from '../../../auth/use-auth';
 import { ResponseMessage } from '../../../components/ResponseMessage/ResponseMessage.component';
+import { LoadingResource } from '../../../components/LoadingResource/LoadingResource.component';
 
 export const RefundRequestCard = ({
   refundRequest,
@@ -18,10 +19,12 @@ export const RefundRequestCard = ({
     error: false,
     message: null,
   });
+  const [loading, setLoading] = useState(false);
   const { token } = useAuth();
 
   const handleResolveRequest = async (status) => {
     try {
+      setLoading(true);
       await myAxios(token).patch(
         `http://localhost:3000/api/bookings/refund-request/${refundRequest._id}?status=${status}`
       );
@@ -30,6 +33,7 @@ export const RefundRequestCard = ({
         clearRefundRequestCard();
       }, 150);
     } catch (err) {
+      setLoading(false);
       setResponse({
         error: true,
         message: err.response.data.message,
@@ -60,34 +64,33 @@ export const RefundRequestCard = ({
             </span>
           </div>
         </Col>
-        <Col xs={6} className="refund-request-card-buttons">
-          <CustomButton
-            type="button"
-            onClick={() => handleResolveRequest('accepted')}
-          >
-            Accept
-          </CustomButton>
-          <CustomButton
-            type="button"
-            warning
-            onClick={() => handleResolveRequest('rejected')}
-          >
-            Deny
-          </CustomButton>
-        </Col>
+        {loading ? (
+          <Col xs={6} className="refund-request-card-loading">
+            <LoadingResource />
+          </Col>
+        ) : (
+          <Col xs={6} className="refund-request-card-buttons">
+            <CustomButton
+              type="button"
+              onClick={() => handleResolveRequest('accepted')}
+            >
+              Accept
+            </CustomButton>
+            <CustomButton
+              type="button"
+              warning
+              onClick={() => handleResolveRequest('rejected')}
+            >
+              Deny
+            </CustomButton>
+          </Col>
+        )}
       </Row>
       <Row className="refund-request-card-tickets">
-        <Col xs={12}>
-          <h2 className="refund-request-card-label">Tickets:</h2>
-        </Col>
-        {refundRequest.tickets.map((ticket, i) => (
-          <Col
-            key={i}
-            as="ul"
-            xs={12}
-            className="refund-request-card-ticket-data"
-          >
-            <li>
+        <Col as="ul" xs={12} md={6}>
+          <div className="refund-request-card-label">Tickets:</div>
+          {refundRequest.tickets.map((ticket, i) => (
+            <li key={i} className="refund-request-card-ticket-data">
               <div>
                 <span className="refund-request-card-label">Type:</span>
                 <span className="refund-request-card-value">
@@ -101,8 +104,14 @@ export const RefundRequestCard = ({
                 </span>
               </div>
             </li>
+          ))}
+        </Col>
+        {refundRequest.reason && (
+          <Col xs={12} md={6}>
+            <div className="refund-request-card-label">Cancelation reason:</div>
+            <div>{refundRequest.reason}</div>
           </Col>
-        ))}
+        )}
       </Row>
       {response.message && (
         <Row>

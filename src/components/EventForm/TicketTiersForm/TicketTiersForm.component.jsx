@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
-import { Row, Col, Container } from 'react-bootstrap';
+import { Row, Col, Container, Alert } from 'react-bootstrap';
 
 import { FormInput } from '../../FormInput/FormInput.component';
 import { TicketTierList } from '../TicketTierList/TicketTierList.component';
@@ -8,313 +8,259 @@ import { CustomButton } from '../../CustomButton/CustomButton.component';
 import { ResponseMessage } from '../../ResponseMessage/ResponseMessage.component';
 
 import './TicketTiersForm.styles.scss';
+import { validationSchema } from './TicketTiersForm.schema';
+import { useResponse } from '../../../libs/useResponse';
+import { FormInputToggle } from '../../FormInputToggle/FormInputToggle.component';
+import { validationSchemaArray } from '../EventForm.schema';
 
-class TicketTiersForm extends React.Component {
-  constructor(props) {
-    super(props);
+const initialCurrentTier = {
+  tierName: '',
+  tierDescription: '',
+  capacity: '',
+  price: '',
+  online: false,
+  limitPerCustomer: '',
+};
 
-    this.state = {
-      currentTier: this.initialCurrentTier,
-      editMode: false,
-      tierToEdit: '',
-      error: '',
+export const TicketTiersForm = ({
+  ticketTiers,
+  handleEventChange,
+  totalCapacity,
+}) => {
+  const [currentTier, setCurrentTier] = useState(initialCurrentTier);
+  const [editMode, setEditMode] = useState(false);
+  const [tierToEdit, setTierToEdit] = useState(null);
+  const [capacityAlert, setCapacityAlert] = useState(null);
+  const { response, createResponse, clearResponse } = useResponse();
+
+  const ticketNames = useMemo(() => {
+    return ticketTiers.map((tier) => tier.tierName.toLowerCase());
+  }, [ticketTiers]);
+
+  //validate ticketTiers on every submit for displaying alert
+  useEffect(() => {
+    const validateTicketTiers = async () => {
+      try {
+        await validationSchemaArray[3].validate(
+          { ticketTiers, totalCapacity },
+          { abortEarly: false }
+        );
+        setCapacityAlert(null);
+      } catch (err) {
+        setCapacityAlert(err.errors.join(' '));
+      }
     };
-  }
+    validateTicketTiers();
+  }, [ticketTiers, totalCapacity]);
 
-  initialCurrentTier = {
-    tierName: '',
-    tierDescription: '',
-    capacity: '',
-    price: '',
-    online: false,
-    limitPerCustomer: '',
-  };
-
-  isFormValid(validators) {
-    const { currentTier } = this.state;
-    const { ticketTiers } = this.props;
-    let formValid = true;
-    let errors = [];
-
-    // Check if all fields are complete
-    if (validators.complete) {
-      //Get array of form values
-      let tierValues = Object.values(currentTier);
-
-      let formComplete = true;
-      //remove the online boolean value
-      const newTiers = tierValues.filter((e) => typeof e !== 'boolean');
-      //flag isFormComplete false if empty value found
-      newTiers.forEach((value) => {
-        if (!value) formComplete = false;
-      });
-
-      if (!formComplete) {
-        errors.push('Please fill out all fields.');
-        formValid = false;
-      }
-    }
-
-    if (validators.name) {
-      //trim whitespace from name
-      currentTier.tierName = currentTier.tierName.trim();
-      //collect all tier names and convert to lowercase
-      let names = ticketTiers.map((tier) => tier.tierName.toLowerCase());
-      //name of new tier is unique if not included in names array
-      let unique = !names.includes(currentTier.tierName.toLowerCase());
-
-      if (!unique) {
-        errors.push('A tier with this name already exists.');
-        formValid = false;
-      }
-    }
-
-    if (validators.capacity) {
-      if (!currentTier.online && Number(currentTier.capacity) === 0) {
-        errors.push('In-person tickets must have a capacity.');
-        formValid = false;
-      } else if (Number(currentTier.capacity) < 0) {
-        errors.push('Invalid capacity.');
-        formValid = false;
-      }
-    }
-
-    if (validators.price) {
-      if (currentTier.price < 0) {
-        errors.push('Invalid price.');
-        formValid = false;
-      }
-    }
-
-    if (errors.length) this.setState({ error: errors.join(' ') });
-    return formValid;
-  }
-
-  toggleEditMode = (tier) => {
-    if (this.state.editMode && this.state.tierToEdit === tier.tierName) {
-      this.setState({
-        currentTier: this.initialCurrentTier,
-        editMode: false,
-        tierToEdit: '',
-        error: '',
-      });
+  const toggleEditMode = (tier) => {
+    if (editMode && tierToEdit === tier.tierName) {
+      setCurrentTier(initialCurrentTier);
+      setEditMode(false);
+      setTierToEdit(null);
+      clearResponse();
     } else {
-      this.setState({
-        currentTier: tier,
-        editMode: true,
-        tierToEdit: tier.tierName,
-        error: '',
-      });
+      setCurrentTier(tier);
+      setEditMode(true);
+      setTierToEdit(tier.tierName);
+      clearResponse();
     }
   };
 
-  handleTierChange = ({ target: { name, value } }) => {
-    this.setState({
-      currentTier: { ...this.state.currentTier, [name]: value },
+  const handleTierChange = ({ target: { name, value, type } }) => {
+    setCurrentTier({
+      ...currentTier,
+      [name]: type === 'number' ? Number(value) : value,
     });
   };
 
-  handleOnlineCheckbox = () => {
-    this.setState({
-      currentTier: {
-        ...this.state.currentTier,
-        online: !this.state.currentTier.online,
-      },
+  const handleToggleOnline = () => {
+    setCurrentTier({
+      ...currentTier,
+      online: !currentTier.online,
     });
   };
 
-  handleTierSubmit = () => {
-    const { currentTier } = this.state;
-    const { ticketTiers } = this.props;
-    if (
-      this.isFormValid({
-        complete: true,
-        name: true,
-        capacity: true,
-        price: true,
-      })
-    ) {
-      //Format tier data
-      currentTier.capacity = Number(currentTier.capacity);
-      currentTier.price = Number(currentTier.price);
-      //add to ticketTiers
-      this.props.handleChange({
-        target: { name: 'ticketTiers', value: [...ticketTiers, currentTier] },
-      });
-      this.setState({
-        currentTier: this.initialCurrentTier,
-        error: '',
-      });
-    }
-  };
-
-  handleTierEdit = () => {
-    const { currentTier, tierToEdit } = this.state;
-    const { ticketTiers } = this.props;
-    if (this.isFormValid({ complete: true, capacity: true, price: true })) {
-      //Format tier data
-      currentTier.capacity = Number(currentTier.capacity);
-      currentTier.price = Number(currentTier.price);
-      //Set new tierList with tier replaced
-      const updatedTiers = ticketTiers.map((tier) =>
-        tier.tierName === tierToEdit ? currentTier : tier
+  const handleTierSubmit = async () => {
+    try {
+      const submittedTier = { ...currentTier };
+      //trim name whitespace
+      submittedTier.tierName = submittedTier.tierName.trim();
+      //name of new tier is unique if not included in tierNames array
+      const unique = !ticketNames.includes(
+        submittedTier.tierName.toLowerCase()
       );
-      this.props.handleChange({
-        target: { name: 'ticketTiers', value: updatedTiers },
+      if (!unique && !editMode) {
+        throw new Error('Ticket name must be unique.');
+      }
+      if (submittedTier.capacity > totalCapacity) {
+        throw new Error('Ticket capacity cannot exceed the event maximum.');
+      }
+
+      //validate other fields
+      await validationSchema.validate(
+        { ...submittedTier },
+        { abortEarly: false }
+      );
+
+      //add to ticketTiers
+      const updatedTicketTiers = editMode
+        ? ticketTiers.map((tier) =>
+            tier.tierName === tierToEdit ? submittedTier : tier
+          )
+        : [...ticketTiers, submittedTier];
+      handleEventChange({
+        target: { name: 'ticketTiers', value: updatedTicketTiers },
       });
-      this.setState({
-        currentTier: this.initialCurrentTier,
-        editMode: false,
-        tierToEdit: '',
-        error: '',
-      });
+
+      //initialize
+      setCurrentTier(initialCurrentTier);
+      clearResponse();
+      if (editMode) {
+        setTierToEdit(false);
+        setEditMode(false);
+      }
+    } catch (err) {
+      createResponse(err);
     }
   };
 
-  handleTierDelete = () => {
-    const { tierToEdit } = this.state;
-    const { ticketTiers } = this.props;
+  const handleTierDelete = () => {
     const updatedTiers = ticketTiers.filter(
       (tier) => tier.tierName !== tierToEdit
     );
-    this.props.handleChange({
+    handleEventChange({
       target: { name: 'ticketTiers', value: updatedTiers },
     });
-    this.setState({
-      currentTier: this.initialCurrentTier,
-      editMode: false,
-      tierToEdit: '',
-      error: '',
-    });
+    setCurrentTier(initialCurrentTier);
+    clearResponse();
+    setTierToEdit(null);
+    setEditMode(false);
   };
 
-  render() {
-    const {
-      currentTier: {
-        tierName,
-        tierDescription,
-        online,
-        capacity,
-        price,
-        limitPerCustomer,
-      },
-      editMode,
-      tierToEdit,
-      error,
-    } = this.state;
-    const { ticketTiers } = this.props;
-    return (
-      <Container fluid className="ticket-tiers-form">
+  const {
+    tierName,
+    tierDescription,
+    online,
+    capacity,
+    price,
+    limitPerCustomer,
+  } = currentTier;
+  return (
+    <Container fluid className="ticket-tiers-form">
+      {capacityAlert && (
         <Row>
           <Col xs={12}>
-            <h2>Specify the ticket types available for the event.</h2>
-            <TicketTierList
-              tierList={ticketTiers}
-              tierToEdit={tierToEdit}
-              toggleEditMode={this.toggleEditMode}
-            />
+            <Alert show={true} variant="warning">
+              {capacityAlert}
+            </Alert>
           </Col>
         </Row>
-        <Row>
+      )}
+      <Row className="ticket-tiers-tier-list">
+        <Col xs={12}>
+          <h2>Specify the ticket types available for the event.</h2>
+          <TicketTierList
+            tierList={ticketTiers}
+            tierToEdit={tierToEdit}
+            toggleEditMode={toggleEditMode}
+          />
+        </Col>
+      </Row>
+      <Row className="ticket-tiers-controls">
+        <Col xs={6}>
+          <CustomButton type="button" onClick={handleTierSubmit}>
+            {editMode ? 'Confirm Edit' : 'Add Ticket Type'}
+          </CustomButton>
+        </Col>
+        {editMode && (
           <Col xs={6}>
-            {editMode ? (
-              <CustomButton type="button" onClick={this.handleTierEdit}>
-                Confirm Edit
-              </CustomButton>
-            ) : (
-              <CustomButton type="button" onClick={this.handleTierSubmit}>
-                Add Ticket Type
-              </CustomButton>
-            )}
+            <CustomButton type="button" warning onClick={handleTierDelete}>
+              Delete Ticket
+            </CustomButton>
           </Col>
-          {editMode && (
-            <Col xs={6}>
-              <CustomButton type="button" red onClick={this.handleTierDelete}>
-                Delete Ticket
-              </CustomButton>
-            </Col>
-          )}
-        </Row>
-        <Row>
-          <Col xs={12}>
-            <div className="ticket-tiers-message">
-              {error && <ResponseMessage error>{error}</ResponseMessage>}
-            </div>
-          </Col>
-          <Col xs={12} className="ticket-tiers-name-group">
-            <FormInput
-              name="tierName"
-              type="name"
-              id="tier-name"
-              value={tierName}
-              handleChange={this.handleTierChange}
-              label="Ticket Name"
-              required
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={8}>
-            <FormInput
-              name="tierDescription"
-              type="text"
-              id="tier-description"
-              value={tierDescription}
-              handleChange={this.handleTierChange}
-              label="Ticket Description"
-              required
-            />
-          </Col>
-          <Col xs={4}>
-            <FormInput
-              name="limitPerCustomer"
-              type="number"
-              id="tier-limit"
-              value={limitPerCustomer}
-              handleChange={this.handleTierChange}
-              label="# Per Customer"
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={4} className="online-input-group">
-            <label htmlFor={'tier-online'} className="online-input-label">
-              Online Attendence
-            </label>
-            <FormInput
-              name="online"
-              type="checkbox"
-              id="tier-online"
-              checked={online}
-              handleChange={this.handleOnlineCheckbox}
-              required
-            />
-          </Col>
-          <Col xs={4}>
-            <FormInput
-              name="capacity"
-              type="number"
-              id="tier-capacity"
-              value={capacity}
-              handleChange={this.handleTierChange}
-              label="# of Tickets"
-            />
-          </Col>
-          <Col xs={4}>
-            <FormInput
-              name="price"
-              type="number"
-              id="tier-price"
-              value={price}
-              handleChange={this.handleTierChange}
-              label="Ticket Price"
-              required
-            />
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
-}
+        )}
+      </Row>
+      <Row>
+        <Col xs={12}>
+          <ResponseMessage response={response} />
+        </Col>
+        <Col xs={12} className="ticket-tiers-name-group">
+          <FormInput
+            name="tierName"
+            type="name"
+            id="tier-name"
+            value={tierName}
+            handleChange={handleTierChange}
+            label="Ticket Name"
+            required
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col xs={8}>
+          <FormInput
+            name="tierDescription"
+            type="text"
+            id="tier-description"
+            value={tierDescription}
+            handleChange={handleTierChange}
+            label="Ticket Description"
+            required
+          />
+        </Col>
+        <Col xs={4}>
+          <FormInput
+            name="limitPerCustomer"
+            type="number"
+            id="tier-limit"
+            value={limitPerCustomer}
+            handleChange={handleTierChange}
+            label="Per Customer"
+            min="1"
+            max={capacity}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col xs={4} className="online-input-group">
+          <label htmlFor={'tier-online'} className="online-input-label">
+            Online
+          </label>
+          <FormInputToggle
+            name="online"
+            checked={online}
+            id="tier-online"
+            onClick={handleToggleOnline}
+          />
+        </Col>
+        <Col xs={4} className="capacity-input-group">
+          <FormInput
+            name="capacity"
+            type="number"
+            id="tier-capacity"
+            value={capacity}
+            handleChange={handleTierChange}
+            label="Capacity"
+            min="0"
+            max={totalCapacity}
+          />
+          <div className="capacity-input-total-capacity">{`Event total: ${totalCapacity}`}</div>
+        </Col>
+        <Col xs={4}>
+          <FormInput
+            name="price"
+            type="number"
+            id="tier-price"
+            value={String(price)}
+            handleChange={handleTierChange}
+            label="Price"
+            min="0"
+          />
+        </Col>
+      </Row>
+    </Container>
+  );
+};
 
 export default TicketTiersForm;

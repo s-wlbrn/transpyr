@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Modal, Row } from 'react-bootstrap';
+import { ErrorBoundary, useErrorHandler } from 'react-error-boundary';
 import { Route } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+
 import myAxios from '../../auth/axios.config';
+import { ErrorModal } from '../../components/ErrorModal/ErrorModal.component';
+
 import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
 import { calculateEventInfo } from '../../libs/calculateEventInfo';
 import ErrorPage from '../error-page/error-page.component';
@@ -14,9 +18,10 @@ import './user-profile-page.styles.scss';
 const UserProfilePage = ({ match }) => {
   const [user, setUser] = useState(null);
   const [dataFetched, setDataFetched] = useState(false);
-  const [error, setError] = useState(null);
   const [userEvents, setUserEvents] = useState([]);
   const [userFavorites, setUserFavorites] = useState([]);
+  const history = useHistory();
+  const handleError = useErrorHandler();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -42,26 +47,27 @@ const UserProfilePage = ({ match }) => {
         setUser(user);
         setDataFetched(true);
       } catch (err) {
-        console.log(err);
-        setError(err.response.data);
-        setDataFetched(true);
+        handleError(err);
       }
     };
     fetchUser();
-  }, [match.params.id]);
+  }, [match.params.id, handleError]);
 
   if (!dataFetched) return <LoadingResource>Loading user...</LoadingResource>;
-  if (error) return <ErrorPage {...error} />;
 
   return (
     <Container fluid as="main" className="user-profile-page">
-      <Route path={`${match.path}/events`}>
-        <SeeMoreModal resource="events" />
-      </Route>
-      <Route path={`${match.path}/favorites`}>
-        <SeeMoreModal resource="favorites" />
-      </Route>
-
+      <ErrorBoundary
+        onReset={() => history.push(`/users/id/${match.params.id}`)}
+        FallbackComponent={ErrorModal}
+      >
+        <Route path={`${match.path}/events`}>
+          <SeeMoreModal resource="events" />
+        </Route>
+        <Route path={`${match.path}/favorites`}>
+          <SeeMoreModal resource="favorites" />
+        </Route>
+      </ErrorBoundary>
       <Row as="section" className="user-profile-intro">
         <Col xs={12} md={6}>
           <img

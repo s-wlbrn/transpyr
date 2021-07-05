@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Modal } from 'react-bootstrap';
+import { useErrorHandler } from 'react-error-boundary';
 import InfiniteScroll from 'react-infinite-scroller';
 import { useHistory, useRouteMatch } from 'react-router';
 import myAxios from '../../../auth/axios.config';
 import { CustomButton } from '../../../components/CustomButton/CustomButton.component';
 import { LoadingResource } from '../../../components/LoadingResource/LoadingResource.component';
+import AppError from '../../../libs/AppError';
 import { calculateEventInfo } from '../../../libs/calculateEventInfo';
-import ErrorPage from '../../error-page/error-page.component';
 import { EventList } from '../../homepage/components/EventList/EventList.component';
 
 import './SeeMoreModal.styles.scss';
@@ -14,9 +15,9 @@ import './SeeMoreModal.styles.scss';
 export const SeeMoreModal = ({ resource }) => {
   const [events, setEvents] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-  const [error, setError] = useState(null);
   const history = useHistory();
   const match = useRouteMatch();
+  const handleError = useErrorHandler();
   const handleClose = () => {
     history.push(`/users/id/${match.params.id}`);
   };
@@ -37,7 +38,7 @@ export const SeeMoreModal = ({ resource }) => {
         setHasMore(false);
       }
     } catch (err) {
-      setError(error);
+      handleError(err);
     }
   };
 
@@ -55,20 +56,16 @@ export const SeeMoreModal = ({ resource }) => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {error ? (
-          <ErrorPage {...error} />
-        ) : (
-          <InfiniteScroll
-            pageStart={1}
-            hasMore={hasMore}
-            loadMore={getEvents}
-            loader={
-              <LoadingResource key="loader0">Loading events...</LoadingResource>
-            }
-          >
-            {events.length ? <EventList events={events} /> : <React.Fragment />}
-          </InfiniteScroll>
-        )}
+        <InfiniteScroll
+          pageStart={1}
+          hasMore={hasMore}
+          loadMore={getEvents}
+          loader={
+            <LoadingResource key="loader0">Loading events...</LoadingResource>
+          }
+        >
+          {events.length ? <EventList events={events} /> : <React.Fragment />}
+        </InfiniteScroll>
       </Modal.Body>
       <Modal.Footer>
         <CustomButton type="button" onClick={handleClose}>

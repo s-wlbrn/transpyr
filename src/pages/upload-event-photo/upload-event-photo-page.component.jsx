@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 import PhotoUploadForm from '../../components/PhotoUploadForm/PhotoUploadForm.component';

@@ -1,5 +1,14 @@
 .create-event-page {
+  display: flex;
+  flex-direction: column;
+
   .create-event-title {
     margin-bottom: 1rem;
+  }
+
+  #create-event-form {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
   }
 }

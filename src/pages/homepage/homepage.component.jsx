@@ -1,18 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useErrorHandler } from 'react-error-boundary';
 
-import { LocationButton } from './components/LocationButton/LocationButton.component';
-import { FilterMenu } from './components/FilterMenu/FilterMenu.component';
-import { EventList } from './components/EventList/EventList.component';
-
+import myAxios from '../../auth/axios.config';
 import { calculateEventInfo } from '../../libs/calculateEventInfo';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import './homepage.styles.scss';
-import myAxios from '../../auth/axios.config';
+import { LocationButton } from './components/LocationButton/LocationButton.component';
+import { FilterMenu } from './components/FilterMenu/FilterMenu.component';
+import { EventList } from './components/EventList/EventList.component';
 import { PageControl } from './components/PageControl/PageControl.component';
+
+import './homepage.styles.scss';
 
 const Homepage = (props) => {
   const [isFetching, setIsFetching] = useState(true);
@@ -25,6 +26,7 @@ const Homepage = (props) => {
     paginate: { page: 1, limit: 10 },
   });
   const numberOfPagesRef = useRef(null);
+  const handleError = useErrorHandler();
 
   const handleChangeQuery = (selections) => {
     setQuery({
@@ -46,19 +48,25 @@ const Homepage = (props) => {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      setIsFetching(true);
-      const response = await myAxios().get('http://localhost:3000/api/events', {
-        params: query,
-      });
-      const events = response.data.data.map((el) => calculateEventInfo(el));
-      console.log(events);
-      numberOfPagesRef.current = response.data.pages;
-      setEvents(events);
-      setIsFetching(false);
+      try {
+        setIsFetching(true);
+        const response = await myAxios().get(
+          'http://localhost:3000/api/events',
+          {
+            params: query,
+          }
+        );
+        const events = response.data.data.map((el) => calculateEventInfo(el));
+        numberOfPagesRef.current = response.data.pages;
+        setEvents(events);
+        setIsFetching(false);
+      } catch (err) {
+        handleError(err);
+      }
     };
 
     fetchEvents();
-  }, [query]);
+  }, [query, handleError]);
 
   return (
     <Container as="main" fluid className="homepage">

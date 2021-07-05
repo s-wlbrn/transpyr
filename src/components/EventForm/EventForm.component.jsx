@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { isOnlineOnly } from '../../libs/isOnlineOnly';
-
 import { NameTypeCategoryForm } from './NameTypeCategoryForm/NameTypeCategoryForm.component';
 import { DateTimeForm } from './DateTimeForm/DateTimeForm.component';
 import { DescriptionForm } from './DescriptionForm/DescriptionForm.component';
@@ -24,6 +22,8 @@ export const EventForm = ({ event, step, handleChange }) => {
     address,
     location,
     totalCapacity,
+    locationValid,
+    onlineOnly,
   } = event;
   switch (step) {
     case 1:
@@ -57,16 +57,18 @@ export const EventForm = ({ event, step, handleChange }) => {
       return (
         <TicketTiersForm
           ticketTiers={ticketTiers}
-          handleChange={handleChange}
+          handleEventChange={handleChange}
+          totalCapacity={totalCapacity}
         />
       );
     case 5:
       return (
         <LocationForm
-          onlineOnly={isOnlineOnly(ticketTiers)}
+          onlineOnly={onlineOnly}
           address={address}
           handleChange={handleChange}
           location={location}
+          locationValid={locationValid}
         />
       );
 

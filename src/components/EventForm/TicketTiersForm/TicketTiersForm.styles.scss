@@ -1,9 +1,33 @@
 @import '../../../scss/colors';
 
-.ticket-tiers-form {
+div.ticket-tiers-form {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+
+  .ticket-tiers-tier-list {
+    flex: 1 0 auto;
+
+    & > div {
+      display: flex;
+      flex-direction: column;
+
+      .tier-list-container {
+        flex: 1 0 auto;
+        min-height: 10rem;
+      }
+    }
+  }
+
+  .ticket-tiers-controls {
+    margin-bottom: 0.5rem;
+  }
+
   .online-input-group {
     display: flex;
     flex-direction: column;
+    align-items: center;
 
     .online-input-label {
       color: $darker-color;
@@ -31,6 +55,20 @@
 
     .form-input {
       margin: 0;
+    }
+  }
+
+  .capacity-input-group {
+    display: flex;
+    flex-direction: column;
+    padding: 0 0.75rem;
+
+    .form-input-group {
+      margin-bottom: 0;
+    }
+    .capacity-input-total-capacity {
+      font-size: 0.85em;
+      font-weight: bold;
     }
   }
 

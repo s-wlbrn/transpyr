@@ -6,7 +6,7 @@
   }
 
   .edit-event-title {
-    padding-right: 0.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 1rem;
 
     h2 {
       font-size: 1.25em;
@@ -24,5 +24,11 @@
       width: 45%;
       height: 80%;
     }
+  }
+
+  .response {
+    margin: 0 0.5rem 0 0;
+    width: 100%;
+    text-align: end;
   }
 }

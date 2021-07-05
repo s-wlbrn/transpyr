@@ -30,7 +30,7 @@ const useProvideAuth = () => {
       setToken(response.token);
       setExpiresIn(response.expiresIn);
     } catch (err) {
-      return Promise.reject(err.response.data);
+      return Promise.reject(err);
     }
   };
 
@@ -46,7 +46,7 @@ const useProvideAuth = () => {
       setToken(response.token);
       setExpiresIn(response.expiresIn);
     } catch (err) {
-      return Promise.reject(err.response.data);
+      return Promise.reject(err);
     }
   };
 
@@ -64,7 +64,7 @@ const useProvideAuth = () => {
     } catch (err) {
       unmountUser();
       setRefreshed(true);
-      return Promise.reject(err.response.data);
+      return Promise.reject(err);
     }
   };
 
@@ -73,7 +73,7 @@ const useProvideAuth = () => {
       await myAxios(token).post(`${baseUrl}/revoke-token`);
       unmountUser();
     } catch (err) {
-      return Promise.reject(err.response.data);
+      return Promise.reject(err);
     }
   };
 
@@ -86,7 +86,7 @@ const useProvideAuth = () => {
       });
       unmountUser();
     } catch (err) {
-      return Promise.reject(err.response.data);
+      return Promise.reject(err);
     }
   };
 
@@ -95,6 +95,7 @@ const useProvideAuth = () => {
     token,
     expiresIn,
     refreshed,
+    setUser,
     signIn,
     signUp,
     refreshToken,

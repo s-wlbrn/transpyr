@@ -134,7 +134,7 @@ export const EventDetails = ({
         }}
       >
         <h2>Where</h2>
-        {location.coordinates.length ? (
+        {address ? (
           <React.Fragment>
             {online && <p>Online and</p>}
             <p className="event-details-address">{address}</p>

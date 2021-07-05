@@ -1,28 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
+import { useErrorHandler } from 'react-error-boundary';
 
 import { useAuth } from '../../auth/use-auth';
 import myAxios from '../../auth/axios.config';
-
-import ErrorPage from '../error-page/error-page.component';
+import AppError from '../../libs/AppError';
 
 import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
 import { FormInput } from '../../components/FormInput/FormInput.component';
 import { CustomButton } from '../../components/CustomButton/CustomButton.component';
 import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessage.component';
+import { FormInputTextArea } from '../../components/FormInputTextArea/FormInputTextArea.components';
 
 import './publish-event-page.styles.scss';
-import { FormInputTextArea } from '../../components/FormInputTextArea/FormInputTextArea.components';
+import { useResponse } from '../../libs/useResponse';
+import { validationSchema } from './publish-event-page.schema';
 
 export const PublishEventPage = () => {
   const { user, token } = useAuth();
   const [feePolicy, setFeePolicy] = useState('');
   const [refundPolicy, setRefundPolicy] = useState('');
-  const [error, setError] = useState(null);
-  const [response, setResponse] = useState('');
   const [dataFetched, setDataFetched] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const handleError = useErrorHandler();
+  const { response, createResponse } = useResponse();
 
   const publishForm = useRef(null);
   const scrollToForm = () => publishForm.current.scrollIntoView();
@@ -44,26 +46,26 @@ export const PublishEventPage = () => {
         if (event.published) history.push(`/events/id/${match.params.id}`);
         //handle unauthorized
         if (user._id !== event.organizer) {
-          setError({
-            statusCode: 403,
-            message: 'You are not the organizer of this event.',
-          });
+          handleError(
+            new AppError('You are not the organizer of this event.', 403)
+          );
         }
-
         setDataFetched(true);
       } catch (err) {
-        setError(err.response.data);
-        setDataFetched(true);
+        handleError(err);
       }
     };
-
     if (user._id) fetchEventAndCheckAuth();
-  }, [match, history, user]);
+  }, [match.params.id, history, user._id, handleError]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      await validationSchema.validate(
+        { feePolicy, refundPolicy },
+        { abortEarly: false }
+      );
       await myAxios(token).put(
         `http://localhost:3000/api/events/${match.params.id}/publish-event`,
         {
@@ -73,12 +75,11 @@ export const PublishEventPage = () => {
       );
       navigateToEventPage();
     } catch (err) {
-      setResponse(err.response.data.message);
+      createResponse(err);
     }
   };
 
   if (!dataFetched) return <LoadingResource>Loading event...</LoadingResource>;
-  if (error) return <ErrorPage {...error} />;
 
   return (
     <Container fluid as="main" className="publish-event-page">
@@ -100,7 +101,7 @@ export const PublishEventPage = () => {
           <div className="confirm-publish-buttons">
             <CustomButton
               type="button"
-              red
+              warning
               onClick={() => setShowConfirm(false)}
             >
               Go back
@@ -108,13 +109,11 @@ export const PublishEventPage = () => {
             <CustomButton type="submit">Confirm submit</CustomButton>
           </div>
         </Alert>
-        {response && (
-          <Row>
-            <Col xs={12}>
-              <ResponseMessage error>{response}</ResponseMessage>
-            </Col>
-          </Row>
-        )}
+        <Row>
+          <Col xs={12}>
+            <ResponseMessage response={response} />
+          </Col>
+        </Row>
         <Row>
           <Col xs={12} md={6}>
             <h2>Service fee</h2>
@@ -164,7 +163,6 @@ export const PublishEventPage = () => {
               onChange={(e) => setRefundPolicy(e.target.value)}
               rows={5}
               label="Enter refund policy"
-              required
             />
           </Col>
         </Row>

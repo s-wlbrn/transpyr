@@ -1,3 +1,5 @@
+@import '../../../scss/colors';
+
 .refund-request-card {
   border-bottom: 1px solid black;
   padding: 0.5rem 0;
@@ -14,6 +16,14 @@
     div {
       display: flex;
       flex-wrap: wrap;
+    }
+  }
+
+  .refund-request-card-loading {
+    .loading {
+      div {
+        top: 2rem;
+      }
     }
   }
 

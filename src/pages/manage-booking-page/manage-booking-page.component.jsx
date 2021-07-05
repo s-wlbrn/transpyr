@@ -2,11 +2,12 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useRouteMatch } from 'react-router';
 import { IoCheckmark } from 'react-icons/io5';
+import { useErrorHandler } from 'react-error-boundary';
 
 import myAxios from '../../auth/axios.config';
 import { useAuth } from '../../auth/use-auth';
+import { useResponse } from '../../libs/useResponse';
 import { formatPriceUSD } from '../../libs/formatPriceUSD';
-import ErrorPage from '../error-page/error-page.component';
 import { CustomButton } from '../../components/CustomButton/CustomButton.component';
 import CustomTable from '../../components/CustomTable/CustomTable.component';
 import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
@@ -14,28 +15,18 @@ import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessag
 import { CancelBookingModal } from './CancelBookingModal/CancelBookingModal.component';
 
 import './manage-booking-page.styles.scss';
+import { validationSchema } from './CancelBookingModal/CancelBooking.schema';
 
 const ManageBookingPage = () => {
   const [bookings, setBookings] = useState(null);
-  const [error, setError] = useState(null);
   const [dataFetched, setDataFetched] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [cancelationReason, setCancelationReason] = useState('');
-  const [response, setResponse] = useState({
-    error: false,
-    message: null,
-  });
   const [selected, setSelected] = useState({});
   const { token } = useAuth();
   const match = useRouteMatch();
-
-  //move to useResponse hook
-  const clearResponse = () => {
-    setResponse({
-      error: false,
-      message: null,
-    });
-  };
+  const handleError = useErrorHandler();
+  const { response, createResponse, clearResponse } = useResponse();
 
   const getBookings = useCallback(async () => {
     try {
@@ -45,10 +36,9 @@ const ManageBookingPage = () => {
       setBookings(response.data);
       setDataFetched(true);
     } catch (err) {
-      setError(err.response.data);
-      setDataFetched(true);
+      handleError(err);
     }
-  }, [match.params.id, token]);
+  }, [match.params.id, token, handleError]);
 
   useEffect(() => {
     getBookings();
@@ -67,47 +57,57 @@ const ManageBookingPage = () => {
     const allSelected = bookings.reduce(
       (acc, cur) => ({
         ...acc,
-        [cur.id]: !cur.refundRequest ? value : undefined,
+        [cur.id]: value,
       }),
       {}
     );
     setSelected(allSelected);
   };
 
+  const validateSelections = () => {
+    for (const key of selectedIdsArray) {
+      if (bookings.find((el) => el.id === key).refundRequest) return false;
+    }
+    return true;
+  };
+
   const handleShowModal = () => {
-    if (selectedIdsArray.length) {
+    if (!selectedIdsArray.length) {
+      createResponse(new Error('No bookings are selected.'));
+    } else if (!validateSelections()) {
+      createResponse(
+        new Error('A selected booking already has a cancelation request.')
+      );
+    } else {
       clearResponse();
       setShowModal(true);
-    } else {
-      setResponse({ error: true, message: 'No bookings are selected.' });
     }
   };
 
   const handleClearModal = () => {
-    //clear response
+    clearResponse();
     setShowModal(false);
   };
 
   const handleRequestRefund = async () => {
     try {
+      if (cancelationReason) {
+        await validationSchema.validate({ cancelationReason });
+      }
       await myAxios(token).patch(
-        `http://localhost:3000/api/bookings/refund-request/event/${bookings[0].event.id}`,
+        `http://localhost:3000/api/bookings/refund-requests/event/${bookings[0].event.id}`,
         { selectedIdsArray, cancelationReason }
       );
       handleClearModal();
       setSelected({});
       getBookings();
     } catch (err) {
-      setResponse({
-        error: true,
-        message: err.response.message,
-      });
+      createResponse(err);
     }
   };
 
   if (!dataFetched)
     return <LoadingResource>Loading bookings...</LoadingResource>;
-  if (error) return <ErrorPage {...error} />;
 
   return (
     <Container fluid as="main" className="manage-booking-page">
@@ -184,9 +184,7 @@ const ManageBookingPage = () => {
               {bookings.map((el) => (
                 <CustomTable.TableRow
                   key={el.id}
-                  onClick={() => {
-                    if (!el.refundRequest) toggleSelected(el.id);
-                  }}
+                  onClick={() => toggleSelected(el.id)}
                   selected={selected[el.id]}
                 >
                   <CustomTable.TableData xs={1} centered>
@@ -196,7 +194,9 @@ const ManageBookingPage = () => {
                     {el.ticketData.tierName}
                     {el.refundRequest && (
                       <div className="manage-booking-table-refund-requested">
-                        Refund requested
+                        {el.refundRequest.status === 'rejected'
+                          ? 'Refund request rejected'
+                          : 'Refund requested'}
                       </div>
                     )}
                   </CustomTable.TableData>
@@ -213,11 +213,7 @@ const ManageBookingPage = () => {
               Request Refund
             </CustomButton>
           </div>
-          {response.message && (
-            <ResponseMessage error={response.error}>
-              {response.message}
-            </ResponseMessage>
-          )}
+          {!showModal && <ResponseMessage response={response} />}
         </Col>
       </Row>
     </Container>

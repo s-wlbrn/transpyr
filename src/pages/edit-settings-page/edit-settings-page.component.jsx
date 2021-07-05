@@ -6,6 +6,11 @@ import { CustomButton } from '../../components/CustomButton/CustomButton.compone
 import { FormInput } from '../../components/FormInput/FormInput.component';
 import { FormInputToggle } from '../../components/FormInputToggle/FormInputToggle.component';
 import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessage.component';
+import { useResponse } from '../../libs/useResponse';
+import {
+  nameValidationSchema,
+  passwordValidationSchema,
+} from './edit-settings-page.schema';
 
 import './edit-settings-page.styles.scss';
 
@@ -15,14 +20,11 @@ const EditSettingsPage = () => {
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
   const [name, setName] = useState('');
   const [privateFavorites, setPrivateFavorites] = useState('');
-  const [response, setResponse] = useState({
-    form: '',
-    error: false,
-    message: '',
-  });
-  const { user, token, updatePassword } = useAuth();
-
-  //set initial private event switch when user mounted
+  const updatePasswordResponse = useResponse();
+  const updateSettingsResponse = useResponse();
+  const { user, token, updatePassword, setUser } = useAuth();
+  console.log(user);
+  //set initial privateFavorites value when user mounted
   useEffect(() => {
     if (user) {
       setPrivateFavorites(user.privateFavorites);
@@ -31,15 +33,18 @@ const EditSettingsPage = () => {
 
   const handleUpdatePassword = async (e) => {
     e.preventDefault();
-    const { id } = e.target;
     try {
+      await passwordValidationSchema.validate(
+        { password, newPassword, newPasswordConfirm },
+        { abortEarly: false }
+      );
       await updatePassword(password, newPassword, newPasswordConfirm);
+      updatePasswordResponse.createResponse({ message: 'Password updated!' });
+      setPassword('');
+      setNewPassword('');
+      setNewPasswordConfirm('');
     } catch (err) {
-      setResponse({
-        form: id,
-        error: true,
-        message: err.message,
-      });
+      updatePasswordResponse.createResponse(err);
     }
   };
 
@@ -47,24 +52,23 @@ const EditSettingsPage = () => {
     e.preventDefault();
     const { id } = e.target;
     try {
+      //validate name field if updating name
+      if (id === 'update-name') {
+        await nameValidationSchema.validate(data);
+      }
       const response = await myAxios(token).patch(
         `http://localhost:3000/api/users/me`,
         data
       );
-
+      setUser(response.data.user);
       //clear relevant field
       if (id === 'update-name') {
         setName('');
-      } else {
-        setPrivateFavorites(response.data.user.privateFavorites);
       }
-      setResponse({ form: id, error: false, message: 'Settings saved!' });
+      updateSettingsResponse.createResponse({ message: 'Settings saved!' });
+      setTimeout(() => updateSettingsResponse.clearResponse(), 4000);
     } catch (err) {
-      setResponse({
-        form: id,
-        error: true,
-        message: err.response.data.message,
-      });
+      updateSettingsResponse.createResponse(err);
     }
   };
 
@@ -103,11 +107,7 @@ const EditSettingsPage = () => {
               label="Confirm New Password"
             />
             <CustomButton type="submit">Change password</CustomButton>
-            {response.form === 'update-password' && (
-              <ResponseMessage error={response.error}>
-                {response.message}
-              </ResponseMessage>
-            )}
+            <ResponseMessage response={updatePasswordResponse.response} />
           </form>
         </Col>
         <Col xs={12} md={6} className="edit-settings-name-favorites">
@@ -125,11 +125,6 @@ const EditSettingsPage = () => {
               label="New Name"
             />
             <CustomButton type="submit">Change name</CustomButton>
-            {response.form === 'update-name' && (
-              <ResponseMessage error={response.error}>
-                {response.message}
-              </ResponseMessage>
-            )}
           </form>
           <form className="edit-settings-favorites">
             <h2>Favorites Privacy</h2>
@@ -141,12 +136,8 @@ const EditSettingsPage = () => {
               }
               id="update-private-favorites"
             />
-            {response.form === 'update-private-favorites' && (
-              <ResponseMessage error={response.error}>
-                {response.message}
-              </ResponseMessage>
-            )}
           </form>
+          <ResponseMessage response={updateSettingsResponse.response} />
         </Col>
       </Row>
     </Container>

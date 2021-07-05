@@ -13,6 +13,7 @@ export const DateTimeForm = ({
   timeEnd,
   handleChange,
 }) => {
+  console.log(dateStart, timeStart);
   return (
     <Container fluid className="date-time-form">
       <Row className="date-time-input-group">
@@ -51,7 +52,7 @@ export const DateTimeForm = ({
             type="date"
             id="end-date"
             min={dateStart}
-            value={dateEnd || dateStart}
+            value={dateEnd}
             handleChange={handleChange}
           />
           <label htmlFor={'end-time'} className="date-input-label">

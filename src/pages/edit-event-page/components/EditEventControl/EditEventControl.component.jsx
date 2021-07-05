@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Row, Col } from 'react-bootstrap';
 import { CustomButton } from '../../../../components/CustomButton/CustomButton.component';
+import { ResponseMessage } from '../../../../components/ResponseMessage/ResponseMessage.component';
 
 import './EditEventControl.styles.scss';
 
@@ -10,6 +11,7 @@ export const EditEventControl = ({
   eventChanged,
   handleSubmit,
   handleDiscard,
+  response,
 }) => (
   <Row className="edit-event-control">
     <Col xs={6} className="edit-event-title">
@@ -17,20 +19,23 @@ export const EditEventControl = ({
       {!editStep && <h2>Select a field to edit.</h2>}
     </Col>
     {!editStep && (
-      <Col xs={6} className="edit-event-buttons">
-        {eventChanged && (
-          <CustomButton type="button" onClick={handleSubmit}>
-            Save Event
+      <React.Fragment>
+        <Col xs={6} className="edit-event-buttons">
+          {eventChanged && (
+            <CustomButton type="button" onClick={handleSubmit}>
+              Save Event
+            </CustomButton>
+          )}
+          <CustomButton
+            type="button"
+            style={{ background: 'darkred' }}
+            onClick={handleDiscard}
+          >
+            {eventChanged ? 'Discard Changes' : 'Cancel'}
           </CustomButton>
-        )}
-        <CustomButton
-          type="button"
-          style={{ background: 'darkred' }}
-          onClick={handleDiscard}
-        >
-          {eventChanged ? 'Discard Changes' : 'Cancel'}
-        </CustomButton>
-      </Col>
+        </Col>
+        <ResponseMessage response={response} />
+      </React.Fragment>
     )}
   </Row>
 );
