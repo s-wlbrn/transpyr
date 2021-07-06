@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Row, Col, Container } from 'react-bootstrap';
 
-import { eventTypes } from './eventTypes';
-import { eventCategories } from './eventCategories';
+import { eventTypes } from '../../../libs/eventTypes';
+import { eventCategories } from '../../../libs/eventCategories';
 import { FormInput } from '../../FormInput/FormInput.component';
 import { FormDropdown } from '../../FormDropdown/FormDropdown.component';
 

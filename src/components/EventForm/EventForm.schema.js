@@ -1,8 +1,8 @@
 import * as yup from 'yup';
 import { format, formatISO, startOfDay, isToday, isSameDay } from 'date-fns';
 
-import { eventTypes } from './NameTypeCategoryForm/eventTypes';
-import { eventCategories } from './NameTypeCategoryForm/eventCategories';
+import { eventTypes } from '../../libs/eventTypes';
+import { eventCategories } from '../../libs/eventCategories';
 
 export const validationSchemaArray = [
   //Name,

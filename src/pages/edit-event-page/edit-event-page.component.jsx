@@ -5,20 +5,20 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { useErrorHandler } from 'react-error-boundary';
 
 import myAxios from '../../auth/axios.config';
-import { useAuth } from '../../auth/use-auth';
 import AppError from '../../libs/AppError';
+import { useAuth } from '../../auth/use-auth';
+import { useResponse } from '../../libs/useResponse';
+import { isOnlineOnly } from '../../libs/isOnlineOnly';
+import { validationSchemaArray } from '../../components/EventForm/EventForm.schema';
 
 import { EventDetails } from '../../components/EventDetails/EventDetails.component';
 import { EventForm } from '../../components/EventForm/EventForm.component';
 import { EditEventControl } from './components/EditEventControl/EditEventControl.component';
 import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
 import { CustomButton } from '../../components/CustomButton/CustomButton.component';
+import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessage.component';
 
 import './edit-event-page.styles.scss';
-import { validationSchemaArray } from '../../components/EventForm/EventForm.schema';
-import { useResponse } from '../../libs/useResponse';
-import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessage.component';
-import { isOnlineOnly } from '../../libs/isOnlineOnly';
 
 const EditEventPage = () => {
   const { user, token } = useAuth();

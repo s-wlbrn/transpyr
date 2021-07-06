@@ -14,6 +14,7 @@ import { LoadingResource } from '../../components/LoadingResource/LoadingResourc
 import { OwnEventControl } from './components/OwnEventControl/OwnEventControl.component';
 
 import './event-details-page.styles.scss';
+import API from '../../api';
 
 const EventDetailsPage = ({ match }) => {
   const history = useHistory();
@@ -24,19 +25,18 @@ const EventDetailsPage = ({ match }) => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await myAxios().get(
-          `http://localhost:3000/api/events/${match.params.id}`
-        );
-        const eventData = calculateEventInfo(response.data.data);
-
+        const event = await new API().getEvent(match.params.id, {
+          calculateEventInfo: true,
+        });
+        //redirect away if event not published and user not logged in or not organizer
         if (
-          (!eventData.published && !user) ||
-          (!eventData.published && user._id !== eventData.organizer)
+          (!event.published && !user) ||
+          (!event.published && user._id !== event.organizer)
         ) {
           history.push('/events');
         }
 
-        setEvent({ ...eventData });
+        setEvent(event);
       } catch (err) {
         handleError(err);
       }

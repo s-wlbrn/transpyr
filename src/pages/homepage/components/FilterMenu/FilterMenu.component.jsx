@@ -1,68 +1,66 @@
-import React from 'react';
-
+import React, { useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
+
+import { dateMenuMap, menuItems } from './filterMenu.data';
 
 import './FilterMenu.styles.scss';
 
-const menuItems = {
-  Date: ['Today', 'Tomorrow', 'Select date'],
-  Category: [
-    'Business',
-    'Food',
-    'Health and Lifestyle',
-    'Music',
-    'Vehicle',
-    'Charity',
-    'Community',
-    'Fashion',
-    'Film',
-    'Home',
-    'Hobbies',
-    'Performing & Visual Arts',
-    'Politics',
-    'Spirituality',
-    'School',
-    'Science and Technology',
-    'Holiday',
-    'Sports and Fitness',
-    'Travel',
-    'Outdoor & Recreation',
-    'Other',
-  ],
-  Type: ['Lecture', 'Performance', 'Social', 'Workshop'],
-  Language: ['English'],
-};
-
 export const FilterMenu = ({ query, handleChange }) => {
+  const [selections, setSelections] = useState({});
+
   const isSelected = (type, item) => {
-    return query[type] === item;
+    if (item) {
+      return selections[type] === item;
+    }
+    return !!selections[type];
+  };
+
+  const handleClear = (type) => {
+    if (type === 'date') {
+      handleChange({
+        'dateTimeStart[gte]': Date.now(),
+        'dateTimeStart[lte]': undefined,
+      });
+    } else {
+      handleChange({ [type]: undefined });
+    }
+    setSelections({ ...selections, [type]: undefined });
   };
 
   const handleToggle = (type, item) => {
-    const changeValue = isSelected(type, item) ? undefined : item;
-    handleChange({
-      [type]: changeValue,
-    });
+    if (isSelected(type, item)) {
+      return handleClear(type);
+    } else if (type === 'date') {
+      setSelections({ ...selections, date: item });
+      handleChange(dateMenuMap[item]);
+    } else {
+      handleChange({
+        [type]: item,
+      });
+    }
+    setSelections({ ...selections, [type]: item });
   };
 
   return (
     <div className="filters-bar">
-      {['Date', 'Category', 'Type', 'Language'].map((type) => {
+      {Object.keys(menuItems).map((type) => {
         const lowercaseType = type.toLowerCase();
 
         return (
           <div className="filter-dropdown-group">
             <Dropdown
               key={`dropdown-${type}`}
-              style={!query[lowercaseType] ? { width: '100%' } : undefined}
+              style={!isSelected(lowercaseType) ? { width: '100%' } : undefined}
             >
               <Dropdown.Toggle
                 key={type}
                 variant="success"
                 id={`dropdown-${type}-toggle`}
-                className={query[lowercaseType] && 'dropdown-toggle-select'}
+                className={
+                  isSelected(lowercaseType) && 'dropdown-toggle-select'
+                }
               >
-                {query[lowercaseType] ? query[lowercaseType] : type}
+                {isSelected(lowercaseType) ? selections[lowercaseType] : type}
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
@@ -79,10 +77,10 @@ export const FilterMenu = ({ query, handleChange }) => {
                 })}
               </Dropdown.Menu>
             </Dropdown>
-            {query[lowercaseType] && (
+            {isSelected(lowercaseType) && (
               <div
                 className="dropdown-toggle-clear"
-                onClick={() => handleChange({ [lowercaseType]: undefined })}
+                onClick={() => handleClear(lowercaseType)}
               >
                 ⊗
               </div>

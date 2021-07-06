@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
 
-import myAxios from '../../auth/axios.config';
-import { calculateEventInfo } from '../../libs/calculateEventInfo';
-
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+import API from '../../api';
 import { LocationButton } from './components/LocationButton/LocationButton.component';
 import { FilterMenu } from './components/FilterMenu/FilterMenu.component';
 import { EventList } from './components/EventList/EventList.component';
@@ -16,13 +14,14 @@ import { PageControl } from './components/PageControl/PageControl.component';
 import './homepage.styles.scss';
 
 const Homepage = (props) => {
-  const [isFetching, setIsFetching] = useState(true);
+  const [dataFetched, setDataFetched] = useState(false);
   const [events, setEvents] = useState([]);
   const [query, setQuery] = useState({
     sort: 'dateTimeStart',
     fields:
       '_id,name,dateTimeStart,dateTimeEnd,photo,ticketTiers,totalBookings,soldOut,canceled',
     online: true,
+    'dateTimeStart[gte]': Date.now(),
     paginate: { page: 1, limit: 10 },
   });
   const numberOfPagesRef = useRef(null);
@@ -49,17 +48,12 @@ const Homepage = (props) => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        setIsFetching(true);
-        const response = await myAxios().get(
-          'http://localhost:3000/api/events',
-          {
-            params: query,
-          }
-        );
-        const events = response.data.data.map((el) => calculateEventInfo(el));
-        numberOfPagesRef.current = response.data.pages;
-        setEvents(events);
-        setIsFetching(false);
+        const response = await new API().getEvents(query, {
+          calculateEventInfo: true,
+        });
+        numberOfPagesRef.current = response.pages;
+        setEvents(response.data);
+        setDataFetched(true);
       } catch (err) {
         handleError(err);
       }
@@ -92,7 +86,7 @@ const Homepage = (props) => {
         </Col>
       </Row>
       <FilterMenu query={query} handleChange={handleChangeQuery} />
-      <EventList isFetching={isFetching} events={events} />
+      <EventList isFetching={!dataFetched} events={events} />
       <PageControl
         page={query.paginate.page}
         totalPages={numberOfPagesRef.current}
