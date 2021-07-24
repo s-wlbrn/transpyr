@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 
-import myAxios from '../../auth/axios.config';
+import API from '../../api';
 import { useAuth } from '../../auth/use-auth';
 import { useResponse } from '../../libs/useResponse';
 import { validationSchema } from './edit-profile-page.schema';
 
 import { CustomButton } from '../../components/CustomButton/CustomButton.component';
-import { FormInput } from '../../components/FormInput/FormInput.component';
 import { FormInputTextArea } from '../../components/FormInputTextArea/FormInputTextArea.components';
 import PhotoUploadForm from '../../components/PhotoUploadForm/PhotoUploadForm.component';
 import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessage.component';
@@ -34,12 +33,7 @@ const EditProfilePage = () => {
 
     try {
       await validationSchema.validate({ tagline, bio, interests });
-
-      await myAxios(token).patch('http://localhost:3000/api/users/me', {
-        tagline,
-        bio,
-        interests,
-      });
+      await new API(token).updateUser({ tagline, bio, interests });
       await refreshToken();
       createResponse({ message: 'Profile saved!' });
     } catch (err) {
@@ -59,7 +53,10 @@ const EditProfilePage = () => {
         <Col xs={12}>
           <h2>Upload photo</h2>
           <p>Allowed types: .jpg, .jpeg, .gif, .png</p>
-          <PhotoUploadForm resource="users/me" />
+          <PhotoUploadForm
+            resource="users/me"
+            successCallback={async () => await refreshToken()}
+          />
         </Col>
       </Row>
       <form onSubmit={handleSubmit}>

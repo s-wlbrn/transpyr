@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 
 import { Col, Row } from 'react-bootstrap';
 
-import myAxios from '../../../../auth/axios.config';
+import API from '../../../../api';
+import { useResponse } from '../../../../libs/useResponse';
 
 import { FormInput } from '../../../../components/FormInput/FormInput.component';
 import { CustomButton } from '../../../../components/CustomButton/CustomButton.component';
@@ -12,31 +13,29 @@ import './ForgotPassword.styles.scss';
 
 export const ForgotPassword = () => {
   const [email, setEmail] = useState('');
-  const [response, setResponse] = useState(null);
+  const { response, createResponse } = useResponse();
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await myAxios().post(`http://localhost:3000/api/users/forgot-password`, {
-        email,
-      });
+      await new API().forgotPassword(email);
       setEmail('');
       setSuccess(true);
     } catch (err) {
-      setResponse(err.response.data.message);
+      createResponse(err);
     }
   };
 
   return !success ? (
     <Row className="forgot-password">
-      <Col xs={12} md={6}>
+      <Col xs={12}>
         <p className="forgot-password-text">
           Enter your email adress below. If there is an account associated with
           it, a link to reset the password will be sent to that email address.
         </p>
       </Col>
-      <Col xs={12} md={6}>
+      <Col xs={12}>
         <form onSubmit={handleSubmit}>
           <FormInput
             name="email"
@@ -49,7 +48,7 @@ export const ForgotPassword = () => {
           />
           <CustomButton type="submit">Submit</CustomButton>
         </form>
-        {response && <ResponseMessage error>{response}</ResponseMessage>}
+        <ResponseMessage response={response} />
       </Col>
     </Row>
   ) : (

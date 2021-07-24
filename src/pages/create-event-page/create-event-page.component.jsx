@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useHistory, withRouter } from 'react-router-dom';
 
-import myAxios from '../../auth/axios.config';
+import API from '../../api';
 import { useAuth } from '../../auth/use-auth';
 import { combineDateTime } from '../../libs/formatDateTime';
 import { validationSchemaArray } from '../../components/EventForm/EventForm.schema';
@@ -57,17 +57,15 @@ const CreateEventPage = () => {
 
   const handleSubmit = async (e) => {
     try {
+      //create dateTimeStart and dateTimeEnd fields
       let formattedEvent = combineDateTime({ ...event });
+      //delete unnecessary fields
       delete formattedEvent.locationValid;
       delete formattedEvent.capacitiesValid;
       delete formattedEvent.onlineOnly;
 
-      const response = await myAxios(token).post(
-        'http://localhost:3000/api/events',
-        formattedEvent
-      );
-      const { id } = response.data.data;
-      history.push(`/events/id/${id}/upload-photo`);
+      const response = await new API(token).createEvent(formattedEvent);
+      history.push(`/events/id/${response.id}/upload-photo`);
     } catch (err) {
       return Promise.reject(err);
     }
@@ -81,7 +79,6 @@ const CreateEventPage = () => {
 
   const _next = async () => {
     try {
-      console.log(currentStep);
       await validationSchemaArray[currentStep - 1].validate(event, {
         abortEarly: false,
       });

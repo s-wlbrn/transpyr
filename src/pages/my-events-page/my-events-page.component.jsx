@@ -1,17 +1,20 @@
 import React from 'react';
+
+import API from '../../api';
 import { useAuth } from '../../auth/use-auth';
+
+import CalendarListPage from '../calendar-list-page/calendar-list-page.component';
 import { MyEventsCard } from './components/MyEventsCard/MyEventsCard.component';
 
 import './my-events-page.styles.scss';
-import CalendarListPage from '../calendar-list-page/calendar-list-page.component';
 
 const MyEventsPage = () => {
-  const { user } = useAuth();
+  const { token } = useAuth();
 
   return (
     <CalendarListPage
       manageResource="events"
-      url={`http://localhost:3000/api/events?organizer=${user._id}&`}
+      fetchEvents={new API(token).getMyEvents}
       card={<MyEventsCard />}
     />
   );

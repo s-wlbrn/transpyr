@@ -5,23 +5,19 @@
 }
 
 main.container-fluid {
+  background-color: white;
   position: relative;
   min-height: calc(100vh - 56px);
   max-width: 1600px;
   margin: 0 auto;
   padding: 1rem 0;
-  border: 1px solid lightgrey;
+  border: 1px solid gray;
   border-top: none;
   border-bottom: none;
 }
 
 .app {
   height: 100%;
-}
-
-div.container-fluid {
-  margin: 0;
-  padding: 0;
 }
 
 .row {

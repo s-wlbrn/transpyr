@@ -4,10 +4,21 @@
   border-bottom: 1px solid lightgrey;
   padding: 4px 0;
 
-  .manage-events-card-canceled {
+  .manage-events-card-unpublished {
     color: $warning;
+    font-size: 0.9em;
+    font-weight: bold;
+  }
+
+  .manage-events-card-canceled,
+  .manage-events-card-past-event {
     font-weight: bold;
     font-size: 1.25em;
+    text-align: center;
+  }
+
+  .manage-events-card-canceled {
+    color: $warning;
   }
 
   & > div {

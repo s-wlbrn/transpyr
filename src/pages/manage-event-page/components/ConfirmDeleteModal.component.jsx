@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { useHistory, useRouteMatch } from 'react-router';
-import myAxios from '../../../auth/axios.config';
+
+import API from '../../../api';
 import { useAuth } from '../../../auth/use-auth';
+
 import { CustomButton } from '../../../components/CustomButton/CustomButton.component';
 import { ResponseMessage } from '../../../components/ResponseMessage/ResponseMessage.component';
+import { useResponse } from '../../../libs/useResponse';
 
 import './ManageTicketModal.styles.scss';
 
 export const ConfirmDeleteModal = () => {
   const history = useHistory();
   const match = useRouteMatch();
-  const [response, setResponse] = useState({
-    error: false,
-    message: '',
-  });
+  const { response, createResponse } = useResponse();
   const { token } = useAuth();
 
   const handleClose = () => {
@@ -23,16 +23,10 @@ export const ConfirmDeleteModal = () => {
 
   const cancelEvent = async () => {
     try {
-      await myAxios(token).delete(
-        `http://localhost:3000/api/events/${match.params.id}/`
-      );
-
+      await new API(token).cancelEvent(match.params.id);
       history.push('/events/my-events');
     } catch (err) {
-      setResponse({
-        error: true,
-        message: err.response.data.message,
-      });
+      createResponse(err);
     }
   };
 
@@ -50,11 +44,7 @@ export const ConfirmDeleteModal = () => {
         <CustomButton type="button" warning onClick={cancelEvent}>
           Cancel event
         </CustomButton>
-        {response.message && (
-          <ResponseMessage error={response.error}>
-            {response.message}
-          </ResponseMessage>
-        )}
+        <ResponseMessage response={response} />
         <CustomButton type="button" onClick={handleClose}>
           Close
         </CustomButton>

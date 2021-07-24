@@ -31,11 +31,7 @@ export const ManageTicketAlert = ({
             Confirm cancel
           </CustomButton>
         )}
-        {response.message && (
-          <ResponseMessage error={response.error}>
-            {response.message}
-          </ResponseMessage>
-        )}
+        <ResponseMessage response={response} />
       </div>
     </Alert>
   );

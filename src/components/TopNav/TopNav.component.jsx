@@ -43,10 +43,10 @@ export const TopNav = () => {
           </Link>
           {user ? (
             <React.Fragment>
-              <Link to="/bookings/my-bookings" className="nav-link">
+              <Link to="/bookings/my-bookings" className="topnav-link">
                 My bookings
               </Link>
-              <Link to="/events/my-events" className="nav-link">
+              <Link to="/events/my-events" className="topnav-link">
                 My events
               </Link>
               <Link to="/users/edit-profile" className="topnav-link">

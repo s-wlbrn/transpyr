@@ -7,7 +7,6 @@ const authContext = createContext();
 
 //create auth object, manage state
 const useProvideAuth = () => {
-  console.log('auth updating');
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [expiresIn, setExpiresIn] = useState(null);
@@ -20,7 +19,6 @@ const useProvideAuth = () => {
   };
 
   const signIn = async (email, password) => {
-    console.log('test');
     try {
       const response = await myAxios().post(`${baseUrl}/signin`, {
         email,

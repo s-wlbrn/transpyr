@@ -4,16 +4,12 @@ import { useHistory } from 'react-router';
 import { useErrorHandler } from 'react-error-boundary';
 import { Col, Container, Row } from 'react-bootstrap';
 
-import myAxios from '../../auth/axios.config';
-import { useAuth } from '../../auth/use-auth';
-
 import { EventCalendar } from '../../components/EventCalendar/EventCalendar.component';
 
 import './calendar-list-page.styles.scss';
 
-const CalendarListPage = ({ manageResource, url, card }) => {
+const CalendarListPage = ({ manageResource, fetchEvents, card }) => {
   const [events, setEvents] = useState([]);
-  const { token } = useAuth();
   const calendarRef = useRef({});
   const listRef = useRef({});
   const history = useHistory();
@@ -23,10 +19,10 @@ const CalendarListPage = ({ manageResource, url, card }) => {
     async (date) => {
       try {
         const upperBound = addMonths(date, 1);
-        const response = await myAxios(token).get(
-          `${url}dateTimeStart[gt]=${date}&dateTimeStart[lt]=${upperBound}&sort=dateTimeStart`
-        );
-        const calendarEvents = response.data.data.map((el) => {
+        const response = await fetchEvents({
+          query: `dateTimeStart[gt]=${date}&dateTimeStart[lt]=${upperBound}&sort=dateTimeStart`,
+        });
+        const calendarEvents = response.map((el) => {
           // calendar expects 'date' and 'title' properties
           el.date = parseISO(el.dateTimeStart);
           el.title = el.name;
@@ -39,7 +35,7 @@ const CalendarListPage = ({ manageResource, url, card }) => {
         handleError(err);
       }
     },
-    [token, url, handleError]
+    [fetchEvents, handleError]
   );
 
   useEffect(() => {

@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Container, Modal, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import { ErrorBoundary, useErrorHandler } from 'react-error-boundary';
 import { Route } from 'react-router';
 import { Link, useHistory } from 'react-router-dom';
 
 import myAxios from '../../auth/axios.config';
-import { ErrorModal } from '../../components/ErrorModal/ErrorModal.component';
 
 import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
+import { UserProfileImage } from '../../components/UserProfileImage/UserProfileImage.component';
 import { calculateEventInfo } from '../../libs/calculateEventInfo';
-import ErrorPage from '../error-page/error-page.component';
 import { EventList } from '../homepage/components/EventList/EventList.component';
 import { SeeMoreModal } from './components/SeeMoreModal.component';
+import { ErrorModal } from '../../components/ErrorModal/ErrorModal.component';
 
 import './user-profile-page.styles.scss';
+import API from '../../api';
 
 const UserProfilePage = ({ match }) => {
   const [user, setUser] = useState(null);
@@ -26,10 +27,7 @@ const UserProfilePage = ({ match }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await myAxios().get(
-          `http://localhost:3000/api/users/profile/${match.params.id}`
-        );
-        const { user } = response.data;
+        const user = await new API().getUserProfile(match.params.id);
 
         if (user.events) {
           const formattedEvents = user.events.map((event) =>
@@ -70,11 +68,7 @@ const UserProfilePage = ({ match }) => {
       </ErrorBoundary>
       <Row as="section" className="user-profile-intro">
         <Col xs={12} md={6}>
-          <img
-            className="user-profile-photo"
-            src={`http://localhost:3000/static/img/users/${user.photo}`}
-            alt={user.name}
-          />
+          <UserProfileImage id={user.photo} />
         </Col>
         <Col xs={12} md={6}>
           <h1 className="user-profile-name">{user.name}</h1>
@@ -128,10 +122,10 @@ const UserProfilePage = ({ match }) => {
               user.favorites.length > 0 ? (
                 <EventList events={userFavorites} />
               ) : (
-                'This user has no favorite events.'
+                <p>This user has no favorite events.</p>
               )
             ) : (
-              "This user's favorite events are private."
+              <p>This user's favorite events are private.</p>
             )}
           </Col>
         </Row>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../../auth/use-auth';
 import { useResponse } from '../../libs/useResponse';
@@ -9,12 +9,14 @@ import { FormInput } from '../FormInput/FormInput.component';
 import { ResponseMessage } from '../ResponseMessage/ResponseMessage.component';
 import { validationSchema } from './SignUp.schema';
 
-export const SignUp = ({ location }) => {
+export const SignUp = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const history = useHistory();
+  const location = useLocation();
+
   const { response, createResponse } = useResponse();
   const { signUp } = useAuth();
 
@@ -28,11 +30,10 @@ export const SignUp = ({ location }) => {
       await signUp(name, email, password, passwordConfirm);
       // Redirect to 'from' route or default to home
       let { from } = location.state || {
-        from: { pathname: '/events' },
+        from: { pathname: '/users/edit-profile' },
       };
-      history.push(from);
+      history.push(from.pathname);
     } catch (err) {
-      console.log(err.errors);
       createResponse(err);
     }
   };

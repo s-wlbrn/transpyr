@@ -7,6 +7,7 @@ import { CustomButton } from '../CustomButton/CustomButton.component';
 import './PhotoUploadForm.styles.scss';
 import myAxios from '../../auth/axios.config';
 import authContext from '../../auth/use-auth';
+import API from '../../api';
 
 class PhotoUploadForm extends React.Component {
   static contextType = authContext;
@@ -15,8 +16,7 @@ class PhotoUploadForm extends React.Component {
 
     this.state = {
       selectedFile: null,
-      messageResponse: null,
-      messageValidation: null,
+      response: { error: false, message: null },
       imageUrl: null,
     };
 
@@ -31,17 +31,21 @@ class PhotoUploadForm extends React.Component {
     }
 
     if (!imageFile.name.match(/\.(jpg|jpeg|png)$/)) {
-      this.setState({ messageValidation: 'Please select a valid image.' });
+      this.setState({
+        response: { error: true, message: 'Please select a valid image.' },
+      });
       return false;
     }
 
     this.reader.onload = (e) => {
       const img = new Image();
       img.onload = () => {
-        this.setState({ selectedFile: imageFile, messageValidation: null });
+        this.setState({ selectedFile: imageFile, response: { message: null } });
       };
       img.onerror = () => {
-        this.setState({ messageValidation: 'Invalid image content.' });
+        this.setState({
+          response: { error: true, message: 'Invalid image content.' },
+        });
         return false;
       };
 
@@ -53,20 +57,17 @@ class PhotoUploadForm extends React.Component {
   handleUpload = async (e) => {
     e.preventDefault();
     const { token } = this.context;
-    const { selectedFile, messageValidation } = this.state;
+    const { selectedFile, response } = this.state;
 
     //Handle invalid image
-    if (messageValidation) {
+    if (response instanceof Error) {
       return false;
     }
 
     //Handle no image selected
     if (!selectedFile) {
       this.setState({
-        messageResponse: {
-          isSuccess: false,
-          message: 'Please select an image to upload.',
-        },
+        response: { error: true, message: 'Please select an image to upload.' },
       });
       return false;
     }
@@ -77,14 +78,11 @@ class PhotoUploadForm extends React.Component {
     formData.append('photo', selectedFile);
     //Call API
     try {
-      await myAxios(token).patch(
-        `http://localhost:3000/api/${this.props.resource}/${id}`,
-        formData
-      );
+      await new API(token).uploadPhoto(this.props.resource, id, formData);
 
       this.setState({
-        messageResponse: {
-          isSuccess: true,
+        response: {
+          error: false,
           message: 'Photo uploaded successfully!',
         },
       });
@@ -93,21 +91,17 @@ class PhotoUploadForm extends React.Component {
         this.props.successCallback();
       }
     } catch (err) {
-      console.log(err.response);
       this.setState({
-        messageResponse: {
-          isSuccess: false,
-          message: err.response.data.message,
-        },
+        response: { error: true, message: err.message },
       });
     }
   };
 
   render() {
-    const { messageResponse, messageValidation } = this.state;
+    const { response } = this.state;
     return (
       <div className="photo-upload-container">
-        {this.reader.result && <img src={this.reader.result} alt="Event" />}
+        {this.reader.result && <img src={this.reader.result} alt="resource" />}
         <form
           className="photo-upload-form"
           id="photo-upload-form"
@@ -120,16 +114,10 @@ class PhotoUploadForm extends React.Component {
             accept=".jpg,.jpeg,.png"
             onChange={this.onFileChange}
           />
-          {messageValidation && (
-            <ResponseMessage error>{messageValidation}</ResponseMessage>
-          )}
           <CustomButton type="submit">Upload</CustomButton>
         </form>
-        {messageResponse && (
-          <ResponseMessage error={!messageResponse.isSuccess}>
-            {messageResponse.message}
-          </ResponseMessage>
-        )}
+
+        <ResponseMessage response={response} />
       </div>
     );
   }

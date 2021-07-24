@@ -13,7 +13,7 @@ import { CustomButton } from '../../components/CustomButton/CustomButton.compone
 import './RefundRequestsPage.styles.scss';
 import { useErrorHandler } from 'react-error-boundary';
 
-const RefundRequestsPage = ({ url }) => {
+const RefundRequestsPage = ({ fetchRefundRequests }) => {
   const [bookings, setBookings] = useState(null);
   const [dataFetched, setDataFetched] = useState(false);
   const eventData = useRef({ id: null, name: '' });
@@ -23,23 +23,24 @@ const RefundRequestsPage = ({ url }) => {
   const handleError = useErrorHandler();
 
   useEffect(() => {
-    const getBookings = async () => {
+    const getRequests = async () => {
       try {
-        const response = await myAxios(token).get(`${url}/${match.params.id}`);
-        if (response.data.length) {
+        const refundRequests = await fetchRefundRequests(match.params.id);
+
+        if (refundRequests.length) {
           eventData.current = {
-            id: response.data[0].event.id,
-            name: response.data[0].event.name,
+            id: refundRequests[0].event.id,
+            name: refundRequests[0].event.name,
           };
         }
-        setBookings(response.data);
+        setBookings(refundRequests);
         setDataFetched(true);
       } catch (err) {
         handleError(err);
       }
     };
-    getBookings();
-  }, [match.params.id, token, url, handleError]);
+    getRequests();
+  }, [match.params.id, token, fetchRefundRequests, handleError]);
 
   const clearRefundRequestCard = (id) => () => {
     const updatedBookings = bookings.filter((el) => {

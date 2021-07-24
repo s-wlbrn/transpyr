@@ -3,6 +3,7 @@ import { Modal } from 'react-bootstrap';
 import { useErrorHandler } from 'react-error-boundary';
 import InfiniteScroll from 'react-infinite-scroller';
 import { useHistory, useRouteMatch } from 'react-router';
+import API from '../../../api';
 import myAxios from '../../../auth/axios.config';
 import { CustomButton } from '../../../components/CustomButton/CustomButton.component';
 import { LoadingResource } from '../../../components/LoadingResource/LoadingResource.component';
@@ -24,11 +25,10 @@ export const SeeMoreModal = ({ resource }) => {
 
   const getEvents = async (page = 1) => {
     try {
-      const response = await myAxios().get(
-        `http://localhost:3000/api/users/profile/${match.params.id}?fields=${resource}&paginate[page]=${page}&paginate[limit]=10`
-      );
-      console.log(response.data);
-      const { user } = response.data;
+      const user = await new API().getUserProfile(match.params.id, {
+        query: `fields=${resource}&paginate[page]=${page}&paginate[limit]=10`,
+      });
+
       if (user[resource].length) {
         const formattedEvents = user[resource].map((event) =>
           calculateEventInfo(event)

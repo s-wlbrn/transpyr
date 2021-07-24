@@ -3,8 +3,9 @@ import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { Route, useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useErrorHandler } from 'react-error-boundary';
+import { isPast } from 'date-fns';
 
-import myAxios from '../../auth/axios.config';
+import API from '../../api';
 import { formatPriceUSD } from '../../libs/formatPriceUSD';
 import { useAuth } from '../../auth/use-auth';
 import AppError from '../../libs/AppError';
@@ -31,21 +32,18 @@ const ManageEventPage = () => {
   useEffect(() => {
     const fetchEventAndCheckAuth = async () => {
       try {
-        const response = await myAxios().get(
-          `http://localhost:3000/api/events/${match.params.id}`
-        );
-        const event = response.data.data;
-
+        const event = await new API().getEvent(match.params.id);
         //handle unauthorized
-        if (user._id !== event.organizer) {
+        if (user._id !== event.organizer.id) {
           handleError(
             new AppError('You are not the organizer of this event.', 403)
           );
         } else if (!event.published)
           history.push(`/events/id/${match.params.id}/publish`);
-        //handle canceled
-        // if (event.canceled)
-        //   //error canceled event
+        //handle canceled or past
+        if (event.canceled || isPast(new Date(event.dateTimeStart))) {
+          history.push('/events/my-events');
+        }
         setEvent(event);
         setDataFetched(true);
       } catch (err) {
@@ -60,10 +58,10 @@ const ManageEventPage = () => {
   useEffect(() => {
     const getRefundRequests = async () => {
       try {
-        const response = await myAxios(token).get(
-          `http://localhost:3000/api/bookings/refund-requests/event/${match.params.id}`
+        const response = await new API(token).getEventRefundRequests(
+          match.params.id
         );
-        if (response.data.length) {
+        if (response.length) {
           setHasRefundRequests(true);
         }
       } catch (err) {

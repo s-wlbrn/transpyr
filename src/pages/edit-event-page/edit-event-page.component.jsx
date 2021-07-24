@@ -4,7 +4,7 @@ import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useErrorHandler } from 'react-error-boundary';
 
-import myAxios from '../../auth/axios.config';
+import API from '../../api';
 import AppError from '../../libs/AppError';
 import { useAuth } from '../../auth/use-auth';
 import { useResponse } from '../../libs/useResponse';
@@ -36,20 +36,22 @@ const EditEventPage = () => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await myAxios().get(
-          `http://localhost:3000/api/events/${match.params.id}`
-        );
-
+        const response = await new API(token).getEvent(match.params.id);
         //handle unauthorized
-        if (user._id !== response.data.data.organizer) {
+        if (user._id !== response.organizer.id) {
           return handleError(
             new AppError('You are not the organizer of this event.', 403)
           );
         }
-        const formattedData = splitDateTime(response.data.data);
+        //handle past event
+        if (new Date(response.dateTimeStart) < Date.now()) {
+          throw new AppError('You cannot edit a past event.', 400);
+        }
+        //split dateTimeStart and dateTimeEnd to separate date and time fields
+        const formattedData = splitDateTime(response);
+        formattedData.onlineOnly = isOnlineOnly(formattedData.ticketTiers);
         formattedData.locationValid = true;
         formattedData.capacitiesValid = true;
-        formattedData.onlineOnly = isOnlineOnly(formattedData.ticketTiers);
 
         setEvent(formattedData);
         setEventChanges(formattedData);
@@ -59,7 +61,7 @@ const EditEventPage = () => {
       }
     };
     fetchEvent();
-  }, [handleError, match.params.id, user._id]);
+  }, [handleError, match.params.id, user._id, token]);
 
   const editStepMap = {
     name: 1,
@@ -147,10 +149,7 @@ const EditEventPage = () => {
       //validate ticketTiers again
       await validationSchemaArray[3].validate(event, { abortEarly: false });
 
-      await myAxios(token).put(
-        `http://localhost:3000/api/events/${match.params.id}`,
-        event
-      );
+      await new API(token).editEvent(match.params.id, event);
       history.push(`/events/id/${match.params.id}`);
     } catch (err) {
       createResponse(err);

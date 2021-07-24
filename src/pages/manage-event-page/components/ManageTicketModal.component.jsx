@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Alert, Col, Container, Modal, Row } from 'react-bootstrap';
+import { Col, Container, Modal, Row } from 'react-bootstrap';
 import { useRouteMatch } from 'react-router';
-import myAxios from '../../../auth/axios.config';
+
+import API from '../../../api';
 import { useAuth } from '../../../auth/use-auth';
+import { useResponse } from '../../../libs/useResponse';
+
 import { CustomButton } from '../../../components/CustomButton/CustomButton.component';
-import { ResponseMessage } from '../../../components/ResponseMessage/ResponseMessage.component';
 import { ManageTicketAlert } from './ManageTicketAlert.component';
 
 import './ManageTicketModal.styles.scss';
@@ -16,25 +18,17 @@ export const ManageTicketModal = ({
   checkActiveTickets,
 }) => {
   const [showAlert, setShowAlert] = useState(null);
-  const [response, setResponse] = useState({
-    error: false,
-    message: '',
-  });
+  const { response, createResponse } = useResponse();
   const match = useRouteMatch();
   const { token } = useAuth();
 
   const cancelTicket = async () => {
     try {
-      await myAxios(token).delete(
-        `http://localhost:3000/api/events/${match.params.id}/ticket/${ticket.id}`
-      );
+      await new API(token).cancelTicket(match.params.id, ticket.id);
       cancelTicketDisplay();
       clearTicket();
     } catch (err) {
-      setResponse({
-        error: true,
-        message: err.response.data.message,
-      });
+      createResponse(err);
     }
   };
 

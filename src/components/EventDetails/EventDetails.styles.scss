@@ -1,70 +1,92 @@
-.event-image-container {
-  padding: 0;
+.event-listing {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
 
-  h1 {
-    font-size: 1.75em;
+  .event-details-header {
+    h1 {
+      font-size: 1.75em;
 
-    &.event-details-name {
-      margin: 0;
+      &.event-header-name {
+        margin: 0;
+      }
+    }
+
+    .event-image-container {
+      padding: 0;
+
+      .event-image-background {
+        width: 100%;
+        height: 12.5rem;
+        text-align: center;
+        background-color: black;
+
+        .event-header-image {
+          height: 100%;
+          max-width: 100%;
+        }
+      }
+    }
+
+    .event-edit-type-category {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      h2 {
+        display: inline;
+        font-size: 1em;
+        font-weight: bold;
+        margin-right: 0.5em;
+      }
+    }
+
+    .event-header-date {
+      display: block;
+      margin-top: 1rem;
+      margin-bottom: 0;
     }
   }
-}
 
-.event-edit-type-category {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
+  .event-details-body {
+    flex: 1 0 auto;
 
-  h2 {
-    display: inline;
-    font-size: 1em;
-    font-weight: bold;
-    margin-right: 0.5em;
-  }
-}
-
-.event-details-date {
-  margin-top: 1rem;
-  margin-bottom: 0;
-}
-
-.event-image-background {
-  width: 100%;
-  height: 12.5rem;
-  text-align: center;
-  background-color: black;
-}
-
-.event-details-image {
-  height: 100%;
-}
-
-.event-details-body {
-  p {
-    margin: 0;
-  }
-
-  [class^='col'] {
-    margin-bottom: 1rem;
-  }
-
-  h2 {
-    font-size: 1.25em;
-    font-weight: bold;
-  }
-
-  .event-details-past-event {
-    color: darkred;
-    font-weight: bold;
-  }
-
-  .event-book-button {
-    margin-bottom: 1rem;
-  }
-
-  .event-description {
     p {
+      margin: 0;
+    }
+
+    [class^='col'] {
       margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.25em;
+      font-weight: bold;
+    }
+
+    header {
+      display: flex;
+
+      svg {
+        position: relative;
+        top: 4px;
+        margin-right: 0.5rem;
+      }
+    }
+
+    .event-details-past-event {
+      color: darkred;
+      font-weight: bold;
+    }
+
+    .event-book-button {
+      margin-bottom: 1rem;
+    }
+
+    .event-description {
+      p {
+        margin-bottom: 1rem;
+      }
     }
   }
 }

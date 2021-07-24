@@ -2,33 +2,31 @@ import React, { useState } from 'react';
 
 import { Col, Row } from 'react-bootstrap';
 
-import myAxios from '../../../../auth/axios.config';
-
 import { FormInput } from '../../../../components/FormInput/FormInput.component';
 import { CustomButton } from '../../../../components/CustomButton/CustomButton.component';
 import { ResponseMessage } from '../../../../components/ResponseMessage/ResponseMessage.component';
+import API from '../../../../api';
+import { useResponse } from '../../../../libs/useResponse';
 
-//import './ForgotPassword.styles.scss';
+import './ResetPassword.styles.scss';
 
 export const ResetPassword = ({ history, match }) => {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [response, setResponse] = useState(null);
+  const { response, createResponse } = useResponse();
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await myAxios().patch(
-        `http://localhost:3000/api/users/reset-password/${match.params.token}`,
-        {
-          password,
-          passwordConfirm,
-        }
+      await new API().resetPassword(
+        match.params.token,
+        password,
+        passwordConfirm
       );
       setSuccess(true);
     } catch (err) {
-      setResponse(err.response.data.message);
+      createResponse(err);
     }
   };
 
@@ -56,7 +54,7 @@ export const ResetPassword = ({ history, match }) => {
             />
             <CustomButton type="submit">Submit</CustomButton>
           </form>
-          {response && <ResponseMessage error>{response}</ResponseMessage>}
+          <ResponseMessage response={response} />
         </Col>
       ) : (
         <Col xs={12}>

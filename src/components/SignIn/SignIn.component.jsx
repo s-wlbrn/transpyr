@@ -10,15 +10,16 @@ import { FormInput } from '../FormInput/FormInput.component';
 import { ResponseMessage } from '../ResponseMessage/ResponseMessage.component';
 
 import './SignIn.styles.scss';
+import { useLocation } from 'react-router-dom';
 
-export const SignIn = ({ location }) => {
+export const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { response, createResponse } = useResponse();
-
   const { signIn } = useAuth();
+  const location = useLocation();
   const history = useHistory();
-  console.log(response);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -32,7 +33,7 @@ export const SignIn = ({ location }) => {
       let { from } = location.state || {
         from: { pathname: '/events' },
       };
-      history.push(from);
+      history.push(from.pathname);
     } catch (err) {
       createResponse(err);
     }

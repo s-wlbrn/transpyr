@@ -9149,6 +9149,11 @@ react-bootstrap@^1.4.3:
     uncontrollable "^7.0.0"
     warning "^4.0.3"
 
+react-currency-input-field@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/react-currency-input-field/-/react-currency-input-field-3.4.1.tgz#128e7322b52d093716c2c47f7592903de19e79f4"
+  integrity sha512-2DD0nE+pClg/UkQi/FGBdi/53P+KH06CjifBdH4u3rreGj5MYpOY7ViZewtOEA53yZNfWZ2mjwR12nJAXpp3Qw==
+
 react-dev-utils@^11.0.1:
   version "11.0.1"
   resolved "https://registry.npmjs.org/react-dev-utils/-/react-dev-utils-11.0.1.tgz"

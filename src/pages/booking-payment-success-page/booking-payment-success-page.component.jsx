@@ -2,34 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { Container, Row, Col } from 'react-bootstrap';
 
-import myAxios from '../../auth/axios.config';
-
-import ErrorPage from '../error-page/error-page.component';
+import API from '../../api';
 
 import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
+import { useErrorHandler } from 'react-error-boundary';
 
 const BookingPaymentSuccessPage = () => {
   const { search } = useLocation();
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(null);
+  const handleError = useErrorHandler();
 
   useEffect(() => {
-    const createBookings = async () => {
+    const createCheckoutBookings = async () => {
       try {
-        const bookings = await myAxios().get(
-          `http://localhost:3000/api/bookings/checkout-create-booking${search}}`
-        );
+        await new API().createBookings(search);
         setSuccess(true);
       } catch (err) {
-        console.log(err.response);
-        setError(err.response.data);
+        handleError(err);
       }
     };
 
-    createBookings();
-  }, [search]);
+    createCheckoutBookings();
+  }, [search, handleError]);
 
-  if (error) return <ErrorPage {...error} />;
   if (!success)
     return <LoadingResource>Processing bookings...</LoadingResource>;
   return (

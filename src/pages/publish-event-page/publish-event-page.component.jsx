@@ -3,9 +3,10 @@ import { useHistory, useRouteMatch } from 'react-router';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { useErrorHandler } from 'react-error-boundary';
 
+import API from '../../api';
 import { useAuth } from '../../auth/use-auth';
-import myAxios from '../../auth/axios.config';
-import AppError from '../../libs/AppError';
+import { useResponse } from '../../libs/useResponse';
+import { validationSchema } from './publish-event-page.schema';
 
 import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
 import { FormInput } from '../../components/FormInput/FormInput.component';
@@ -14,8 +15,6 @@ import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessag
 import { FormInputTextArea } from '../../components/FormInputTextArea/FormInputTextArea.components';
 
 import './publish-event-page.styles.scss';
-import { useResponse } from '../../libs/useResponse';
-import { validationSchema } from './publish-event-page.schema';
 
 export const PublishEventPage = () => {
   const { user, token } = useAuth();
@@ -25,10 +24,8 @@ export const PublishEventPage = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const handleError = useErrorHandler();
   const { response, createResponse } = useResponse();
-
   const publishForm = useRef(null);
   const scrollToForm = () => publishForm.current.scrollIntoView();
-
   const match = useRouteMatch();
   const history = useHistory();
 
@@ -38,25 +35,16 @@ export const PublishEventPage = () => {
   useEffect(() => {
     const fetchEventAndCheckAuth = async () => {
       try {
-        const response = await myAxios().get(
-          `http://localhost:3000/api/events/${match.params.id}?fields=organizer`
-        );
-        const event = response.data.data;
+        const event = await new API(token).getEvent(match.params.id);
         //handle event alrady published
         if (event.published) history.push(`/events/id/${match.params.id}`);
-        //handle unauthorized
-        if (user._id !== event.organizer) {
-          handleError(
-            new AppError('You are not the organizer of this event.', 403)
-          );
-        }
         setDataFetched(true);
       } catch (err) {
         handleError(err);
       }
     };
     if (user._id) fetchEventAndCheckAuth();
-  }, [match.params.id, history, user._id, handleError]);
+  }, [match.params.id, token, history, user._id, handleError]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,13 +54,10 @@ export const PublishEventPage = () => {
         { feePolicy, refundPolicy },
         { abortEarly: false }
       );
-      await myAxios(token).put(
-        `http://localhost:3000/api/events/${match.params.id}/publish-event`,
-        {
-          feePolicy,
-          refundPolicy,
-        }
-      );
+      await new API(token).publishEvent(match.params.id, {
+        feePolicy,
+        refundPolicy,
+      });
       navigateToEventPage();
     } catch (err) {
       createResponse(err);

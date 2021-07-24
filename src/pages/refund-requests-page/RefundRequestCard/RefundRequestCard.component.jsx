@@ -1,43 +1,38 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { Col, Container, Row } from 'react-bootstrap';
-import { CustomButton } from '../../../components/CustomButton/CustomButton.component';
 
-import './RefundRequestCard.styles.scss';
+import API from '../../../api';
 import { formatPriceUSD } from '../../../libs/formatPriceUSD';
-import myAxios from '../../../auth/axios.config';
+import { useResponse } from '../../../libs/useResponse';
+
 import { useAuth } from '../../../auth/use-auth';
 import { ResponseMessage } from '../../../components/ResponseMessage/ResponseMessage.component';
 import { LoadingResource } from '../../../components/LoadingResource/LoadingResource.component';
+import { CustomButton } from '../../../components/CustomButton/CustomButton.component';
+
+import './RefundRequestCard.styles.scss';
 
 export const RefundRequestCard = ({
   refundRequest,
   clearRefundRequestCard,
 }) => {
   const [cleared, setCleared] = useState(false);
-  const [response, setResponse] = useState({
-    error: false,
-    message: null,
-  });
+  const { response, createResponse } = useResponse();
   const [loading, setLoading] = useState(false);
   const { token } = useAuth();
 
   const handleResolveRequest = async (status) => {
     try {
       setLoading(true);
-      await myAxios(token).patch(
-        `http://localhost:3000/api/bookings/refund-request/${refundRequest._id}?status=${status}`
-      );
+      await new API(token).resolveRefundRequest(refundRequest._id, status);
       setCleared(true);
       setTimeout(() => {
         clearRefundRequestCard();
       }, 150);
     } catch (err) {
       setLoading(false);
-      setResponse({
-        error: true,
-        message: err.response.data.message,
-      });
+      createResponse(err);
     }
   };
 
@@ -113,15 +108,11 @@ export const RefundRequestCard = ({
           </Col>
         )}
       </Row>
-      {response.message && (
-        <Row>
-          <Col xs={12}>
-            <ResponseMessage error={response.error}>
-              {response.message}
-            </ResponseMessage>
-          </Col>
-        </Row>
-      )}
+      <Row>
+        <Col xs={12}>
+          <ResponseMessage response={response} />
+        </Col>
+      </Row>
     </Container>
   );
 };

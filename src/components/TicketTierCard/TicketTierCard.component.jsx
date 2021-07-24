@@ -19,6 +19,7 @@ export const TicketTierCard = ({
     limitPerCustomer,
     ticketSoldOut,
     canceled,
+    capacity,
   } = ticket;
 
   const ticketUnavailable = (
@@ -31,6 +32,7 @@ export const TicketTierCard = ({
     </Col>
   );
 
+  const limit = limitPerCustomer || capacity;
   return (
     <Row className="ticket-tier-card">
       <Col xs={8}>
@@ -54,19 +56,13 @@ export const TicketTierCard = ({
             <input
               type="number"
               min={0}
-              max={limitPerCustomer ? limitPerCustomer : null}
+              max={limitPerCustomer || capacity || undefined}
               value={quantity || 0}
               onChange={({ target: { value } }) => {
-                value =
-                  value > limitPerCustomer && limitPerCustomer !== 0
-                    ? limitPerCustomer
-                    : value;
                 handleChange(value, id);
               }}
             />
-            {limitPerCustomer === 0 ||
-            !quantity ||
-            quantity < limitPerCustomer ? (
+            {limit === 0 || !quantity || quantity < limit ? (
               <div className="arrow" onClick={() => handleIncreaseQuantity(id)}>
                 +
               </div>

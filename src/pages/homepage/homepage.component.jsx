@@ -19,7 +19,7 @@ const Homepage = (props) => {
   const [query, setQuery] = useState({
     sort: 'dateTimeStart',
     fields:
-      '_id,name,dateTimeStart,dateTimeEnd,photo,ticketTiers,totalBookings,soldOut,canceled',
+      '_id,name,dateTimeStart,dateTimeEnd,photo,ticketTiers,totalBookings,totalCapacity,soldOut,canceled',
     online: true,
     'dateTimeStart[gte]': Date.now(),
     paginate: { page: 1, limit: 10 },
@@ -33,7 +33,6 @@ const Homepage = (props) => {
       ...selections,
     });
   };
-
   const handleChangePage = (page) => {
     if (page > 0 && page <= numberOfPagesRef.current) {
       handleChangeQuery({
@@ -48,8 +47,9 @@ const Homepage = (props) => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await new API().getEvents(query, {
+        const response = await new API().getEvents({
           calculateEventInfo: true,
+          query,
         });
         numberOfPagesRef.current = response.pages;
         setEvents(response.data);

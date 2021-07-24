@@ -1,0 +1,36 @@
+@import '../../../../scss/colors';
+
+.about-organizer-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(white 4rem, $lighter-color 2rem, white);
+  text-align: center;
+
+  p {
+    padding: 0 1rem;
+    font-size: 0.95em;
+    font-style: italic;
+    overflow-wrap: anywhere;
+  }
+
+  h3 {
+    font-size: 1em;
+    font-weight: normal;
+    margin-bottom: 0.5rem;
+  }
+
+  hr {
+    position: relative;
+    top: 4rem;
+    margin: 0;
+    width: 100%;
+    background-color: $main-color;
+  }
+
+  .user-profile-image {
+    z-index: 1;
+    width: 6rem;
+    margin-bottom: 0.5rem;
+  }
+}

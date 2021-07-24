@@ -7,6 +7,8 @@ import './App.scss';
 
 import { useAuth } from './auth/use-auth';
 import { PrivateRoute } from './auth/PrivateRoute';
+import AppError from './libs/AppError';
+import API from './api';
 
 import Homepage from './pages/homepage/homepage.component';
 import EventDetailsPage from './pages/event-details-page/event-details-page.component';
@@ -26,14 +28,13 @@ import MyEventsPage from './pages/my-events-page/my-events-page.component';
 import ManageEventPage from './pages/manage-event-page/manage-event-page.component';
 import MyBookingsPage from './pages/my-bookings-page/my-bookings-page.component';
 import RefundRequestsPage from './pages/refund-requests-page/RefundRequestsPage.component';
+import ManageBookingPage from './pages/manage-booking-page/manage-booking-page.component';
 
 import { TopNav } from './components/TopNav/TopNav.component';
 import { Footer } from './components/Footer/Footer.component';
-import ManageBookingPage from './pages/manage-booking-page/manage-booking-page.component';
-import AppError from './libs/AppError';
 
 const App = () => {
-  const { user, expiresIn, refreshToken } = useAuth();
+  const { user, token, expiresIn, refreshToken } = useAuth();
 
   //Silent token refresh
   useEffect(() => {
@@ -59,7 +60,9 @@ const App = () => {
       <ErrorBoundary FallbackComponent={ErrorPage}>
         <Switch>
           <PrivateRoute path="/events/id/:id/manage/refund-requests">
-            <RefundRequestsPage url="http://localhost:3000/api/bookings/refund-requests/event" />
+            <RefundRequestsPage
+              fetchRefundRequests={new API(token).getEventRefundRequests}
+            />
           </PrivateRoute>
           <PrivateRoute path="/events/id/:id/manage">
             <ManageEventPage />
@@ -101,7 +104,9 @@ const App = () => {
         </Route> */}
 
           <PrivateRoute exact path="/bookings/refund-requests/:id">
-            <RefundRequestsPage url="http://localhost:3000/api/bookings/refund-requests" />
+            <RefundRequestsPage
+              fetchRefundRequests={new API(token).getRefundRequest}
+            />
           </PrivateRoute>
           <PrivateRoute path="/bookings/my-bookings/event/:id">
             <ManageBookingPage />
@@ -124,9 +129,6 @@ const App = () => {
               throw new AppError('Page not found.', 404);
             }}
           />
-          {/* <ErrorPage
-              error={{ statusCode: '404', message: 'Page not found.' }}
-            /> */}
         </Switch>
       </ErrorBoundary>
       <Footer />

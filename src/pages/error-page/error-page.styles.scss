@@ -1,7 +1,10 @@
-.error-page {
+main.error-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 10rem;
+
   .error {
-    position: absolute;
-    top: 10rem;
     width: 100%;
     text-align: center;
 
@@ -13,6 +16,17 @@
     &.error-message,
     h2 {
       font-size: 1.25em;
+    }
+  }
+
+  .error-controls {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 2rem;
+    padding: 0 2rem;
+
+    button {
+      width: 48%;
     }
   }
 }

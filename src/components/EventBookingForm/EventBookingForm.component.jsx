@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Col, Row, Modal, Container } from 'react-bootstrap';
 import { useHistory, useRouteMatch } from 'react-router';
 import { useResponse } from '../../libs/useResponse';
@@ -11,26 +11,41 @@ import './EventBookingForm.styles.scss';
 
 export const EventBookingForm = ({ ticketTiers, eventName, eventPath }) => {
   const [quantities, setQuantities] = useState({});
-  const ticketKeys = Object.keys(quantities);
-  const ticketTiersMap = ticketKeys.reduce((acc, ticketId) => {
-    const ticket = ticketTiers.find((el) => el.id === ticketId);
-    return { ...acc, [ticketId]: { ...ticket } };
-  }, {});
-
   const history = useHistory();
   const match = useRouteMatch();
   const { response, createResponse } = useResponse();
+
+  const ticketKeys = useMemo(() => Object.keys(quantities), [quantities]);
+  const ticketTiersMap = useMemo(
+    () =>
+      ticketKeys.reduce((acc, ticketId) => {
+        const ticket = ticketTiers.find((el) => el.id === ticketId);
+        return { ...acc, [ticketId]: { ...ticket } };
+      }, {}),
+    [ticketKeys, ticketTiers]
+  );
+  const subtotal = useMemo(
+    () =>
+      ticketKeys.reduce((acc, ticket) => {
+        const ticketTotal = quantities[ticket] * ticketTiersMap[ticket].price;
+        return acc + ticketTotal;
+      }, 0),
+    [quantities, ticketKeys, ticketTiersMap]
+  );
 
   const handleClose = () => {
     history.push(`/events/id/${match.params.id}`);
   };
 
   const handleChange = (value, ticketId) => {
-    const newQuantity = value < 0 ? 0 : value;
+    const limit =
+      ticketTiersMap[ticketId].limitPerCustomer ||
+      ticketTiersMap[ticketId].capacity;
+    const newQuantity = (value =
+      value < 0 ? 0 : value > limit && limit !== 0 ? limit : value);
     setQuantities({ ...quantities, [ticketId]: Number(newQuantity) });
   };
 
-  //how will each ticket
   //handleIncreaseQuantity
   const handleIncreaseQuantity = (ticketId) => {
     //let test = quantities[ticketId];
@@ -65,11 +80,6 @@ export const EventBookingForm = ({ ticketTiers, eventName, eventPath }) => {
       createResponse(new Error('No ticket quantities specified.'));
     }
   };
-
-  const subtotal = ticketKeys.reduce((acc, ticket) => {
-    const ticketTotal = quantities[ticket] * ticketTiersMap[ticket].price;
-    return acc + ticketTotal;
-  }, 0);
 
   return (
     <Modal show={true} onHide={handleClose} className="event-booking-form">

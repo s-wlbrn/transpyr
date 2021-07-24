@@ -3,11 +3,14 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { useRouteMatch } from 'react-router';
 import { IoCheckmark } from 'react-icons/io5';
 import { useErrorHandler } from 'react-error-boundary';
+import { isPast } from 'date-fns';
 
-import myAxios from '../../auth/axios.config';
+import API from '../../api';
 import { useAuth } from '../../auth/use-auth';
 import { useResponse } from '../../libs/useResponse';
 import { formatPriceUSD } from '../../libs/formatPriceUSD';
+import { validationSchema } from './CancelBookingModal/CancelBooking.schema';
+
 import { CustomButton } from '../../components/CustomButton/CustomButton.component';
 import CustomTable from '../../components/CustomTable/CustomTable.component';
 import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
@@ -15,7 +18,6 @@ import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessag
 import { CancelBookingModal } from './CancelBookingModal/CancelBookingModal.component';
 
 import './manage-booking-page.styles.scss';
-import { validationSchema } from './CancelBookingModal/CancelBooking.schema';
 
 const ManageBookingPage = () => {
   const [bookings, setBookings] = useState(null);
@@ -30,10 +32,10 @@ const ManageBookingPage = () => {
 
   const getBookings = useCallback(async () => {
     try {
-      const response = await myAxios(token).get(
-        `http://localhost:3000/api/bookings/me?event=${match.params.id}&sort=refundRequest -price`
+      const response = await new API(token).getMyBookings(
+        `event=${match.params.id}&sort=refundRequest -price`
       );
-      setBookings(response.data);
+      setBookings(response);
       setDataFetched(true);
     } catch (err) {
       handleError(err);
@@ -94,10 +96,11 @@ const ManageBookingPage = () => {
       if (cancelationReason) {
         await validationSchema.validate({ cancelationReason });
       }
-      await myAxios(token).patch(
-        `http://localhost:3000/api/bookings/refund-requests/event/${bookings[0].event.id}`,
-        { selectedIdsArray, cancelationReason }
-      );
+      await new API(token).requestRefund(bookings[0].event.id, {
+        selectedIdsArray,
+        cancelationReason,
+      });
+
       handleClearModal();
       setSelected({});
       getBookings();
@@ -150,71 +153,73 @@ const ManageBookingPage = () => {
             </span>
           </div>
         </Col>
-        <Col xs={12} md={6} className="manage-booking-bookings">
-          <h2>Bookings</h2>
-          <p>
-            Select a booking below to request a refund or resend the ticket
-            email.
-          </p>
-          <div className="manage-booking-select-buttons">
-            <CustomButton
-              type="button"
-              onClick={() => changeSelectionAll(undefined)}
-            >
-              Select None
-            </CustomButton>
-            <CustomButton
-              type="button"
-              onClick={() => changeSelectionAll(true)}
-            >
-              Select All
-            </CustomButton>
-          </div>
-          <CustomTable className="manage-booking-table" border grow>
-            <thead>
-              <CustomTable.TableRow>
-                <CustomTable.TableData xs={1}></CustomTable.TableData>
-                <CustomTable.TableData xs={7}>Ticket</CustomTable.TableData>
-                <CustomTable.TableData xs={4} centered>
-                  Price
-                </CustomTable.TableData>
-              </CustomTable.TableRow>
-            </thead>
-            <tbody>
-              {bookings.map((el) => (
-                <CustomTable.TableRow
-                  key={el.id}
-                  onClick={() => toggleSelected(el.id)}
-                  selected={selected[el.id]}
-                >
-                  <CustomTable.TableData xs={1} centered>
-                    {selected[el.id] ? <IoCheckmark /> : null}
-                  </CustomTable.TableData>
-                  <CustomTable.TableData xs={7}>
-                    {el.ticketData.tierName}
-                    {el.refundRequest && (
-                      <div className="manage-booking-table-refund-requested">
-                        {el.refundRequest.status === 'rejected'
-                          ? 'Refund request rejected'
-                          : 'Refund requested'}
-                      </div>
-                    )}
-                  </CustomTable.TableData>
+        {!isPast(new Date(bookings[0].event.dateTimeStart)) && (
+          <Col xs={12} md={6} className="manage-booking-bookings">
+            <h2>Bookings</h2>
+            <p>
+              Select a booking below to request a refund or resend the ticket
+              email.
+            </p>
+            <div className="manage-booking-select-buttons">
+              <CustomButton
+                type="button"
+                onClick={() => changeSelectionAll(undefined)}
+              >
+                Select None
+              </CustomButton>
+              <CustomButton
+                type="button"
+                onClick={() => changeSelectionAll(true)}
+              >
+                Select All
+              </CustomButton>
+            </div>
+            <CustomTable className="manage-booking-table" border grow>
+              <thead>
+                <CustomTable.TableRow>
+                  <CustomTable.TableData xs={1}></CustomTable.TableData>
+                  <CustomTable.TableData xs={7}>Ticket</CustomTable.TableData>
                   <CustomTable.TableData xs={4} centered>
-                    {formatPriceUSD(el.price)}
+                    Price
                   </CustomTable.TableData>
                 </CustomTable.TableRow>
-              ))}
-            </tbody>
-          </CustomTable>
-          <div className="manage-booking-controls">
-            <CustomButton type="button">Resend Tickets</CustomButton>
-            <CustomButton type="button" onClick={handleShowModal} warning>
-              Request Refund
-            </CustomButton>
-          </div>
-          {!showModal && <ResponseMessage response={response} />}
-        </Col>
+              </thead>
+              <tbody>
+                {bookings.map((el) => (
+                  <CustomTable.TableRow
+                    key={el.id}
+                    onClick={() => toggleSelected(el.id)}
+                    selected={selected[el.id]}
+                  >
+                    <CustomTable.TableData xs={1} centered>
+                      {selected[el.id] ? <IoCheckmark /> : null}
+                    </CustomTable.TableData>
+                    <CustomTable.TableData xs={7}>
+                      {el.ticketData.tierName}
+                      {el.refundRequest && (
+                        <div className="manage-booking-table-refund-requested">
+                          {el.refundRequest.status === 'rejected'
+                            ? 'Refund request rejected'
+                            : 'Refund requested'}
+                        </div>
+                      )}
+                    </CustomTable.TableData>
+                    <CustomTable.TableData xs={4} centered>
+                      {formatPriceUSD(el.price)}
+                    </CustomTable.TableData>
+                  </CustomTable.TableRow>
+                ))}
+              </tbody>
+            </CustomTable>
+            <div className="manage-booking-controls">
+              <CustomButton type="button">Resend Tickets</CustomButton>
+              <CustomButton type="button" onClick={handleShowModal} warning>
+                Request Refund
+              </CustomButton>
+            </div>
+            {!showModal && <ResponseMessage response={response} />}
+          </Col>
+        )}
       </Row>
     </Container>
   );

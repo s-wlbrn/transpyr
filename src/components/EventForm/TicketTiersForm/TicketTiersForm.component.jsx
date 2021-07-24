@@ -137,7 +137,7 @@ export const TicketTiersForm = ({
     setTierToEdit(null);
     setEditMode(false);
   };
-
+  console.log(currentTier);
   const {
     tierName,
     tierDescription,
@@ -250,12 +250,11 @@ export const TicketTiersForm = ({
         <Col xs={4}>
           <FormInput
             name="price"
-            type="number"
+            type="currency"
             id="tier-price"
-            value={String(price)}
+            value={price}
             handleChange={handleTierChange}
             label="Price"
-            min="0"
           />
         </Col>
       </Row>

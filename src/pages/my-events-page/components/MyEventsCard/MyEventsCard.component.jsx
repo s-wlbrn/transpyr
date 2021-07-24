@@ -26,8 +26,21 @@ export const MyEventsCard = forwardRef(
         <Col xs={5}>
           <EventStartDateShort dateTimeStart={dateTimeStart} />
           <div className="manage-events-card-name">{name}</div>
+          {!published && (
+            <div className="manage-events-card-unpublished">
+              (Not published)
+            </div>
+          )}
         </Col>
-        {!event.canceled ? (
+        {event.canceled ? (
+          <Col xs={4} className="manage-events-card-canceled">
+            Canceled
+          </Col>
+        ) : event.dateTimeStart < Date.now() ? (
+          <Col xs={4} className="manage-events-card-past-event">
+            Past Event
+          </Col>
+        ) : (
           <Col xs={4}>
             {!published ? (
               <CustomButton
@@ -47,10 +60,6 @@ export const MyEventsCard = forwardRef(
             <CustomButton onClick={() => handleClick(`/events/id/${id}/edit`)}>
               Edit
             </CustomButton>
-          </Col>
-        ) : (
-          <Col xs={4} className="manage-events-card-canceled">
-            Canceled
           </Col>
         )}
       </Row>

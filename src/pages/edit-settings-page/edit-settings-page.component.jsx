@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import myAxios from '../../auth/axios.config';
+
+import API from '../../api';
 import { useAuth } from '../../auth/use-auth';
-import { CustomButton } from '../../components/CustomButton/CustomButton.component';
-import { FormInput } from '../../components/FormInput/FormInput.component';
-import { FormInputToggle } from '../../components/FormInputToggle/FormInputToggle.component';
-import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessage.component';
-import { useResponse } from '../../libs/useResponse';
 import {
   nameValidationSchema,
   passwordValidationSchema,
 } from './edit-settings-page.schema';
+import { useResponse } from '../../libs/useResponse';
+
+import { CustomButton } from '../../components/CustomButton/CustomButton.component';
+import { FormInput } from '../../components/FormInput/FormInput.component';
+import { FormInputToggle } from '../../components/FormInputToggle/FormInputToggle.component';
+import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessage.component';
 
 import './edit-settings-page.styles.scss';
 
@@ -23,7 +25,7 @@ const EditSettingsPage = () => {
   const updatePasswordResponse = useResponse();
   const updateSettingsResponse = useResponse();
   const { user, token, updatePassword, setUser } = useAuth();
-  console.log(user);
+
   //set initial privateFavorites value when user mounted
   useEffect(() => {
     if (user) {
@@ -56,11 +58,8 @@ const EditSettingsPage = () => {
       if (id === 'update-name') {
         await nameValidationSchema.validate(data);
       }
-      const response = await myAxios(token).patch(
-        `http://localhost:3000/api/users/me`,
-        data
-      );
-      setUser(response.data.user);
+      const response = await new API(token).updateUser(data);
+      setUser(response.user);
       //clear relevant field
       if (id === 'update-name') {
         setName('');

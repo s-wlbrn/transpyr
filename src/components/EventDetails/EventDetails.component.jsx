@@ -3,6 +3,11 @@ import { format, isSameDay } from 'date-fns';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import {
+  IoDocumentTextOutline,
+  IoCalendarOutline,
+  IoLocationOutline,
+} from 'react-icons/io5';
 
 import { EventDetailsMap } from '../EventDetailsMap/EventDetailsMap.component';
 import { EventDescription } from '../EventDescription/EventDescription.component';
@@ -30,8 +35,8 @@ export const EventDetails = ({
   pastEvent,
   canceled,
 }) => (
-  <React.Fragment>
-    <Row>
+  <section className="event-listing">
+    <Row as="header" className="event-details-header">
       <Col xs={12} className="event-image-container">
         <div
           className="event-image-background"
@@ -42,7 +47,7 @@ export const EventDetails = ({
           <img
             src={`http://localhost:3000/static/img/events/${photo}`}
             alt={name}
-            className="event-details-image"
+            className="event-header-image"
           />
         </div>
       </Col>
@@ -52,8 +57,10 @@ export const EventDetails = ({
           if (editMode) handleEditStep('name');
         }}
       >
-        <p className="event-details-date">{format(dateTimeStart, 'PPPPp O')}</p>
-        <h1 className="event-details-name">{name}</h1>
+        <time dateTime={dateTimeStart} className="event-header-date">
+          {format(dateTimeStart, 'PPPPp O')}
+        </time>
+        <h1 className="event-header-name">{name}</h1>
         {editMode && (
           <div className="event-edit-type-category">
             <span>
@@ -66,10 +73,10 @@ export const EventDetails = ({
             </span>
           </div>
         )}
-        <hr className="event-details-titlebreak" />
+        <hr className="event-header-titlebreak" />
       </Col>
     </Row>
-    <Row className="event-details-body">
+    <Row as="section" className="event-details-body">
       <Col
         xs={12}
         className="event-book-button"
@@ -97,11 +104,27 @@ export const EventDetails = ({
       </Col>
       <Col
         xs={12}
+        as="section"
+        onClick={() => {
+          if (editMode) handleEditStep('description');
+        }}
+      >
+        <header>
+          <IoDocumentTextOutline /> <h2>Description</h2>
+        </header>
+        <EventDescription convertedDescription={convertedDescription} />
+      </Col>
+      <Col
+        xs={12}
+        as="section"
         onClick={() => {
           if (editMode) handleEditStep('date');
         }}
       >
-        <h2>When</h2>
+        <header>
+          <IoCalendarOutline /> <h2>When</h2>
+        </header>
+
         {isSameDay(dateTimeStart, dateTimeEnd) ? (
           <p>
             <time dateTime={dateTimeStart}>
@@ -129,11 +152,15 @@ export const EventDetails = ({
 
       <Col
         xs={12}
+        as="section"
         onClick={() => {
           if (editMode) handleEditStep('location');
         }}
       >
-        <h2>Where</h2>
+        <header>
+          <IoLocationOutline /> <h2>Where</h2>
+        </header>
+
         {address ? (
           <React.Fragment>
             {online && <p>Online and</p>}
@@ -144,18 +171,11 @@ export const EventDetails = ({
           <p className="event-details-online">This is an online event.</p>
         )}
       </Col>
-      <Col
-        xs={12}
-        onClick={() => {
-          if (editMode) handleEditStep('description');
-        }}
-      >
-        <h2>Description</h2>
-        <EventDescription convertedDescription={convertedDescription} />
-      </Col>
     </Row>
     {!editMode && location.coordinates.length ? (
       <EventDetailsMap coordinates={location.coordinates} />
-    ) : null}
-  </React.Fragment>
+    ) : (
+      <React.Fragment />
+    )}
+  </section>
 );
