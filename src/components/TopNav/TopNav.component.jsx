@@ -21,7 +21,11 @@ export const TopNav = () => {
   return (
     <Navbar as="header" className="navigation" variant="dark" expand="md">
       <Link to="/events" className="navbar-brand">
-        <img src={require('img/logo-white.png')} width="48px" alt="Transpyr" />
+        <img
+          src={require('./img/logo-white.png')}
+          width="48px"
+          alt="Transpyr"
+        />
       </Link>
       <Navbar.Toggle aria-controls="basic-navbar-nav">
         {user ? <UserNamePicture name={user.name} photo={user.photo} /> : null}
