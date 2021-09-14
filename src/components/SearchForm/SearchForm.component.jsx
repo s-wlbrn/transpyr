@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Form, FormControl, Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-import API from '../../api';
 
 export const SearchForm = () => {
   const [searchField, setSearchField] = useState('');

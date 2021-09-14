@@ -2,16 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { Route, useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
+import { useErrorHandler } from 'react-error-boundary';
 
 import { useAuth } from '../../auth/use-auth';
-import myAxios from '../../auth/axios.config';
 
 import { RefundRequestCard } from './RefundRequestCard/RefundRequestCard.component';
 import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
 import { CustomButton } from '../../components/CustomButton/CustomButton.component';
 
 import './RefundRequestsPage.styles.scss';
-import { useErrorHandler } from 'react-error-boundary';
 
 const RefundRequestsPage = ({ fetchRefundRequests }) => {
   const [bookings, setBookings] = useState(null);

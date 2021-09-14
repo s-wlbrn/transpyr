@@ -1,13 +1,12 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 
+import authContext from '../../auth/use-auth';
+import API from '../../api';
 import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessage.component';
 import { CustomButton } from '../CustomButton/CustomButton.component';
 
 import './PhotoUploadForm.styles.scss';
-import myAxios from '../../auth/axios.config';
-import authContext from '../../auth/use-auth';
-import API from '../../api';
 
 class PhotoUploadForm extends React.Component {
   static contextType = authContext;

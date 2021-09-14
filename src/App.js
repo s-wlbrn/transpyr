@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { ErrorBoundary, useErrorHandler } from 'react-error-boundary';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';

@@ -3,11 +3,11 @@ import { Modal } from 'react-bootstrap';
 import { useErrorHandler } from 'react-error-boundary';
 import InfiniteScroll from 'react-infinite-scroller';
 import { useHistory, useRouteMatch } from 'react-router';
+
 import API from '../../../api';
-import myAxios from '../../../auth/axios.config';
+
 import { CustomButton } from '../../../components/CustomButton/CustomButton.component';
 import { LoadingResource } from '../../../components/LoadingResource/LoadingResource.component';
-import AppError from '../../../libs/AppError';
 import { calculateEventInfo } from '../../../libs/calculateEventInfo';
 import { EventList } from '../../homepage/components/EventList/EventList.component';
 
