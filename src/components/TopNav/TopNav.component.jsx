@@ -22,7 +22,7 @@ export const TopNav = () => {
     <Navbar as="header" className="navigation" variant="dark" expand="md">
       <Link to="/events" className="navbar-brand">
         <img
-          src={require('./img/logo-white.png')}
+          src={require('../../../public/img/logo-white.png')}
           width="48px"
           alt="Transpyr"
         />
