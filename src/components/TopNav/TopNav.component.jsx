@@ -6,7 +6,6 @@ import { useAuth } from '../../auth/use-auth';
 
 import { SearchForm } from '../SearchForm/SearchForm.component';
 import { UserNamePicture } from '../UserNamePicture/UserNamePicture.component';
-import logo from '../../../public/img/logo-white.png';
 
 import './TopNav.styles.scss';
 
@@ -22,7 +21,7 @@ export const TopNav = () => {
   return (
     <Navbar as="header" className="navigation" variant="dark" expand="md">
       <Link to="/events" className="navbar-brand">
-        <img src={logo} width="48px" alt="Transpyr" />
+        <img src="./img/logo-white.png" width="48px" alt="Transpyr" />
       </Link>
       <Navbar.Toggle aria-controls="basic-navbar-nav">
         {user ? <UserNamePicture name={user.name} photo={user.photo} /> : null}
