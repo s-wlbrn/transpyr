@@ -24,9 +24,7 @@ export const EventCard = ({
   return (
     <Row as="li" className="event-card" onClick={() => handleClick(_id)}>
       <Col xs={3}>
-        <EventThumbnail
-          src={`http://localhost:3000/static/img/events/${photo}`}
-        />
+        <EventThumbnail id={photo} />
       </Col>
       <Col className="event-card-name-date" xs={6}>
         <EventStartDateShort dateTimeStart={dateTimeStart} />

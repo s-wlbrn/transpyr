@@ -119,24 +119,26 @@ const ManageEventPage = () => {
           <hr />
         </Col>
       </Row>
-      <Row>
-        <Col xs={12}>
-          <Alert
-            show={hasRefundRequests}
-            variant="danger"
-            className="manage-event-refund-request-alert"
-          >
-            <Alert.Heading>
-              This event has outstanding refund requests.
-            </Alert.Heading>
-            <Link to={`/events/id/${match.params.id}/manage/refund-requests`}>
-              View refund requests for this event
-            </Link>
-          </Alert>
-        </Col>
-      </Row>
-      <Row className="manage-event-info">
-        <Col xs={12} md={6} as="section" className="manage-event-tickets">
+      {hasRefundRequests && (
+        <Row>
+          <Col xs={12}>
+            <Alert
+              show={hasRefundRequests}
+              variant="danger"
+              className="manage-event-refund-request-alert"
+            >
+              <Alert.Heading>
+                This event has outstanding refund requests.
+              </Alert.Heading>
+              <Link to={`/events/id/${match.params.id}/manage/refund-requests`}>
+                View refund requests for this event
+              </Link>
+            </Alert>
+          </Col>
+        </Row>
+      )}
+      <Row as="section" className="manage-event-info">
+        <Col xs={12} as="section" className="manage-event-tickets">
           <h2>Tickets</h2>
           <p>Click to manage a ticket.</p>
           <Container className="manage-event-table-container">
@@ -146,7 +148,7 @@ const ManageEventPage = () => {
             />
           </Container>
         </Col>
-        <Col xs={12} md={6} as="section" className="manage-event-sales">
+        <Col xs={12} as="section" className="manage-event-sales">
           <h2>Sales</h2>
           <div>
             <div>
@@ -182,7 +184,7 @@ const ManageEventPage = () => {
           </div>
         </Col>
       </Row>
-      <Row className="manage-event-nav-buttons">
+      <Row as="nav" className="manage-event-nav-buttons">
         <Col xs={6}>
           <CustomButton
             type="button"

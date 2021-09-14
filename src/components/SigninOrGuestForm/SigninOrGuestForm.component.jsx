@@ -7,9 +7,9 @@ import { validationSchema } from './GuestForm.schema';
 
 import { SignIn } from '../SignIn/SignIn.component';
 import { SignUp } from '../SignUp/SignUp.component';
+import { ResponseMessage } from '../ResponseMessage/ResponseMessage.component';
 
 import './SigninOrGuestForm.styles.scss';
-import { ResponseMessage } from '../ResponseMessage/ResponseMessage.component';
 
 export const SigninOrGuestForm = ({ setGuest }) => {
   const [signupForm, setSignupForm] = useState(false);
@@ -45,9 +45,9 @@ export const SigninOrGuestForm = ({ setGuest }) => {
         </div>
       </Col>
 
-      <Col xs={12} md={6} className="guest-form">
+      <Col xs={12} md={6} className="guest-signin">
         <h2>...or checkout as a guest</h2>
-        <form onSubmit={handleSubmitGuest}>
+        <form onSubmit={handleSubmitGuest} className="guest-signin-form">
           <FormInput
             name="name"
             type="text"

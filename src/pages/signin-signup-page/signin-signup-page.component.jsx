@@ -23,7 +23,7 @@ const SignInSignUpPage = () => {
   }
 
   return (
-    <Container as="main" fluid>
+    <Container fluid as="main" className="signin-signup-page">
       <Row className="signin-signup">
         <Col as="section" xs={12} md={6}>
           <SignIn />

@@ -1,7 +1,13 @@
 import React from 'react';
+import { StreamedImage } from '../StreamedImage/StreamedImage.component';
 
 import './EventThumbnail.styles.scss';
 
-export const EventThumbnail = ({ src }) => (
-  <img className="event-thumbnail" src={src} alt="event" />
+export const EventThumbnail = ({ id }) => (
+  <StreamedImage
+    folder="events"
+    id={id}
+    alt="event"
+    className="event-thumbnail"
+  />
 );

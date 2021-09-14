@@ -29,6 +29,7 @@ import ManageEventPage from './pages/manage-event-page/manage-event-page.compone
 import MyBookingsPage from './pages/my-bookings-page/my-bookings-page.component';
 import RefundRequestsPage from './pages/refund-requests-page/RefundRequestsPage.component';
 import ManageBookingPage from './pages/manage-booking-page/manage-booking-page.component';
+import { SearchPage } from './pages/search-page/search-page.component';
 
 import { TopNav } from './components/TopNav/TopNav.component';
 import { Footer } from './components/Footer/Footer.component';
@@ -48,7 +49,7 @@ const App = () => {
           }, expiresIn);
         }
       } catch (err) {
-        console.log(err);
+        console.log('Error occured in silent refresh:', err);
       }
     };
     silentRefresh();
@@ -97,11 +98,6 @@ const App = () => {
           <Route exact path="/users/signin" component={SignInSignUpPage} />
           <Route path="/users/forgot-password" component={ForgotPasswordPage} />
           <Route path="/users/id/:id" component={UserProfilePage} />
-          {/* <Route>
-          exact
-          patch="/users/reset-password/:token"
-          component={ResetPasswordPage}
-        </Route> */}
 
           <PrivateRoute exact path="/bookings/refund-requests/:id">
             <RefundRequestsPage
@@ -115,9 +111,11 @@ const App = () => {
             <MyBookingsPage />
           </PrivateRoute>
           <Route
-            path="/bookings/create"
+            path="/bookings/success/:id"
             component={BookingPaymentSuccessPage}
           />
+
+          <Route path="/search" component={SearchPage} />
 
           <Route exact path="/">
             <Redirect to="/events" />

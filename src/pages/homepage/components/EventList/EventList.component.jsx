@@ -28,7 +28,6 @@ export const EventList = ({ isFetching, events, filterOnline }) => {
   };
 
   const toggleFavorite = async (id) => {
-    console.log(user.favorites);
     let updatedFavorites = [];
     if (favoritesMap[id]) {
       updatedFavorites = user.favorites.filter((fav) => fav !== id);
@@ -37,7 +36,6 @@ export const EventList = ({ isFetching, events, filterOnline }) => {
     }
 
     try {
-      console.log(updatedFavorites);
       const response = await myAxios(token).patch(
         'http://localhost:3000/api/users/me',
         { favorites: updatedFavorites }
@@ -52,9 +50,9 @@ export const EventList = ({ isFetching, events, filterOnline }) => {
   if (isFetching) return <LoadingResource>Loading events...</LoadingResource>;
 
   return (
-    <Container as="ol" className="event-listing" fluid>
+    <Container as="ol" className="event-list" fluid>
       {!events.length ? (
-        <h2 className="event-listing-not-found">No events found.</h2>
+        <h2 className="event-list-not-found">No events found.</h2>
       ) : (
         events.map((el) => (
           <EventCard

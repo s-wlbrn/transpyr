@@ -19,9 +19,7 @@ export const MyEventsCard = forwardRef(
         onMouseOut={() => handleHover(id)}
       >
         <Col xs={3}>
-          <EventThumbnail
-            src={`http://localhost:3000/static/img/events/${photo}`}
-          />
+          <EventThumbnail id={photo} />
         </Col>
         <Col xs={5}>
           <EventStartDateShort dateTimeStart={dateTimeStart} />

@@ -61,6 +61,7 @@ const CalendarListPage = ({ manageResource, fetchEvents, card }) => {
       <Row as="header">
         <Col xs={12}>
           <h1>{`My ${manageResource}`}</h1>
+          <p>{`Click on one of your ${manageResource} from the list to manage it.`}</p>
         </Col>
       </Row>
       <Row className="my-events-content">

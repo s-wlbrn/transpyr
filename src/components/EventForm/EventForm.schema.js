@@ -57,6 +57,7 @@ export const validationSchemaArray = [
     dateEnd: yup
       .date()
       .typeError('Invalid end date.')
+      .required('An end date is required.')
       .test(
         'dateEnd-after-start',
         'The end date cannot be before the start date.',

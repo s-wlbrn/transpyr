@@ -2,12 +2,8 @@ import { format, parseISO } from 'date-fns';
 
 export const combineDateTime = (eventObj) => {
   const { dateStart, timeStart, dateEnd, timeEnd, ...restEvent } = eventObj;
-  console.log(dateStart, timeStart);
-  console.log(dateEnd, timeEnd);
   const dateTimeStart = new Date(`${dateStart}T${timeStart}`);
   const dateTimeEnd = new Date(`${dateEnd}T${timeEnd}`);
-  console.log(dateTimeStart);
-  console.log(dateTimeEnd);
   const newEvent = {
     ...restEvent,
     dateTimeStart,

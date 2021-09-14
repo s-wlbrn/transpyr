@@ -80,10 +80,16 @@ const EditSettingsPage = () => {
         </Col>
       </Row>
       <Row as="section" className="edit-settings-forms">
-        <Col xs={12} md={6} className="edit-settings-password">
-          <form id="update-password" onSubmit={handleUpdatePassword}>
-            <h2>Set new password</h2>
-            <p>You will need to log in again after changing your password.</p>
+        <Col as="section" xs={12} md={6} className="edit-settings-password">
+          <form
+            className="update-password-form"
+            id="update-password"
+            onSubmit={handleUpdatePassword}
+          >
+            <header>
+              <h2>Set new password</h2>
+              <p>You will need to log in again after changing your password.</p>
+            </header>
             <FormInput
               type="password"
               value={password}
@@ -109,7 +115,12 @@ const EditSettingsPage = () => {
             <ResponseMessage response={updatePasswordResponse.response} />
           </form>
         </Col>
-        <Col xs={12} md={6} className="edit-settings-name-favorites">
+        <Col
+          as="section"
+          xs={12}
+          md={6}
+          className="edit-settings-name-favorites"
+        >
           <form
             className="edit-settings-name"
             id="update-name"

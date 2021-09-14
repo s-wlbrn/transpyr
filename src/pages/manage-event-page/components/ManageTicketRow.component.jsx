@@ -1,26 +1,23 @@
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
+import CustomTable from '../../../components/CustomTable/CustomTable.component';
 
 import './ManageTicketRow.styles.scss';
 
 export const ManageTicketRow = ({ ticket, index, handleClick }) => {
   const { tierName, numBookings } = ticket;
   return (
-    <Row
-      as="tr"
+    <CustomTable.TableRow
       className="manage-ticket-row"
       onClick={() => handleClick(index)}
     >
-      <Col as="td" xs={8}>
-        {tierName}
-      </Col>
-      <Col as="td" xs={4}>
+      <CustomTable.TableData xs={8}>{tierName}</CustomTable.TableData>
+      <CustomTable.TableData xs={4} centered>
         {!ticket.canceled ? (
           numBookings.length
         ) : (
           <span className="manage-ticket-row-canceled">Canceled</span>
         )}
-      </Col>
-    </Row>
+      </CustomTable.TableData>
+    </CustomTable.TableRow>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useContext, createContext } from 'react';
 import myAxios from './axios.config';
 
-const baseUrl = 'http://localhost:3000/api/users';
+const baseUrl = `${process.env.REACT_APP_BACKEND_HOST}/api/users`;
 
 const authContext = createContext();
 
@@ -50,7 +50,6 @@ const useProvideAuth = () => {
 
   const refreshToken = async () => {
     if (expiresIn) {
-      console.log('setting expiresIn null');
       setExpiresIn(null);
     }
     try {
@@ -60,6 +59,7 @@ const useProvideAuth = () => {
       setRefreshed(true);
       setExpiresIn(response.expiresIn);
     } catch (err) {
+      console.log('Error occured in refreshToken:', err);
       unmountUser();
       setRefreshed(true);
       return Promise.reject(err);

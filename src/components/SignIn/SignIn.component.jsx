@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
 import { useAuth } from '../../auth/use-auth';
 import { validationSchema } from './SignIn.schema';
@@ -10,7 +11,6 @@ import { FormInput } from '../FormInput/FormInput.component';
 import { ResponseMessage } from '../ResponseMessage/ResponseMessage.component';
 
 import './SignIn.styles.scss';
-import { useLocation } from 'react-router-dom';
 
 export const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -44,7 +44,7 @@ export const SignIn = () => {
       <h2 className="signin-signup-title">
         Sign in with your email and password
       </h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="signin-form">
         <FormInput
           name="email"
           type="email"
@@ -72,8 +72,8 @@ export const SignIn = () => {
             Forgot password?
           </CustomButton>
         </div>
+        <ResponseMessage response={response} />
       </form>
-      <ResponseMessage response={response} />
     </div>
   );
 };

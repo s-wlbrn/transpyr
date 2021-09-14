@@ -61,7 +61,6 @@ export const EventBookingForm = ({ ticketTiers, eventName, eventPath }) => {
 
   const isValid = (tickets) => {
     for (let ticket of tickets) {
-      console.log(quantities[ticket]);
       if (quantities[ticket]) return true;
     }
     return false;

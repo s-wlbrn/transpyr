@@ -8,6 +8,7 @@ import { useResponse } from '../../../../libs/useResponse';
 import { FormInput } from '../../../../components/FormInput/FormInput.component';
 import { CustomButton } from '../../../../components/CustomButton/CustomButton.component';
 import { ResponseMessage } from '../../../../components/ResponseMessage/ResponseMessage.component';
+import { validationSchema } from './ForgotPassword.schema';
 
 import './ForgotPassword.styles.scss';
 
@@ -19,6 +20,7 @@ export const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      await validationSchema.validate({ email }, { abortEarly: false });
       await new API().forgotPassword(email);
       setEmail('');
       setSuccess(true);

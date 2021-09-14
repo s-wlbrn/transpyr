@@ -1,0 +1,38 @@
+.booking-payment-success-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.booking-payment-success-header {
+  margin-bottom: 2rem;
+}
+
+.booking-payment-success-message {
+  margin-top: 10vh;
+  width: 75%;
+}
+
+.booking-payment-success-email {
+  display: inline;
+  font-weight: bold;
+}
+
+.booking-payment-success-links {
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  margin-top: 2rem;
+  z-index: 1;
+
+  button {
+    margin: 0 0.25rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .booking-payment-success-message {
+    width: 50%;
+  }
+}

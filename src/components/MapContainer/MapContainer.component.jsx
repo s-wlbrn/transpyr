@@ -14,7 +14,7 @@ const MapContainer = ({ coordinates, google }) => {
     lat: coordinates[1],
     lng: coordinates[0],
   };
-  console.log('map rendering');
+
   return (
     <Map
       style={mapStyles}

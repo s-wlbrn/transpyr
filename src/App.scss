@@ -8,7 +8,7 @@ main.container-fluid {
   background-color: white;
   position: relative;
   min-height: calc(100vh - 56px);
-  max-width: 1600px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 1rem 0;
   border: 1px solid gray;
@@ -18,6 +18,7 @@ main.container-fluid {
 
 .app {
   height: 100%;
+  overflow-y: hidden;
 }
 
 .row {
@@ -30,7 +31,7 @@ a:hover {
 }
 
 h1 {
-  font-size: 1.75em;
+  font-size: 2em;
 }
 
 h2 {

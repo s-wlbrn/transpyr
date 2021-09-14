@@ -1,22 +1,53 @@
 @import '../../scss/colors';
 
 .signin-or-guest-form {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   .signin {
     margin-bottom: 0;
   }
 
+  .signin-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
   .signin-signup-toggle {
+    margin: 0.5rem 0;
     color: $darker-color;
     font-weight: bold;
   }
 
-  .guest-form {
+  .guest-signin {
     display: flex;
     flex-direction: column;
+    height: 75%;
     margin: 1rem 0;
+
+    .guest-signin-form {
+      display: flex;
+      flex-direction: column;
+      flex: 1 0 auto;
+    }
 
     .custom-button {
       height: 4rem;
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .signin-or-guest-form {
+    flex-direction: row;
+    height: 25vh;
+    padding-top: 1rem;
+
+    .guest-signin {
+      margin: 0;
     }
   }
 }

@@ -45,9 +45,7 @@ const EventDetailsPage = ({ match }) => {
   return (
     <Container as="main" className="event-details-page" fluid>
       {user
-        ? user._id === event.organizer && (
-            <OwnEventControl published={event.published} />
-          )
+        ? user._id === event.organizer.id && <OwnEventControl event={event} />
         : null}
       <Route exact path={`${match.path}/tickets`}>
         {!event.canceled && !event.soldOut ? (

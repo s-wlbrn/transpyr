@@ -2,7 +2,8 @@
 
 .event-card {
   min-height: 6.5rem;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid darkgray;
+  margin: 0 1rem;
 
   [class*='col'] {
     display: flex;

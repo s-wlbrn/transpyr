@@ -1,0 +1,19 @@
+.search-page {
+  display: flex;
+  flex-direction: column;
+
+  .search-page-header {
+    margin-bottom: 1rem;
+  }
+
+  .search-page-results {
+    display: flex;
+    flex-direction: column;
+    padding: 0 1rem;
+    flex: 1 0 auto;
+  }
+
+  .event-list {
+    border: 1px solid black;
+  }
+}

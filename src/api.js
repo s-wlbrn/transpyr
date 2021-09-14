@@ -4,12 +4,12 @@ import { calculateEventInfo } from './libs/calculateEventInfo';
 class API {
   constructor(token) {
     this.token = token;
-    this.host = 'http://localhost:3000/api';
+    this.host = `${process.env.REACT_APP_BACKEND_HOST}`;
   }
   //GET multiple
   async getAll(url, query) {
     const response = await myAxios(this.token).get(
-      `${this.host}${url}${typeof query === 'string' ? `?${query}` : ''}`,
+      `${this.host}/api${url}${typeof query === 'string' ? `?${query}` : ''}`,
       {
         params: typeof query === 'object' ? query : undefined,
       }
@@ -17,10 +17,17 @@ class API {
     return response;
   }
 
+  //Stream image from S3 bucket
+  getImage = async (folder, id) => {
+    const response = await fetch(`${this.host}/image/${folder}/${id}`);
+    const blob = await response.blob();
+    return URL.createObjectURL(blob);
+  };
+
   //Upload photo
   uploadPhoto = async (resource, id, formData) => {
     await myAxios(this.token).patch(
-      `http://localhost:3000/api/${resource}/${id}`,
+      `${this.host}/api/${resource}/${id}`,
       formData
     );
   };
@@ -40,7 +47,9 @@ class API {
 
   //get one event
   getEvent = async (id, options = {}) => {
-    const response = await myAxios(this.token).get(`${this.host}/events/${id}`);
+    const response = await myAxios(this.token).get(
+      `${this.host}/api/events/${id}`
+    );
 
     if (options.calculateEventInfo) {
       response.data.data = calculateEventInfo(response.data.data);
@@ -63,7 +72,7 @@ class API {
   //create event
   createEvent = async (event) => {
     const response = await myAxios(this.token).post(
-      `${this.host}/events`,
+      `${this.host}/api/events`,
       event
     );
     return response.data.data;
@@ -71,16 +80,13 @@ class API {
 
   //edit event
   editEvent = async (eventId, event) => {
-    await myAxios(this.token).put(
-      `http://localhost:3000/api/events/${eventId}`,
-      event
-    );
+    await myAxios(this.token).put(`${this.host}/api/events/${eventId}`, event);
   };
 
   //publish event
   publishEvent = async (id, data) => {
     await myAxios(this.token).put(
-      `${this.host}/events/${id}/publish-event`,
+      `${this.host}/api/events/${id}/publish-event`,
       data
     );
   };
@@ -88,20 +94,28 @@ class API {
   //cancel event ticket
   cancelTicket = async (eventId, ticketId) => {
     await myAxios(this.token).delete(
-      `${this.host}/events/${eventId}/ticket/${ticketId}`
+      `${this.host}/api/events/${eventId}/ticket/${ticketId}`
     );
   };
 
   //cancel event
   cancelEvent = async (id) => {
-    await myAxios(this.token).delete(`${this.host}/events/${id}/`);
+    await myAxios(this.token).delete(`${this.host}/api/events/${id}/`);
   };
 
   //BOOKINGS
+  //get order
+  getOrder = async (orderId) => {
+    const response = await myAxios().get(
+      `${this.host}/api/bookings/order/${orderId}`
+    );
+    return response.data;
+  };
+
   //create checkout session
   createCheckoutSession = async (eventId, booking) => {
     const session = await myAxios().post(
-      `http://localhost:3000/api/bookings/checkout-session/${eventId}`,
+      `${this.host}/api/bookings/checkout-session/${eventId}`,
       booking
     );
     return session;
@@ -109,9 +123,10 @@ class API {
 
   //TEMPORARY: create bookings
   createBookings = async (search) => {
-    await myAxios().get(
-      `${this.host}/bookings/checkout-create-booking${search}}`
+    const response = await myAxios().get(
+      `${this.host}/api/bookings/checkout-create-booking${search}}`
     );
+    return response.data.data;
   };
 
   //get own bookings
@@ -123,7 +138,7 @@ class API {
   //get event refund requests
   getEventRefundRequests = async (id) => {
     const response = await myAxios(this.token).get(
-      `${this.host}/bookings/refund-requests/event/${id}`
+      `${this.host}/api/bookings/refund-requests/event/${id}`
     );
     return response.data;
   };
@@ -131,7 +146,7 @@ class API {
   //get refund request by request ID
   getRefundRequest = async (id) => {
     const response = await myAxios(this.token).get(
-      `${this.host}/bookings/refund-requests/${id}`
+      `${this.host}/api/bookings/refund-requests/${id}`
     );
     return response.data;
   };
@@ -139,7 +154,7 @@ class API {
   //request refund
   requestRefund = async (eventId, data) => {
     await myAxios(this.token).patch(
-      `${this.host}/bookings/refund-requests/event/${eventId}`,
+      `${this.host}/api/bookings/refund-requests/event/${eventId}`,
       data
     );
   };
@@ -147,7 +162,7 @@ class API {
   //resolve refund request
   resolveRefundRequest = async (id, status) => {
     await myAxios(this.token).patch(
-      `${this.host}/bookings/refund-request/${id}?status=${status}`
+      `${this.host}/api/bookings/refund-requests/${id}?status=${status}`
     );
   };
 
@@ -155,7 +170,7 @@ class API {
   //edit profile
   updateUser = async (data) => {
     const response = await myAxios(this.token).patch(
-      `${this.host}/users/me`,
+      `${this.host}/api/users/me`,
       data
     );
     return response.data;
@@ -169,17 +184,20 @@ class API {
 
   //forgot password
   forgotPassword = async (email) => {
-    await myAxios().post(`${this.host}/users/forgot-password`, {
+    await myAxios().post(`${this.host}/api/users/forgot-password`, {
       email,
     });
   };
 
   //reset password
   resetPassword = async (resetToken, password, passwordConfirm) => {
-    await myAxios().patch(`${this.host}/users/reset-password/${resetToken}`, {
-      password,
-      passwordConfirm,
-    });
+    await myAxios().patch(
+      `${this.host}/api/users/reset-password/${resetToken}`,
+      {
+        password,
+        passwordConfirm,
+      }
+    );
   };
 }
 

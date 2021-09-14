@@ -15,6 +15,7 @@ import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessag
 import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
 
 import './book-event-page.styles.scss';
+import CustomTable from '../../components/CustomTable/CustomTable.component';
 
 const stripePromise = loadStripe(
   'pk_test_51Ibx4EH1QVoCyfVJzLIjeDhQcJ3im0gqgcVgT7cTjXKVrLyZKrYJwzJh9SROtNTemuuF3bIv7k3EqO8NFvoiK4pq005Yw7vnI0'
@@ -102,33 +103,45 @@ const BookEventPage = ({ match, location }) => {
               <h2>{location.state.eventName}</h2>
             </Col>
           </Row>
-          <Row as="section" className="confirm-booking-cart">
-            <Col xs={12}>
-              <table className="confirm-booking-table">
-                <thead>
-                  <tr className="confirm-booking-labels">
-                    <th xs={6}>Ticket Name</th>
-                    <th xs={3}>Quantity</th>
-                    <th xs={3}>Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {location.state.ticketKeys.map((ticket) => (
-                    <ConfirmBookingTicketCard
-                      ticket={location.state.ticketTiersMap[ticket]}
-                      quantity={location.state.ticketSelections[ticket]}
-                    />
-                  ))}
-                </tbody>
-              </table>
-            </Col>
-          </Row>
+          <section className="confirm-booking-cart">
+            <CustomTable className="confirm-booking-table" grow>
+              <thead>
+                <CustomTable.TableRow className="confirm-booking-labels">
+                  <CustomTable.TableHeader xs={6}>
+                    Ticket Name
+                  </CustomTable.TableHeader>
+                  <CustomTable.TableHeader xs={3} centered>
+                    Quantity
+                  </CustomTable.TableHeader>
+                  <CustomTable.TableHeader xs={3} centered>
+                    Price
+                  </CustomTable.TableHeader>
+                </CustomTable.TableRow>
+              </thead>
+              <tbody>
+                {location.state.ticketKeys.map((ticket) => (
+                  <ConfirmBookingTicketCard
+                    ticket={location.state.ticketTiersMap[ticket]}
+                    quantity={location.state.ticketSelections[ticket]}
+                  />
+                ))}
+              </tbody>
+            </CustomTable>
+          </section>
           <hr />
           <Row as="section">
             <Col xs={12} className="confirm-booking-totals">
               <div className="confirm-booking-subtotal">{`Subtotal: ${totals.subtotal}`}</div>
               <div className="confirm-booking-taxes-fees">{`Service fee (3%): ${totals.fees}`}</div>
               <div className="confirm-booking-total">{`Total: ${totals.total}`}</div>
+            </Col>
+            <Col xs={12} className="confirm-booking-stripe-warning">
+              <p>
+                This app is for demonstration and uses a test implementation of
+                Stripe. Use the following credit card number along with any
+                future expiration date and security code:
+              </p>
+              <p>4242 4242 4242 4242</p>
             </Col>
           </Row>
           {loadingCheckout ? (

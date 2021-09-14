@@ -47,6 +47,10 @@ const EditEventPage = () => {
         if (new Date(response.dateTimeStart) < Date.now()) {
           throw new AppError('You cannot edit a past event.', 400);
         }
+        //handle canceled event
+        if (response.canceled) {
+          throw new AppError('You cannot edit a canceled event.', 400);
+        }
         //split dateTimeStart and dateTimeEnd to separate date and time fields
         const formattedData = splitDateTime(response);
         formattedData.onlineOnly = isOnlineOnly(formattedData.ticketTiers);
@@ -168,7 +172,7 @@ const EditEventPage = () => {
         response={response}
       />
       {editStep ? (
-        <form>
+        <form className="edit-event-form">
           <EventForm
             event={eventChanges}
             step={editStepMap[editStep]}

@@ -4,7 +4,7 @@ import { ErrorBoundary, useErrorHandler } from 'react-error-boundary';
 import { Route } from 'react-router';
 import { Link, useHistory } from 'react-router-dom';
 
-import myAxios from '../../auth/axios.config';
+import API from '../../api';
 
 import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
 import { UserProfileImage } from '../../components/UserProfileImage/UserProfileImage.component';
@@ -14,7 +14,6 @@ import { SeeMoreModal } from './components/SeeMoreModal.component';
 import { ErrorModal } from '../../components/ErrorModal/ErrorModal.component';
 
 import './user-profile-page.styles.scss';
-import API from '../../api';
 
 const UserProfilePage = ({ match }) => {
   const [user, setUser] = useState(null);
@@ -66,51 +65,44 @@ const UserProfilePage = ({ match }) => {
           <SeeMoreModal resource="favorites" />
         </Route>
       </ErrorBoundary>
-      <Row as="section" className="user-profile-intro">
-        <Col xs={12} md={6}>
-          <UserProfileImage id={user.photo} />
-        </Col>
-        <Col xs={12} md={6}>
+      <header as="header" className="user-profile-header">
+        <UserProfileImage id={user.photo} />
+        <div className="user-profile-intro">
           <h1 className="user-profile-name">{user.name}</h1>
           <p className="user-profile-tagline">{user.tagline}</p>
-        </Col>
-        <hr />
-      </Row>
+        </div>
+      </header>
 
-      <section className="user-profile-content">
-        <Row>
-          <Col xs={12}>
+      <Row as="section" className="user-profile-content">
+        <Col as="section" xs={12} md={4} className="user-profile-content-info">
+          <section>
             <h2>Bio</h2>
             <p>
               {user.bio ? user.bio : 'This user has not provided a bio yet.'}
             </p>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12}>
+          </section>
+          <section>
             <h2>Interests</h2>
             <p>
               {user.interests
                 ? user.interests
                 : 'This user has not provided their interests yet.'}
             </p>
-          </Col>
-        </Row>
-        {userEvents.length ? (
-          <Row className="user-profile-events">
-            <Col xs={12}>
+          </section>
+        </Col>
+        <Col as="section" xs={12} md={8}>
+          {userEvents.length ? (
+            <div className="user-profile-events">
               <h2>Events</h2>
               <Link to={`${match.url}/events`} className="user-profile-see-all">
                 (See All)
               </Link>
               <EventList events={userEvents} />
-            </Col>
-          </Row>
-        ) : (
-          <React.Fragment />
-        )}
-        <Row className="user-profile-favorites">
-          <Col xs={12}>
+            </div>
+          ) : (
+            <React.Fragment />
+          )}
+          <div className="user-profile-favorites">
             <h2>Favorites</h2>
             <Link
               to={`${match.url}/favorites`}
@@ -127,9 +119,9 @@ const UserProfilePage = ({ match }) => {
             ) : (
               <p>This user's favorite events are private.</p>
             )}
-          </Col>
-        </Row>
-      </section>
+          </div>
+        </Col>
+      </Row>
     </Container>
   );
 };

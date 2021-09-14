@@ -1,14 +1,30 @@
+@import '../../scss/colors';
+
+.event-photo-modal {
+  h1 {
+    margin-bottom: 0;
+  }
+}
+
 .event-listing {
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
 
   .event-details-header {
+    padding-bottom: 1rem;
+    background: linear-gradient(white 9rem, $lighter-color);
+    border-bottom: 1px solid $darker-color;
+
     h1 {
       font-size: 1.75em;
 
       &.event-header-name {
         margin: 0;
+
+        & + p {
+          margin-bottom: 0;
+        }
       }
     }
 
@@ -46,6 +62,11 @@
       margin-top: 1rem;
       margin-bottom: 0;
     }
+
+    .event-header-price-display {
+      font-weight: bold;
+      text-align: end;
+    }
   }
 
   .event-details-body {
@@ -80,12 +101,51 @@
     }
 
     .event-book-button {
-      margin-bottom: 1rem;
+      height: 5rem;
+      display: flex;
+      align-items: center;
+      background: white;
+
+      &.book-button-sticky {
+        position: sticky;
+        top: 1px;
+        z-index: 1;
+      }
     }
 
     .event-description {
       p {
         margin-bottom: 1rem;
+      }
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    .event-details-header {
+      height: 18rem;
+
+      & > div {
+        &.event-image-container .event-image-background {
+          height: 18rem;
+        }
+
+        &:nth-child(2) {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          row-gap: 1rem;
+          padding: 2rem;
+
+          .event-header-date {
+            margin-top: 0;
+            margin-bottom: 2rem;
+          }
+
+          .event-header-price-display {
+            position: absolute;
+            bottom: 2rem;
+          }
+        }
       }
     }
   }

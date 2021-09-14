@@ -15,10 +15,9 @@ export const LocationForm = ({
   locationValid,
 }) => {
   //bypass location validation if event is online-only
-  console.log(locationValid);
   return (
-    <Container fluid className="location-form">
-      <Row>
+    <Container as="section" fluid className="location-form">
+      <Row as="header" className="location-form-header">
         <Col xs={12}>
           <h2>Enter an address for the event.</h2>
         </Col>

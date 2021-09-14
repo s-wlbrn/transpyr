@@ -9,6 +9,7 @@ import API from '../../../../api';
 import { useResponse } from '../../../../libs/useResponse';
 
 import './ResetPassword.styles.scss';
+import { validationSchema } from './ResetPassword.schema';
 
 export const ResetPassword = ({ history, match }) => {
   const [password, setPassword] = useState('');
@@ -19,6 +20,10 @@ export const ResetPassword = ({ history, match }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      await validationSchema.validate(
+        { password, passwordConfirm },
+        { abortEarly: false }
+      );
       await new API().resetPassword(
         match.params.token,
         password,

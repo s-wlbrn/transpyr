@@ -9,6 +9,8 @@ import { FormInput } from '../FormInput/FormInput.component';
 import { ResponseMessage } from '../ResponseMessage/ResponseMessage.component';
 import { validationSchema } from './SignUp.schema';
 
+import './SignUp.styles.scss';
+
 export const SignUp = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -16,7 +18,6 @@ export const SignUp = () => {
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const history = useHistory();
   const location = useLocation();
-
   const { response, createResponse } = useResponse();
   const { signUp } = useAuth();
 

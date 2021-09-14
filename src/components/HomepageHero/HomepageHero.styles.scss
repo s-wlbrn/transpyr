@@ -1,0 +1,62 @@
+.homepage-hero-unit {
+  position: relative;
+  height: 50vw;
+  max-height: 300px;
+  overflow: hidden;
+
+  .homepage-hero-overlay {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    position: absolute;
+    z-index: 1;
+    background-color: hsla(203, 51%, 15%, 0.5);
+    height: 100%;
+    width: 100%;
+    padding-right: 5px;
+  }
+
+  .homepage-hero-text {
+    position: absolute;
+    left: 15%;
+    top: 40%;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .homepage-hero-credit {
+    font-size: 0.8rem;
+    color: white;
+  }
+
+  img {
+    position: relative;
+  }
+
+  @media screen and (min-width: 768px) {
+    img {
+      bottom: 5rem;
+    }
+
+    .homepage-hero-text {
+      font-size: 2rem;
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    img {
+      bottom: 10rem;
+    }
+  }
+
+  @media screen and (min-width: 1600px) {
+    img {
+      bottom: 30rem;
+    }
+
+    .homepage-hero-text {
+      font-size: 2.5rem;
+    }
+  }
+}

@@ -4,13 +4,13 @@
   height: 3rem;
   width: 100%;
   letter-spacing: 0.5px;
-
   font-size: 1em;
   background-color: $darker-color;
   color: white;
   font-weight: bolder;
   border: none;
   cursor: pointer;
+  border-radius: 0.25rem;
 
   &:hover {
     background-color: $main-color;

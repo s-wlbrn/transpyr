@@ -3,36 +3,37 @@
 main.user-profile-page {
   display: flex;
   flex-direction: column;
-  padding-top: 0;
+  padding: 0;
 
-  .user-profile-intro {
+  .user-profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1rem 0;
     flex: 0 0 auto;
-    background: linear-gradient(
-      $main-color,
-      $lighter-color,
-      rgba(255, 0, 0, 0)
-    );
-    padding-top: 1rem;
+    background: linear-gradient($main-color, hsl(119deg 51% 80%) 12rem);
     text-align: center;
+
+    .user-profile-image-container {
+      width: 18vh;
+      height: 18vh;
+    }
+
+    .user-profile-intro {
+      width: 90%;
+    }
 
     .user-profile-name {
       padding-top: 1rem;
-      font-size: 2rem;
-    }
-
-    hr {
-      position: relative;
-      top: -9rem;
-      width: 100%;
-      background-color: black;
-      border-width: 2px;
-      z-index: -1;
-      box-shadow: 0 2px 4px darkgray;
+      font-size: 2em;
     }
   }
 
   .user-profile-tagline {
     flex: 0 0 auto;
+    width: 100%;
+    word-wrap: break-word;
     overflow-x: auto;
     text-align: center;
     font-style: italic;
@@ -41,12 +42,24 @@ main.user-profile-page {
 
   .user-profile-content {
     flex: 1 0 auto;
-    display: flex;
-    flex-direction: column;
     justify-content: space-around;
+
+    .user-profile-content-info {
+      background: linear-gradient($lighter-color, white);
+      margin: 0 1rem 2rem 1rem;
+      flex: 1 1 auto;
+      padding: 1rem;
+      box-shadow: 4px 4px 15px -1px;
+
+      & > div {
+        min-height: 50%;
+      }
+    }
 
     .user-profile-events,
     .user-profile-favorites {
+      min-height: 50%;
+
       h2 {
         display: inline;
       }
@@ -56,11 +69,32 @@ main.user-profile-page {
       margin-left: 0.5rem;
     }
 
-    .event-listing {
-      max-height: 20rem;
+    .event-list {
+      display: flex;
+      flex-direction: column;
+      flex: 1 0 auto;
       overflow-y: scroll;
       border: solid 1px black;
       margin: 1rem 0;
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    .user-profile-header {
+      flex-direction: row;
+      justify-content: center;
+
+      .user-profile-image-container {
+        margin-right: 2rem;
+      }
+
+      .user-profile-intro {
+        width: 40%;
+      }
+    }
+
+    .user-profile-content {
+      flex-wrap: nowrap;
     }
   }
 }

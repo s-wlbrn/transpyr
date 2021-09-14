@@ -1,11 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import API from '../../api';
 
 import './UserProfileImage.styles.scss';
 
-export const UserProfileImage = ({ id }) => (
-  <img
-    className="user-profile-image"
-    src={`http://localhost:3000/static/img/users/${id}`}
-    alt="user"
-  />
-);
+export const UserProfileImage = ({ id }) => {
+  const [src, setSrc] = useState('');
+
+  useEffect(() => {
+    const getImage = async () => {
+      try {
+        const imageUrl = await new API().getImage('users', id);
+        setSrc(imageUrl);
+      } catch (err) {
+        return undefined;
+      }
+    };
+    getImage();
+  }, [id]);
+
+  return (
+    <div
+      className="user-profile-image-container"
+      style={{
+        backgroundImage: `url(${src})`,
+      }}
+    />
+  );
+};

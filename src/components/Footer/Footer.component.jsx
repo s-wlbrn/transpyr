@@ -5,7 +5,7 @@ import './Footer.styles.scss';
 export const Footer = () => (
   <footer>
     <nav>
-      <p>Copyright blahdeeblah</p>
+      <p>©2021 Transpyr</p>
       <p>
         <a href="">About</a>
         <a href="">Support</a>

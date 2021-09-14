@@ -35,7 +35,7 @@ export const NameTypeCategoryForm = ({
         </Col>
       </Row>
       <Row className="create-event-category-format">
-        <Col xs={12}>
+        <Col xs={12} md={6}>
           <h2>What format is your event?</h2>
           <FormDropdown
             name="type"
@@ -48,7 +48,7 @@ export const NameTypeCategoryForm = ({
             required
           />
         </Col>
-        <Col xs={12}>
+        <Col xs={12} md={6}>
           <h2>What category is your event?</h2>
           <FormDropdown
             name="category"

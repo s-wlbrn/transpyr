@@ -1,21 +1,17 @@
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
+import CustomTable from '../../../components/CustomTable/CustomTable.component';
 import { ManageTicketRow } from './ManageTicketRow.component';
-
-import './ManageTicketTable.styles.scss';
 
 export const ManageTicketTable = ({ ticketTiers, handleClick }) => {
   return (
-    <table className="manage-ticket-table">
+    <CustomTable className="manage-ticket-table" grow>
       <thead>
-        <Row as="tr" className="manage-ticket-table-header">
-          <Col as="th" xs={8}>
-            Ticket Name
-          </Col>
-          <Col as="th" xs={4}>
+        <CustomTable.TableRow className="manage-ticket-table-header">
+          <CustomTable.TableHeader xs={8}>Ticket Name</CustomTable.TableHeader>
+          <CustomTable.TableHeader xs={4} centered>
             Bookings
-          </Col>
-        </Row>
+          </CustomTable.TableHeader>
+        </CustomTable.TableRow>
       </thead>
       <tbody>
         {ticketTiers.map((ticket, i) => (
@@ -27,6 +23,6 @@ export const ManageTicketTable = ({ ticketTiers, handleClick }) => {
           />
         ))}
       </tbody>
-    </table>
+    </CustomTable>
   );
 };

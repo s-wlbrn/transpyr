@@ -59,7 +59,7 @@ const EditProfilePage = () => {
           />
         </Col>
       </Row>
-      <form onSubmit={handleSubmit}>
+      <form className="edit-profile-form" onSubmit={handleSubmit}>
         <Row>
           <Col xs={12} md={6} as="section" className="edit-profile-tagline">
             <h2>Edit tagline</h2>

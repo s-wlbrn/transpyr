@@ -1,6 +1,14 @@
 @import '../../../scss/colors';
 
+.date-time-form {
+  height: 75vh;
+}
+
 .date-time-input-group {
+  display: flex;
+  justify-content: space-between;
+  flex: 1 0 auto;
+
   .form-input-group {
     margin-top: 0;
 

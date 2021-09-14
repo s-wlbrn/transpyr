@@ -3,7 +3,9 @@ import React from 'react';
 import './PageControl.styles.scss';
 
 export const PageControl = ({ page, totalPages, handleChange }) => {
-  return (
+  return !totalPages ? (
+    <React.Fragment />
+  ) : (
     <div className="page-control">
       {page > 1 ? (
         <div className="page-control-back">

@@ -1,16 +1,10 @@
 import React from 'react';
-
 import { Link, useHistory } from 'react-router-dom';
-
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import FormControl from 'react-bootstrap/FormControl';
-import Dropdown from 'react-bootstrap/Dropdown';
+import { Navbar, Nav, Dropdown } from 'react-bootstrap';
 
 import { useAuth } from '../../auth/use-auth';
 
+import { SearchForm } from '../SearchForm/SearchForm.component';
 import { UserNamePicture } from '../UserNamePicture/UserNamePicture.component';
 
 import './TopNav.styles.scss';
@@ -25,19 +19,16 @@ export const TopNav = () => {
   };
 
   return (
-    <Navbar className="navigation" variant="dark" expand="md">
+    <Navbar as="header" className="navigation" variant="dark" expand="md">
       <Link to="/events" className="navbar-brand">
-        T
+        <img src="img/logo-white.png" width="48px" alt="Transpyr" />
       </Link>
       <Navbar.Toggle aria-controls="basic-navbar-nav">
         {user ? <UserNamePicture name={user.name} photo={user.photo} /> : null}
       </Navbar.Toggle>
       <Navbar.Collapse id="basic-navbar-nav" className="nav-contents">
-        <Form inline>
-          <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-          <Button variant="outline-success">Search</Button>
-        </Form>
-        <Nav className="nav-content-xs">
+        <SearchForm />
+        <Nav as="nav" className="nav-content-xs">
           <Link to="/events/create" className="topnav-link">
             Host an event
           </Link>
@@ -50,7 +41,7 @@ export const TopNav = () => {
                 My events
               </Link>
               <Link to="/users/edit-profile" className="topnav-link">
-                Edit Profile
+                Edit profile
               </Link>
               <Link to="/users/settings" className="topnav-link">
                 Settings
@@ -71,14 +62,14 @@ export const TopNav = () => {
           )}
         </Nav>
       </Navbar.Collapse>
-      <div className="nav-content-md">
+      <nav className="nav-content-md">
         {user ? (
           <Dropdown className="signed-in-dropdown" alignRight>
             <Dropdown.Toggle as="div" id="dropdown-basic">
               <UserNamePicture name={user.name} photo={user.photo} />
             </Dropdown.Toggle>
 
-            <Dropdown.Menu>
+            <Dropdown.Menu as="nav">
               <Link to="/events/create" className="nav-link">
                 Host an event
               </Link>
@@ -89,7 +80,7 @@ export const TopNav = () => {
                 My events
               </Link>
               <Link to="/users/edit-profile" className="nav-link">
-                Edit Profile
+                Edit profile
               </Link>
               <Link to="/users/settings" className="nav-link">
                 Settings
@@ -101,7 +92,7 @@ export const TopNav = () => {
             </Dropdown.Menu>
           </Dropdown>
         ) : (
-          <Nav className="signed-out-content">
+          <Nav as="nav" className="signed-out-content">
             <Link to="/events/create" className="topnav-link">
               Host an event
             </Link>
@@ -113,7 +104,7 @@ export const TopNav = () => {
             </Link>
           </Nav>
         )}
-      </div>
+      </nav>
     </Navbar>
   );
 };

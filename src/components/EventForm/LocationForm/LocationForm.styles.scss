@@ -1,6 +1,10 @@
 @import '../../../scss/colors';
 
 .location-form {
+  .location-form-header {
+    margin-bottom: 1rem;
+  }
+
   .address-label {
     color: $darker-color;
     font-weight: bold;

@@ -1,14 +1,22 @@
 .create-event-page {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 
   .create-event-title {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
 
-  #create-event-form {
+  .create-event-form {
     flex: 1 0 auto;
     display: flex;
     flex-direction: column;
+    margin-bottom: 1rem;
+
+    & > :first-child {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
   }
 }

@@ -137,7 +137,7 @@ export const TicketTiersForm = ({
     setTierToEdit(null);
     setEditMode(false);
   };
-  console.log(currentTier);
+
   const {
     tierName,
     tierDescription,

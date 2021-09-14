@@ -97,12 +97,12 @@ const CreateEventPage = () => {
 
   return (
     <Container as="main" className="create-event-page" fluid>
-      <Row>
+      <Row as="header">
         <Col xs={12}>
           <h1 className="create-event-title">Create an event</h1>
         </Col>
       </Row>
-      <form id="create-event-form">
+      <form className="create-event-form" id="create-event">
         <EventForm
           event={event}
           step={currentStep}
@@ -121,8 +121,6 @@ const CreateEventPage = () => {
               {currentStep < 5 ? 'Next' : 'Submit'}
             </CustomButton>
           </Col>
-        </Row>
-        <Row>
           <Col xs={12}>
             <ResponseMessage response={response} />
           </Col>

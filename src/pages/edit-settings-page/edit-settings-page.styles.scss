@@ -1,11 +1,27 @@
 .edit-settings-page {
   .edit-settings-forms {
-    [class^='edit-settings'] {
+    height: 50vh;
+
+    & > section {
+      height: 100%;
       margin-bottom: 3rem;
 
       &:last-child {
         margin-bottom: 0;
       }
+    }
+
+    .update-password-form {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+    }
+
+    .edit-settings-name-favorites {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .edit-settings-favorites {

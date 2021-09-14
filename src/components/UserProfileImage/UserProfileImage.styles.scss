@@ -1,6 +1,8 @@
-.user-profile-image {
-  width: 100%;
+.user-profile-image-container {
+  width: 20vh;
+  height: 20vh;
+  background-position: center;
+  background-size: contain;
   border-radius: 50%;
   border: 2px solid black;
-  max-width: 200px;
 }

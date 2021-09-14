@@ -1,6 +1,7 @@
 @import '../../../../scss/colors';
 
-.event-listing {
+.event-list {
+  flex: 1 0 auto;
   padding: 0;
 
   a {
@@ -8,7 +9,7 @@
     font-weight: normal;
   }
 
-  .event-listing-not-found {
+  .event-list-not-found {
     margin-top: 5rem;
     text-align: center;
     color: $darker-color;

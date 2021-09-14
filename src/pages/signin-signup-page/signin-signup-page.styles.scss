@@ -1,0 +1,17 @@
+.signin-signup-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.signin-signup {
+  flex-direction: column;
+  justify-content: space-evenly;
+  flex: 1 0 auto;
+}
+
+@media screen and (min-width: 768px) {
+  .signin-signup {
+    padding-top: 2rem;
+    flex-direction: row;
+  }
+}

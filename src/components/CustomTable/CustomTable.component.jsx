@@ -35,6 +35,20 @@ const TableRow = ({ children, selected, className = '', ...otherAttr }) => {
   );
 };
 
+const TableHeader = ({ children, centered, className = '', ...otherAttr }) => {
+  return (
+    <Col
+      as="th"
+      className={`custom-table-header ${className} ${
+        centered ? 'centered' : ''
+      }`}
+      {...otherAttr}
+    >
+      {children}
+    </Col>
+  );
+};
+
 const TableData = ({ children, centered, className = '', ...otherAttr }) => {
   return (
     <Col
@@ -48,6 +62,7 @@ const TableData = ({ children, centered, className = '', ...otherAttr }) => {
 };
 
 CustomTable.TableRow = TableRow;
+CustomTable.TableHeader = TableHeader;
 CustomTable.TableData = TableData;
 
 export default CustomTable;

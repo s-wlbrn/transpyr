@@ -130,7 +130,7 @@ const ManageBookingPage = () => {
         </Col>
       </Row>
       <Row as="section" className="manage-booking-content">
-        <Col xs={12} md={6}>
+        <Col as="section" xs={12} className="manage-booking-info">
           <h2>Order Information</h2>
           <div>
             <span className="manage-booking-label">Name:</span>
@@ -154,7 +154,7 @@ const ManageBookingPage = () => {
           </div>
         </Col>
         {!isPast(new Date(bookings[0].event.dateTimeStart)) && (
-          <Col xs={12} md={6} className="manage-booking-bookings">
+          <Col as="section" xs={12} className="manage-booking-bookings">
             <h2>Bookings</h2>
             <p>
               Select a booking below to request a refund or resend the ticket

@@ -1,7 +1,15 @@
 .signin {
   display: flex;
   flex-direction: column;
-  margin: 1rem 0 2rem 0;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+
+  .signin-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1 0 auto;
+  }
 
   .signin-button-group {
     display: flex;
@@ -20,3 +28,8 @@
   }
 }
 
+@media screen and (min-width: 768px) {
+  .signin {
+    margin: 0;
+  }
+}

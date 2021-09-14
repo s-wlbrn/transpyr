@@ -6,28 +6,32 @@ import { CustomButton } from '../../../../components/CustomButton/CustomButton.c
 
 import './OwnEventControl.styles.scss';
 
-export const OwnEventControl = ({ published }) => {
+export const OwnEventControl = ({
+  event: { published, dateTimeStart, canceled },
+}) => {
   const history = useHistory();
   const location = useLocation();
-  return (
-    !published && (
-      <Row className="own-event-control">
-        <Col xs={6}>
+  return dateTimeStart > Date.now() && !canceled ? (
+    <Row className="own-event-control">
+      <Col xs={6}>
+        {!published ? (
           <p>This event is unpublished.</p>
-        </Col>
-        <Col xs={3}>
-          <CustomButton
-            type="button"
-            onClick={() =>
-              history.push(`${location.pathname}/edit`, {
-                from: location.pathname,
-              })
-            }
-          >
-            Edit
-          </CustomButton>
-        </Col>
-        <Col xs={3}>
+        ) : (
+          <p>This is your event.</p>
+        )}
+      </Col>
+      <Col xs={6}>
+        <CustomButton
+          type="button"
+          onClick={() =>
+            history.push(`${location.pathname}/edit`, {
+              from: location.pathname,
+            })
+          }
+        >
+          Edit
+        </CustomButton>
+        {!published && (
           <CustomButton
             type="button"
             onClick={() =>
@@ -38,8 +42,10 @@ export const OwnEventControl = ({ published }) => {
           >
             Publish
           </CustomButton>
-        </Col>
-      </Row>
-    )
+        )}
+      </Col>
+    </Row>
+  ) : (
+    <React.Fragment />
   );
 };
