@@ -90,7 +90,7 @@ const UserProfilePage = ({ match }) => {
             </p>
           </section>
         </Col>
-        <Col as="section" xs={12} md={8}>
+        <Col as="section" xs={12} md={8} className="user-profile-content-links">
           {userEvents.length ? (
             <div className="user-profile-events">
               <h2>Events</h2>
