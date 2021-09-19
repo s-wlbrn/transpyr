@@ -130,8 +130,8 @@ class API {
   };
 
   //get own bookings
-  getMyBookings = async (options = {}) => {
-    const response = await this.getAll('/bookings/me', options.query);
+  getMyBookings = async (query) => {
+    const response = await this.getAll('/bookings/me', query);
     return response.data;
   };
 
