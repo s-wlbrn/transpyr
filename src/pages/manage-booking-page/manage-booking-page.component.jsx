@@ -32,9 +32,9 @@ const ManageBookingPage = () => {
 
   const getBookings = useCallback(async () => {
     try {
-      const response = await new API(token).getMyBookings(
-        `event=${match.params.id}&sort=refundRequest -price`
-      );
+      const response = await new API(token).getMyBookings({
+        query: `event=${match.params.id}&sort=refundRequest -price`,
+      });
       setBookings(response);
       setDataFetched(true);
     } catch (err) {
