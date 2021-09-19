@@ -11,6 +11,7 @@ import { LoadingResource } from '../../../../components/LoadingResource/LoadingR
 import { EventCard } from '../EventCard/EventCard.component';
 
 import './EventList.styles.scss';
+import API from '../../../../api';
 
 export const EventList = ({ isFetching, events, filterOnline }) => {
   const [favoritesMap, setFavoritesMap] = useState(null);
@@ -36,11 +37,10 @@ export const EventList = ({ isFetching, events, filterOnline }) => {
     }
 
     try {
-      const response = await myAxios(token).patch(
-        'http://localhost:3000/api/users/me',
-        { favorites: updatedFavorites }
-      );
-      user.favorites = response.data.user.favorites;
+      const response = await new API(token).updateUser({
+        favorites: updatedFavorites,
+      });
+      user.favorites = response.user.favorites;
       setFavoritesMap(createMapFromArray(user.favorites));
     } catch (err) {
       console.log(err);
