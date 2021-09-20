@@ -218,7 +218,7 @@ export const TicketTiersForm = ({
             handleChange={handleTierChange}
             label="Per Customer"
             min="1"
-            max={capacity}
+            max={capacity || undefined}
           />
         </Col>
       </Row>

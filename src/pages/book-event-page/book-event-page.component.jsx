@@ -29,7 +29,7 @@ const BookEventPage = ({ match, location }) => {
     fees: '',
     total: '',
   });
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const history = useHistory();
   const { response, createResponse } = useResponse();
 
@@ -58,23 +58,26 @@ const BookEventPage = ({ match, location }) => {
   const handleCheckout = async (e) => {
     try {
       setLoadingCheckout(true);
-      const booking = user
-        ? {
-            name: user.name,
-            email: user.email,
-            user: user._id,
-          }
-        : {
-            name: guest.name,
-            email: guest.email,
-          };
+      const booking = {
+        name: user?.name || guest.name,
+        email: user?.email || guest.email,
+        tickets: location.state.ticketSelections,
+      };
 
-      booking.tickets = location.state.ticketSelections;
+      //Book free event
+      if (totals.total === '$0.00') {
+        const bookings = await new API(token).createCheckoutSession(
+          match.params.id,
+          booking
+        );
+
+        return history.push(`/bookings/order/${bookings[0].orderId}`);
+      }
 
       //get stripe.js instance
       const stripe = await stripePromise;
       //create checkout session
-      const session = await new API().createCheckoutSession(
+      const session = await new API(token).createCheckoutSession(
         match.params.id,
         booking
       );
