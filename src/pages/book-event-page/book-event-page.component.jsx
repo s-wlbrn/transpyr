@@ -66,12 +66,14 @@ const BookEventPage = ({ match, location }) => {
 
       //Book free event
       if (totals.total === '$0.00') {
-        const bookings = await new API(token).createCheckoutSession(
+        const response = await new API(token).createCheckoutSession(
           match.params.id,
           booking
         );
 
-        return history.push(`/bookings/order/${bookings[0].orderId}`);
+        return history.push(
+          `/bookings/order/${response.data.bookings[0].orderId}`
+        );
       }
 
       //get stripe.js instance
