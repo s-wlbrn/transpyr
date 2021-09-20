@@ -114,7 +114,7 @@ class API {
 
   //create checkout session
   createCheckoutSession = async (eventId, booking) => {
-    const session = await myAxios().post(
+    const session = await myAxios(this.token).post(
       `${this.host}/api/bookings/checkout-session/${eventId}`,
       booking
     );
