@@ -70,9 +70,11 @@ const BookEventPage = ({ match, location }) => {
           match.params.id,
           booking
         );
+        //clear location.state to prevent going back
+        location.state = undefined;
 
         return history.push(
-          `/bookings/order/${response.data.bookings[0].orderId}`
+          `/bookings/success/${response.data.bookings[0].orderId}`
         );
       }
 
