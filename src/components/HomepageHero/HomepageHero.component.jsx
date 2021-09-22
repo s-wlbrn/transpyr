@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import './HomepageHero.styles.scss';
 
 export const HomepageHero = () => {
+  const [loaded, setLoaded] = useState(false);
+
   return (
     <section className="homepage-hero-unit">
       <div className="homepage-hero-overlay">
@@ -26,7 +28,8 @@ export const HomepageHero = () => {
         3840w
       "
         alt="Transpyr"
-        className="homepage-hero-image"
+        className={`homepage-hero-image ${loaded && 'loaded'}`}
+        onLoad={() => setLoaded(true)}
       />
     </section>
   );
