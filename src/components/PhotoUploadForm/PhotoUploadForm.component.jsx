@@ -99,7 +99,7 @@ class PhotoUploadForm extends React.Component {
   render() {
     const { response } = this.state;
     return (
-      <div className="photo-upload-container">
+      <section className="photo-upload-container">
         {this.reader.result && <img src={this.reader.result} alt="resource" />}
         <form
           className="photo-upload-form"
@@ -113,11 +113,15 @@ class PhotoUploadForm extends React.Component {
             accept=".jpg,.jpeg,.png"
             onChange={this.onFileChange}
           />
-          <CustomButton type="submit">Upload</CustomButton>
+          <div className="photo-upload-controls">
+            {this.props.cancel && (
+              <CustomButton type="button">Cancel</CustomButton>
+            )}
+            <CustomButton type="submit">Upload</CustomButton>
+          </div>
         </form>
-
         <ResponseMessage response={response} />
-      </div>
+      </section>
     );
   }
 }

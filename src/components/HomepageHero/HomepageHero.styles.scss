@@ -1,3 +1,5 @@
+@import '../../scss/fade-in.scss';
+
 .homepage-hero-unit {
   position: relative;
   height: 50vw;
@@ -16,7 +18,15 @@
     padding-right: 5px;
   }
 
+  .homepage-hero-image {
+    @include fade-in(1s);
+    transform-origin: left top;
+    animation: scale 8000ms ease-out forwards;
+  }
+
   .homepage-hero-text {
+    @include fade-in(0.75s);
+    animation: flytext 8000ms ease-out forwards;
     position: absolute;
     left: 15%;
     top: 40%;
@@ -58,5 +68,23 @@
     .homepage-hero-text {
       font-size: 2.5rem;
     }
+  }
+}
+
+@keyframes scale {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.025);
+  }
+}
+
+@keyframes flytext {
+  0% {
+    transform: translateX(-20px);
+  }
+  100% {
+    transform: translateX(0);
   }
 }

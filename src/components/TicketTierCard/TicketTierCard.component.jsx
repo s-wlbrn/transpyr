@@ -56,7 +56,7 @@ export const TicketTierCard = ({
             <input
               type="number"
               min={0}
-              max={limitPerCustomer || capacity || undefined}
+              max={limit || undefined}
               value={quantity || 0}
               onChange={({ target: { value } }) => {
                 handleChange(value, id);

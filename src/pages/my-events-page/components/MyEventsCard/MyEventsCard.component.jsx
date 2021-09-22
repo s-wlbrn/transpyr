@@ -17,6 +17,7 @@ export const MyEventsCard = forwardRef(
         ref={ref}
         onMouseOver={() => handleHover(id)}
         onMouseOut={() => handleHover(id)}
+        onClick={() => handleClick(`/events/id/${id}`)}
       >
         <Col xs={3}>
           <EventThumbnail id={photo} />

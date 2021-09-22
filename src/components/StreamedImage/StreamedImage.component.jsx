@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import API from '../../api';
 
-export const StreamedImage = ({ folder, id, alt, ...otherProps }) => {
+import './StreamedImage.styles.scss';
+
+export const StreamedImage = ({
+  folder,
+  id,
+  alt,
+  width,
+  className,
+  ...otherProps
+}) => {
   const [src, setSrc] = useState('');
 
   useEffect(() => {
@@ -16,5 +25,17 @@ export const StreamedImage = ({ folder, id, alt, ...otherProps }) => {
     getImageData();
   }, [folder, id]);
 
-  return <img src={src} alt={alt || folder} {...otherProps} />;
+  return src ? (
+    <img
+      src={src}
+      alt={alt || folder}
+      className={`streamed-image ${className}`}
+      {...otherProps}
+    />
+  ) : (
+    <div
+      className={`streamed-image-loading ${className}`}
+      style={{ width: width }}
+    />
+  );
 };

@@ -26,6 +26,7 @@ export const HomepageHero = () => {
         3840w
       "
         alt="Transpyr"
+        className="homepage-hero-image"
       />
     </section>
   );

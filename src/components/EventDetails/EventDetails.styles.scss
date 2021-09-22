@@ -40,6 +40,15 @@
         .event-header-image {
           height: 100%;
           max-width: 100%;
+
+          &.streamed-image-loading {
+            background-image: linear-gradient(
+              to left,
+              black,
+              black,
+              $main-color 75%
+            );
+          }
         }
       }
     }

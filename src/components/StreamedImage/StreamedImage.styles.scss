@@ -1,0 +1,14 @@
+@import '../../scss/colors';
+@import '../../scss/fade-in.scss';
+@import '../../scss/background-pulse.scss';
+
+.streamed-image-loading {
+  @include background-pulse;
+  background-image: linear-gradient(to left, white, lightgray);
+  width: 100%;
+  height: 100%;
+}
+
+.streamed-image {
+  @include fade-in(0.25s);
+}

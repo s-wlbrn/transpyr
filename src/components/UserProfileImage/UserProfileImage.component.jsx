@@ -21,9 +21,13 @@ export const UserProfileImage = ({ id }) => {
   return (
     <div
       className="user-profile-image-container"
-      style={{
-        backgroundImage: `url(${src})`,
-      }}
+      style={
+        src
+          ? {
+              backgroundImage: `url(${src})`,
+            }
+          : { backgroundColor: 'lightgray' }
+      }
     />
   );
 };

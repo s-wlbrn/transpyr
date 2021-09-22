@@ -28,6 +28,7 @@ const UploadEventPhotoPage = ({ match }) => {
             resource="events"
             resourceId={match.params.id}
             successCallback={handlePhotoUploadSuccess}
+            cancel={() => history.goBack()}
           />
         </Col>
       </Row>

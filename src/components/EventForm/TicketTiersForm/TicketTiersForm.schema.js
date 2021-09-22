@@ -24,7 +24,7 @@ export const validationSchema = yup.object().shape({
     .number()
     .typeError('Invalid per-customer limit.')
     .required()
-    .min(1, 'Per-customer limit must be 1 or greater.')
+    .min(0, 'Per-customer limit must be a positive number.')
     .when('capacity', (capacity, schema) => {
       return capacity > 0
         ? schema.max(
