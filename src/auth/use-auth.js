@@ -24,6 +24,7 @@ const useProvideAuth = () => {
         email,
         password,
       });
+      localStorage.setItem('refreshToken', response.refreshToken);
       setUser({ ...response.data.user });
       setToken(response.token);
       setExpiresIn(response.expiresIn);
@@ -40,6 +41,7 @@ const useProvideAuth = () => {
         password,
         passwordConfirm,
       });
+      localStorage.setItem('refreshToken', response.refreshToken);
       setUser({ ...response.data.user });
       setToken(response.token);
       setExpiresIn(response.expiresIn);
@@ -53,7 +55,16 @@ const useProvideAuth = () => {
       setExpiresIn(null);
     }
     try {
-      const response = await myAxios().post(`${baseUrl}/refresh-token`);
+      //get refresh token from Local Storage
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (!refreshToken) return false;
+
+      const response = await myAxios().post(`${baseUrl}/refresh-token`, {
+        refreshToken,
+      });
+      //set new refreshToken in Local Storage
+      localStorage.setItem('refreshToken', response.refreshToken);
+      //set user and JWT in app state
       setUser({ ...response.data.user });
       setToken(response.token);
       setRefreshed(true);
@@ -68,7 +79,9 @@ const useProvideAuth = () => {
 
   const signOut = async () => {
     try {
-      await myAxios(token).post(`${baseUrl}/revoke-token`);
+      const refreshToken = localStorage.getItem('refreshToken');
+      await myAxios(token).post(`${baseUrl}/revoke-token`, { refreshToken });
+      localStorage.removeItem('refreshToken');
       unmountUser();
     } catch (err) {
       return Promise.reject(err);

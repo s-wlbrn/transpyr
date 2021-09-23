@@ -78,6 +78,14 @@ const EditEventPage = () => {
   const handleEditStep = (section) => {
     if (section === 'photo')
       history.push(`/events/id/${match.params.id}/upload-photo`);
+    if (event.published && section === 'ticketTiers')
+      return createResponse(
+        new AppError(
+          'Tickets must be managed from the "Manage Events" page when the event is published.',
+          400
+        )
+      );
+
     setEditStep(section);
     clearResponse();
   };
