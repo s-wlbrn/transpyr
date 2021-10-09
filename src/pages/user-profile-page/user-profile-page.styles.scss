@@ -80,6 +80,12 @@ main.user-profile-page {
       border: solid 1px black;
       margin: 1rem 0;
     }
+
+    .user-profile-favorites {
+      h2 {
+        display: inline;
+      }
+    }
   }
 
   @media screen and (min-width: 768px) {
@@ -98,6 +104,12 @@ main.user-profile-page {
 
     .user-profile-content {
       flex-wrap: nowrap;
+    }
+
+    .user-profile-content-info {
+      & > :first-child {
+        margin-bottom: 20rem;
+      }
     }
   }
 }

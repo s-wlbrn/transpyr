@@ -104,12 +104,14 @@ const UserProfilePage = ({ match }) => {
           )}
           <div className="user-profile-favorites">
             <h2>Favorites</h2>
-            <Link
-              to={`${match.url}/favorites`}
-              className="user-profile-see-all"
-            >
-              (See All)
-            </Link>
+            {user.favorites.length && (
+              <Link
+                to={`${match.url}/favorites`}
+                className="user-profile-see-all"
+              >
+                (See All)
+              </Link>
+            )}
             {user.favorites ? (
               user.favorites.length > 0 ? (
                 <EventList events={userFavorites} />
