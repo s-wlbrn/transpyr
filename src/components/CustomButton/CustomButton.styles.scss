@@ -1,11 +1,9 @@
-@import '../../scss/colors';
-
 .custom-button {
   height: 3rem;
   width: 100%;
   letter-spacing: 0.5px;
   font-size: 1em;
-  background-color: $darker-color;
+  background-color: var(--color-dark);
   color: white;
   font-weight: bolder;
   border: none;
@@ -13,14 +11,14 @@
   border-radius: 0.25rem;
 
   &:hover {
-    background-color: $main-color;
+    background-color: var(--color-main);
   }
 
   &.warning {
-    background: $warning;
+    background: var(--color-warning);
 
     &:hover {
-      background-color: $light-warning;
+      background-color: var(--color-warning-light);
     }
   }
 }

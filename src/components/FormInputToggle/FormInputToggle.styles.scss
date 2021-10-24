@@ -1,5 +1,3 @@
-@import '../../scss/colors';
-
 .form-input-toggle-group {
   position: relative;
   display: inline-block;
@@ -37,11 +35,11 @@
   }
 
   .form-input-toggle:checked + .form-input-toggle-slider {
-    background-color: $darker-color;
+    background-color: var(--color-dark);
   }
 
   .form-input-toggle:focus + .form-input-toggle-slider {
-    box-shadow: 0 0 1px $darker-color;
+    box-shadow: 0 0 1px var(--color-dark);
   }
 
   .form-input-toggle:checked + .form-input-toggle-slider:before {

@@ -1,9 +1,7 @@
-@import '../../scss/colors';
-
 .calendar-nav {
   button {
     display: inline;
-    background-color: $darker-color;
+    background-color: var(--color-dark);
     color: white;
     border: none;
     border-radius: 2rem;
@@ -92,7 +90,7 @@
         }
 
         p {
-          color: $darker-color;
+          color: var(--color-dark);
           font-weight: bold;
           order: 1;
           margin-bottom: 0.5rem;

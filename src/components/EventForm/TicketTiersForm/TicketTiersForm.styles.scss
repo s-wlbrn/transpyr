@@ -1,5 +1,3 @@
-@import '../../../scss/colors';
-
 div.ticket-tiers-form {
   flex: 1 0 auto;
   display: flex;
@@ -30,7 +28,7 @@ div.ticket-tiers-form {
     align-items: center;
 
     .online-input-label {
-      color: $darker-color;
+      color: var(--color-dark);
       font-weight: bold;
       margin-bottom: 0;
       text-align: center;

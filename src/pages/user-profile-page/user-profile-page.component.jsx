@@ -81,6 +81,7 @@ const UserProfilePage = ({ match }) => {
               {user.bio ? user.bio : 'This user has not provided a bio yet.'}
             </p>
           </section>
+          <hr />
           <section>
             <h2>Interests</h2>
             <p>
@@ -104,7 +105,7 @@ const UserProfilePage = ({ match }) => {
           )}
           <div className="user-profile-favorites">
             <h2>Favorites</h2>
-            {user.favorites.length && (
+            {!!user.favorites.length && (
               <Link
                 to={`${match.url}/favorites`}
                 className="user-profile-see-all"

@@ -1,12 +1,10 @@
-@import '../../../scss/colors';
-
 .location-form {
   .location-form-header {
     margin-bottom: 1rem;
   }
 
   .address-label {
-    color: $darker-color;
+    color: var(--color-dark);
     font-weight: bold;
     margin: 0.5rem 0 0 0;
   }

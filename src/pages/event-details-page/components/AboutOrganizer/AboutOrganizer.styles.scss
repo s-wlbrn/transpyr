@@ -1,10 +1,8 @@
-@import '../../../../scss/colors';
-
 .about-organizer-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(white 4rem, $lighter-color 2rem, white);
+  background: linear-gradient(white 4rem, var(--color-light) 2rem, white);
   text-align: center;
 
   p {
@@ -25,7 +23,7 @@
     top: 4rem;
     margin: 0;
     width: 100%;
-    background-color: $main-color;
+    background-color: var(--color-main);
   }
 
   .user-profile-image-container {

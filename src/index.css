@@ -1,3 +1,14 @@
+/* CSS Variables */
+:root {
+  --color-main: #43a047;
+  --color-dark: #00701a;
+  --color-light: #76d275;
+  --color-lighter: hsl(119, 51%, 85%);
+  --color-selected: hsl(203, 51%, 85%);
+  --color-warning: #940e00;
+  --color-warning-light: #cb5855;
+}
+
 html {
   margin-bottom: 0px;
   /* overflow: hidden; */

@@ -1,15 +1,13 @@
-@import '../../scss/colors';
-
 .form-text-area-group {
   display: flex;
   flex-direction: column;
 
   .form-text-area-label {
-    color: $darker-color;
+    color: var(--color-dark);
     font-weight: bold;
   }
 
   .form-text-area {
-    border: 1px solid $darker-color;
+    border: 1px solid var(--color-dark);
   }
 }

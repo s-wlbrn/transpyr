@@ -1,10 +1,6 @@
-$darker-color: #00701a;
-$main-color: #43a047;
-$lighter-color: #76d275;
-
 .navigation {
-  background-color: $darker-color;
-  border-bottom: solid 1px $main-color;
+  background-color: var(--color-dark);
+  border-bottom: solid 1px var(--color-main);
 
   .navbar-toggler {
     border: none;

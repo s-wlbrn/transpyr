@@ -1,6 +1,4 @@
-@import '../../../scss/colors';
-
 .manage-ticket-row-canceled {
   font-weight: bold;
-  color: $warning;
+  color: var(--color-warning);
 }

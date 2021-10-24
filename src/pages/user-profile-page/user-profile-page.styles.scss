@@ -1,5 +1,3 @@
-@import '../../scss/colors';
-
 main.user-profile-page {
   display: flex;
   flex-direction: column;
@@ -12,7 +10,7 @@ main.user-profile-page {
     margin-bottom: 2rem;
     padding: 1rem 0;
     flex: 0 0 auto;
-    background: linear-gradient($main-color, hsl(119deg 51% 80%) 12rem);
+    background: linear-gradient(var(--color-main), hsl(119deg 51% 80%) 12rem);
     text-align: center;
 
     .user-profile-image-container {
@@ -45,23 +43,28 @@ main.user-profile-page {
     justify-content: space-around;
 
     .user-profile-content-info {
-      background: linear-gradient($lighter-color, white);
-      margin: 0 1rem 2rem 1rem;
+      display: flex;
+      flex-direction: column;
       flex: 1 1 auto;
+      margin: 0 1rem 2rem 1rem;
       padding: 1rem;
+      background: linear-gradient(var(--color-light), white);
       box-shadow: 4px 4px 15px -1px;
 
-      & > div {
-        min-height: 50%;
+      & > section {
+        flex: 1 1 50%;
       }
     }
 
     .user-profile-content-links {
-      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
     }
 
-    .user-profile-events {
-      min-height: 50%;
+    .user-profile-events,
+    .user-profile-favorites {
+      flex: 1 1 50%;
 
       h2 {
         display: inline;
@@ -79,12 +82,6 @@ main.user-profile-page {
       overflow-y: scroll;
       border: solid 1px black;
       margin: 1rem 0;
-    }
-
-    .user-profile-favorites {
-      h2 {
-        display: inline;
-      }
     }
   }
 
@@ -104,12 +101,6 @@ main.user-profile-page {
 
     .user-profile-content {
       flex-wrap: nowrap;
-    }
-
-    .user-profile-content-info {
-      & > :first-child {
-        margin-bottom: 20rem;
-      }
     }
   }
 }

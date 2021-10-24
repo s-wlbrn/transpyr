@@ -1,8 +1,7 @@
-@import '../../scss/colors';
 @mixin shrinkLabel {
   top: -14px;
   font-size: 12px;
-  color: $main-color;
+  color: var(--color-main);
 }
 
 .form-input-group {
@@ -19,7 +18,7 @@
     width: 100%;
     border: none;
     border-radius: 0;
-    border-bottom: 1px solid $darker-color;
+    border-bottom: 1px solid var(--color-dark);
 
     &:focus {
       outline: none;
@@ -35,7 +34,7 @@
   }
 
   .form-input-label {
-    color: $darker-color;
+    color: var(--color-dark);
     font-size: 16px;
     font-weight: bold;
     position: absolute;

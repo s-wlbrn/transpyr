@@ -1,11 +1,9 @@
-@import '../../../../scss/colors';
-
 .manage-events-card {
   border-bottom: 1px solid lightgrey;
   padding: 4px 0.5rem;
 
   .manage-events-card-unpublished {
-    color: $warning;
+    color: var(--color-warning);
     font-size: 0.9em;
     font-weight: bold;
   }
@@ -18,7 +16,7 @@
   }
 
   .manage-events-card-canceled {
-    color: $warning;
+    color: var(--color-warning);
   }
 
   & > div {

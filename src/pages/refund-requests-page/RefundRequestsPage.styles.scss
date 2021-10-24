@@ -1,5 +1,3 @@
-@import '../../scss/colors';
-
 .refund-requests-page {
   display: flex;
   flex-direction: column;
@@ -10,7 +8,7 @@
   }
 
   .refund-requests-none {
-    color: $darker-color;
+    color: var(--color-dark);
     text-align: center;
     margin-top: 4rem;
     font-weight: bold;

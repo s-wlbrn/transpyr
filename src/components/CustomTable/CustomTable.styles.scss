@@ -1,5 +1,3 @@
-@import '../../scss/colors';
-
 .custom-table-container {
   padding: 0;
   min-height: 5rem;
@@ -24,7 +22,7 @@
 
     thead {
       tr {
-        background-color: $darker-color;
+        background-color: var(--color-dark);
         color: white;
         font-weight: bold;
       }
@@ -44,11 +42,11 @@
       flex-wrap: nowrap;
 
       &:nth-child(even) {
-        background-color: $lightest-color;
+        background-color: var(--color-lighter);
       }
 
       &.selected {
-        background-color: $selected-color;
+        background-color: var(--color-selected);
       }
     }
 

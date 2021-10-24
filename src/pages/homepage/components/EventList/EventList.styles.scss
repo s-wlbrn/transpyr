@@ -1,5 +1,3 @@
-@import '../../../../scss/colors';
-
 .event-list {
   flex: 1 0 auto;
   padding: 0;
@@ -12,6 +10,6 @@
   .event-list-not-found {
     margin-top: 5rem;
     text-align: center;
-    color: $darker-color;
+    color: var(--color-dark);
   }
 }

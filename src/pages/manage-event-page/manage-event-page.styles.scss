@@ -1,5 +1,3 @@
-@import '../../scss/colors';
-
 .manage-event-page {
   display: flex;
   flex-direction: column;
@@ -51,7 +49,7 @@
 
       .manage-event-sales-value {
         display: inline;
-        color: $darker-color;
+        color: var(--color-dark);
         font-size: 1em;
         font-weight: bold;
         margin-left: 1rem;

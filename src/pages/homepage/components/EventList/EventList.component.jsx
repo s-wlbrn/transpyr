@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 
-import myAxios from '../../../../auth/axios.config';
 import { useAuth } from '../../../../auth/use-auth';
 import createMapFromArray from '../../../../libs/createMapFromArray';
 
