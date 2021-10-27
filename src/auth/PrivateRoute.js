@@ -11,7 +11,7 @@ export const PrivateRoute = ({ children, ...rest }) => {
       {...rest}
       render={({ location, match }) =>
         !auth.refreshed ? (
-          <LoadingResource />
+          <LoadingResource page={true} />
         ) : auth.user ? (
           children
         ) : (

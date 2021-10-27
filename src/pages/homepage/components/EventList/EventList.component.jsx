@@ -2,17 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 
+import API from '../../../../api';
 import { useAuth } from '../../../../auth/use-auth';
 import createMapFromArray from '../../../../libs/createMapFromArray';
 
 import { LoadingResource } from '../../../../components/LoadingResource/LoadingResource.component';
-
 import { EventCard } from '../EventCard/EventCard.component';
 
 import './EventList.styles.scss';
-import API from '../../../../api';
 
-export const EventList = ({ isFetching, events, filterOnline }) => {
+export const EventList = ({ dataFetched, events, filterOnline }) => {
   const [favoritesMap, setFavoritesMap] = useState(null);
   const history = useHistory();
   const { user, token } = useAuth();
@@ -46,7 +45,7 @@ export const EventList = ({ isFetching, events, filterOnline }) => {
     }
   };
 
-  if (isFetching) return <LoadingResource>Loading events...</LoadingResource>;
+  if (!dataFetched) return <LoadingResource>Loading events...</LoadingResource>;
 
   return (
     <Container as="ol" className="event-list" fluid>

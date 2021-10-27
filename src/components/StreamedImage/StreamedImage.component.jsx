@@ -29,7 +29,7 @@ export const StreamedImage = ({
     <img
       src={src}
       alt={alt || folder}
-      className={`streamed-image ${className}`}
+      className={`streamed-image ${className || ''}`}
       {...otherProps}
     />
   ) : (

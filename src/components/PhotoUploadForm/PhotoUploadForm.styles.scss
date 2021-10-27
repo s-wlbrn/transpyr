@@ -13,9 +13,10 @@
 
   .photo-upload-controls {
     display: flex;
-    justify-content: space-between;
-    button {
-      width: 48%;
+    justify-content: center;
+
+    .custom-button-container {
+      flex: 1 1 48%;
     }
   }
 

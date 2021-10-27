@@ -24,6 +24,7 @@ const ManageBookingPage = () => {
   const [dataFetched, setDataFetched] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [cancelationReason, setCancelationReason] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const [selected, setSelected] = useState({});
   const { token } = useAuth();
   const match = useRouteMatch();
@@ -93,6 +94,7 @@ const ManageBookingPage = () => {
 
   const handleRequestRefund = async () => {
     try {
+      setSubmitting(true);
       if (cancelationReason) {
         await validationSchema.validate({ cancelationReason });
       }
@@ -106,11 +108,13 @@ const ManageBookingPage = () => {
       getBookings();
     } catch (err) {
       createResponse(err);
+    } finally {
+      setSubmitting(false);
     }
   };
 
   if (!dataFetched)
-    return <LoadingResource>Loading bookings...</LoadingResource>;
+    return <LoadingResource page={true}>Loading bookings...</LoadingResource>;
 
   return (
     <Container fluid as="main" className="manage-booking-page">
@@ -122,6 +126,7 @@ const ManageBookingPage = () => {
         refundPolicy={bookings[0].event.refundPolicy}
         clearModal={handleClearModal}
         requestRefund={handleRequestRefund}
+        submitting={submitting}
       />
       <Row as="header">
         <Col xs={12}>

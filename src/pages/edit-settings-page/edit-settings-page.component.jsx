@@ -22,6 +22,10 @@ const EditSettingsPage = () => {
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
   const [name, setName] = useState('');
   const [privateFavorites, setPrivateFavorites] = useState('');
+  const [submitting, setSubmitting] = useState({
+    data: false,
+    password: false,
+  });
   const updatePasswordResponse = useResponse();
   const updateSettingsResponse = useResponse();
   const { user, token, updatePassword, setUser } = useAuth();
@@ -36,6 +40,7 @@ const EditSettingsPage = () => {
   const handleUpdatePassword = async (e) => {
     e.preventDefault();
     try {
+      setSubmitting({ ...submitting, password: true });
       await passwordValidationSchema.validate(
         { password, newPassword, newPasswordConfirm },
         { abortEarly: false }
@@ -47,6 +52,8 @@ const EditSettingsPage = () => {
       setNewPasswordConfirm('');
     } catch (err) {
       updatePasswordResponse.createResponse(err);
+    } finally {
+      setSubmitting({ ...submitting, password: false });
     }
   };
 
@@ -54,6 +61,7 @@ const EditSettingsPage = () => {
     e.preventDefault();
     const { id } = e.target;
     try {
+      setSubmitting({ ...submitting, data: true });
       //validate name field if updating name
       if (id === 'update-name') {
         await nameValidationSchema.validate(data);
@@ -68,6 +76,8 @@ const EditSettingsPage = () => {
       setTimeout(() => updateSettingsResponse.clearResponse(), 4000);
     } catch (err) {
       updateSettingsResponse.createResponse(err);
+    } finally {
+      setSubmitting({ ...submitting, data: false });
     }
   };
 
@@ -111,7 +121,9 @@ const EditSettingsPage = () => {
               onChange={(e) => setNewPasswordConfirm(e.target.value)}
               label="Confirm New Password"
             />
-            <CustomButton type="submit">Change password</CustomButton>
+            <CustomButton type="submit" submitting={submitting.password}>
+              Change password
+            </CustomButton>
             <ResponseMessage response={updatePasswordResponse.response} />
           </form>
         </Col>
@@ -134,7 +146,9 @@ const EditSettingsPage = () => {
               onChange={(e) => setName(e.target.value)}
               label="New Name"
             />
-            <CustomButton type="submit">Change name</CustomButton>
+            <CustomButton type="submit" submitting={submitting.data}>
+              Change name
+            </CustomButton>
           </form>
           <form className="edit-settings-favorites">
             <h2>Favorites Privacy</h2>
@@ -145,6 +159,7 @@ const EditSettingsPage = () => {
                 handleSubmit(e, { privateFavorites: !privateFavorites })
               }
               id="update-private-favorites"
+              submitting={submitting.data}
             />
           </form>
           <ResponseMessage response={updateSettingsResponse.response} />

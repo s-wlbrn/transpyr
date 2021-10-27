@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useErrorHandler } from 'react-error-boundary';
 
 import API from '../../api';
+import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
 import { usePagination } from '../../libs/usePagination';
 
 import { EventList } from '../homepage/components/EventList/EventList.component';
@@ -12,6 +13,7 @@ import './search-page.styles.scss';
 
 export const SearchPage = ({ location }) => {
   const [searchResults, setSearchResults] = useState([]);
+  const [dataFetched, setDataFetched] = useState(false);
   const handleError = useErrorHandler();
   const { totalPages, setTotalPages, currentPage, handleChangePage } =
     usePagination();
@@ -35,10 +37,17 @@ export const SearchPage = ({ location }) => {
         setSearchResults(response.data);
       } catch (err) {
         handleError(err);
+      } finally {
+        setDataFetched(true);
       }
     };
     if (searchQuery) getSearchResults();
   }, [searchQuery, currentPage, setTotalPages, handleError]);
+
+  if (!dataFetched)
+    return (
+      <LoadingResource page={true}>Loading search results...</LoadingResource>
+    );
 
   return (
     <Container fluid as="main" className="search-page">
@@ -49,7 +58,7 @@ export const SearchPage = ({ location }) => {
         </Col>
       </Row>
       <section className="search-page-results">
-        <EventList events={searchResults} />
+        <EventList events={searchResults} dataFetched={dataFetched} />
       </section>
       <PageControl
         page={currentPage}

@@ -64,7 +64,7 @@ export const SeeMoreModal = ({ resource }) => {
             <LoadingResource key="loader0">Loading events...</LoadingResource>
           }
         >
-          {events.length ? <EventList events={events} /> : <React.Fragment />}
+          {!!events.length && <EventList events={events} dataFetched={true} />}
         </InfiniteScroll>
       </Modal.Body>
       <Modal.Footer>

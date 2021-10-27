@@ -14,6 +14,7 @@ export const CancelBookingModal = ({
   refundPolicy,
   clearModal,
   requestRefund,
+  submitting,
 }) => {
   return (
     <Modal
@@ -51,7 +52,12 @@ export const CancelBookingModal = ({
           <CustomButton type="button" onClick={clearModal}>
             Go back
           </CustomButton>
-          <CustomButton type="submit" warning onClick={requestRefund}>
+          <CustomButton
+            type="submit"
+            submitting={submitting}
+            warning
+            onClick={requestRefund}
+          >
             Request cancelation
           </CustomButton>
         </div>

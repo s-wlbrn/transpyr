@@ -12,6 +12,7 @@ export const EditEventControl = ({
   handleSubmit,
   handleDiscard,
   response,
+  submitting,
 }) => (
   <Row className="edit-event-control">
     <Col xs={6} className="edit-event-title">
@@ -22,7 +23,11 @@ export const EditEventControl = ({
       <React.Fragment>
         <Col xs={6} className="edit-event-buttons">
           {eventChanged && (
-            <CustomButton type="button" onClick={handleSubmit}>
+            <CustomButton
+              type="button"
+              submitting={submitting}
+              onClick={handleSubmit}
+            >
               Save Event
             </CustomButton>
           )}

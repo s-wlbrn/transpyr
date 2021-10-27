@@ -78,7 +78,7 @@ const Homepage = (props) => {
           </Col>
         </Row>
         <FilterMenu query={query} handleChange={handleChangeQuery} />
-        <EventList isFetching={!dataFetched} events={events} />
+        <EventList dataFetched={dataFetched} events={events} />
         <PageControl
           page={currentPage}
           totalPages={totalPages}

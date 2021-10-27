@@ -14,12 +14,14 @@ import { validationSchema } from './ResetPassword.schema';
 export const ResetPassword = ({ history, match }) => {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const { response, createResponse } = useResponse();
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setSubmitting(true);
       await validationSchema.validate(
         { password, passwordConfirm },
         { abortEarly: false }
@@ -32,6 +34,8 @@ export const ResetPassword = ({ history, match }) => {
       setSuccess(true);
     } catch (err) {
       createResponse(err);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -57,7 +61,9 @@ export const ResetPassword = ({ history, match }) => {
               label="Confirm Password"
               required
             />
-            <CustomButton type="submit">Submit</CustomButton>
+            <CustomButton type="submit" submitting={submitting}>
+              Submit
+            </CustomButton>
           </form>
           <ResponseMessage response={response} />
         </Col>

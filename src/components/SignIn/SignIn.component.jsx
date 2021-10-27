@@ -15,6 +15,7 @@ import './SignIn.styles.scss';
 export const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const { response, createResponse } = useResponse();
   const { signIn } = useAuth();
   const location = useLocation();
@@ -24,6 +25,7 @@ export const SignIn = () => {
     e.preventDefault();
 
     try {
+      setSubmitting(true);
       await validationSchema.validate(
         { email, password },
         { abortEarly: false }
@@ -36,6 +38,8 @@ export const SignIn = () => {
       history.push(from.pathname);
     } catch (err) {
       createResponse(err);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -64,7 +68,9 @@ export const SignIn = () => {
           required
         />
         <div className="signin-button-group">
-          <CustomButton type="submit">Submit</CustomButton>
+          <CustomButton type="submit" submitting={submitting}>
+            Submit
+          </CustomButton>
           <CustomButton
             type="button"
             onClick={() => history.push('/users/forgot-password')}

@@ -43,7 +43,7 @@
     justify-content: space-around;
     align-items: center;
 
-    & > button:first-child {
+    & > .custom-button-container:first-child {
       margin-bottom: 1rem;
     }
   }
@@ -52,11 +52,11 @@
     .refund-request-card-buttons {
       flex-direction: row;
 
-      button {
+      .custom-button-container {
         width: 48%;
       }
 
-      & > button:first-child {
+      & > .custom-button-container:first-child {
         margin-bottom: 0;
       }
     }

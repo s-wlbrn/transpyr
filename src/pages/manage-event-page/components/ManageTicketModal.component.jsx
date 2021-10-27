@@ -18,17 +18,21 @@ export const ManageTicketModal = ({
   checkActiveTickets,
 }) => {
   const [showAlert, setShowAlert] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
   const { response, createResponse } = useResponse();
   const match = useRouteMatch();
   const { token } = useAuth();
 
   const cancelTicket = async () => {
     try {
+      setSubmitting(true);
       await new API(token).cancelTicket(match.params.id, ticket.id);
       cancelTicketDisplay();
       clearTicket();
     } catch (err) {
       createResponse(err);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -49,6 +53,7 @@ export const ManageTicketModal = ({
             response={response}
             clearTicket={clearTicket}
             cancelTicket={cancelTicket}
+            submitting={submitting}
           />
           <Row>
             {ticket.canceled && (

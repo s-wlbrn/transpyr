@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { useErrorHandler } from 'react-error-boundary';
 import Container from 'react-bootstrap/Container';
 
+import API from '../../api';
 import { useAuth } from '../../auth/use-auth';
 
 import { EventBookingForm } from '../../components/EventBookingForm/EventBookingForm.component';
@@ -13,7 +14,6 @@ import { OwnEventControl } from './components/OwnEventControl/OwnEventControl.co
 import { AboutOrganizer } from './components/AboutOrganizer/AboutOrganizer.component';
 
 import './event-details-page.styles.scss';
-import API from '../../api';
 
 const EventDetailsPage = ({ match }) => {
   const history = useHistory();
@@ -40,7 +40,8 @@ const EventDetailsPage = ({ match }) => {
     history.push(`/events/id/${match.params.id}/tickets`);
   };
 
-  if (!event) return <LoadingResource>Loading event...</LoadingResource>;
+  if (!event)
+    return <LoadingResource page={true}>Loading event...</LoadingResource>;
 
   return (
     <Container as="main" className="event-details-page" fluid>

@@ -14,18 +14,22 @@ import './ForgotPassword.styles.scss';
 
 export const ForgotPassword = () => {
   const [email, setEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const { response, createResponse } = useResponse();
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setSubmitting(true);
       await validationSchema.validate({ email }, { abortEarly: false });
       await new API().forgotPassword(email);
       setEmail('');
       setSuccess(true);
     } catch (err) {
       createResponse(err);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -48,7 +52,9 @@ export const ForgotPassword = () => {
             label="Email"
             required
           />
-          <CustomButton type="submit">Submit</CustomButton>
+          <CustomButton type="submit" submitting={submitting}>
+            Submit
+          </CustomButton>
         </form>
         <ResponseMessage response={response} />
       </Col>

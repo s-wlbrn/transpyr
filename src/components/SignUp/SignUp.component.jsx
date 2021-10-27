@@ -14,6 +14,7 @@ import './SignUp.styles.scss';
 export const SignUp = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const history = useHistory();
@@ -24,6 +25,7 @@ export const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setSubmitting(true);
       await validationSchema.validate(
         { name, email, password, passwordConfirm },
         { abortEarly: false }
@@ -36,6 +38,8 @@ export const SignUp = () => {
       history.push(from.pathname);
     } catch (err) {
       createResponse(err);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -79,7 +83,9 @@ export const SignUp = () => {
           label="Confirm password"
           required
         />
-        <CustomButton type="submit">Submit</CustomButton>
+        <CustomButton type="submit" submitting={submitting}>
+          Submit
+        </CustomButton>
       </form>
       <ResponseMessage response={response} />
     </div>

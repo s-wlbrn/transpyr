@@ -3,7 +3,7 @@
     display: flex;
     justify-content: space-between;
 
-    button:first-child {
+    .custom-button-container:first-child {
       margin-right: 0.5rem;
     }
   }

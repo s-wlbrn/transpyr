@@ -1,12 +1,12 @@
 import React from 'react';
 
-import Spinner from 'react-bootstrap/Spinner';
+import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner.component';
 
 import './LoadingResource.styles.scss';
 
-export const LoadingResource = ({ children }) => (
-  <div className="loading">
-    <Spinner animation="border" className="loading-spinner" />
+export const LoadingResource = ({ page, children }) => (
+  <div className={`loading ${page ? 'loading-page' : ''}`}>
+    <LoadingSpinner />
     <p className="loading-text">{children}</p>
   </div>
 );

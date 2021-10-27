@@ -1,3 +1,5 @@
+@import '../../scss/background-pulse.scss';
+
 .form-input-toggle-group {
   position: relative;
   display: inline-block;
@@ -20,6 +22,12 @@
     background-color: gray;
     transition: 0.5s;
     border-radius: 2rem;
+
+    &.submitting {
+      animation-name: backgroundColor;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+    }
   }
 
   .form-input-toggle-slider:before {
@@ -44,5 +52,19 @@
 
   .form-input-toggle:checked + .form-input-toggle-slider:before {
     transform: translateX(2rem);
+  }
+}
+
+@keyframes backgroundColor {
+  0% {
+    background-color: gray;
+  }
+
+  50% {
+    background-color: var(--color-light);
+  }
+
+  100% {
+    background-color: gray;
   }
 }

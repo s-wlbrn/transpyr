@@ -1,18 +1,18 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { addMonths, parseISO, startOfMonth } from 'date-fns';
-import { useHistory } from 'react-router';
 import { useErrorHandler } from 'react-error-boundary';
 import { Col, Container, Row } from 'react-bootstrap';
 
 import { EventCalendar } from '../../components/EventCalendar/EventCalendar.component';
 
 import './calendar-list-page.styles.scss';
+import { ManageEventList } from './ManageEventList/ManageEventList.component';
 
 const CalendarListPage = ({ manageResource, fetchEvents, card }) => {
   const [events, setEvents] = useState([]);
+  const [dataFetched, setDataFetched] = useState(false);
   const calendarRef = useRef({});
   const listRef = useRef({});
-  const history = useHistory();
   const handleError = useErrorHandler();
 
   const getMonthlyEvents = useCallback(
@@ -33,6 +33,8 @@ const CalendarListPage = ({ manageResource, fetchEvents, card }) => {
         setEvents(calendarEvents);
       } catch (err) {
         handleError(err);
+      } finally {
+        setDataFetched(true);
       }
     },
     [fetchEvents, handleError]
@@ -50,10 +52,6 @@ const CalendarListPage = ({ manageResource, fetchEvents, card }) => {
       block: 'nearest',
       inline: 'start',
     });
-  };
-
-  const handleClick = (route) => {
-    history.push(route);
   };
 
   return (
@@ -74,22 +72,13 @@ const CalendarListPage = ({ manageResource, fetchEvents, card }) => {
           />
         </Col>
         <Col as="section" className="my-events-list" xs={12} lg={4}>
-          <Container as="ol" className="manage-events-list">
-            {events.length ? (
-              events.map((item, i) => {
-                const Card = card;
-                return React.cloneElement(Card, {
-                  key: item._id,
-                  ref: (r) => (listRef.current[item._id] = r),
-                  event: item,
-                  handleClick,
-                  handleHover,
-                });
-              })
-            ) : (
-              <div className="manage-events-none">No events.</div>
-            )}
-          </Container>
+          <ManageEventList
+            dataFetched={dataFetched}
+            events={events}
+            card={card}
+            handleHover={handleHover}
+            ref={listRef}
+          />
         </Col>
       </Row>
     </Container>

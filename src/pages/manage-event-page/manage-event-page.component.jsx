@@ -98,7 +98,8 @@ const ManageEventPage = () => {
     }, 0);
   };
 
-  if (!dataFetched) return <LoadingResource>Loading event...</LoadingResource>;
+  if (!dataFetched)
+    return <LoadingResource page={true}>Loading event...</LoadingResource>;
 
   return (
     <Container fluid as="main" className="manage-event-page">

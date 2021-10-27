@@ -36,6 +36,7 @@ const CreateEventPage = () => {
     onlineOnly: false,
   });
   const [currentStep, setCurrentStep] = useState(1);
+  const [submitting, setSubmitting] = useState(false);
   const { token } = useAuth();
   const history = useHistory();
   const { response, createResponse, clearResponse } = useResponse();
@@ -57,6 +58,7 @@ const CreateEventPage = () => {
 
   const handleSubmit = async (e) => {
     try {
+      setSubmitting(true);
       //create dateTimeStart and dateTimeEnd fields
       let formattedEvent = combineDateTime({ ...event });
       //delete unnecessary fields
@@ -68,6 +70,8 @@ const CreateEventPage = () => {
       history.push(`/events/id/${response.id}/upload-photo`);
     } catch (err) {
       return Promise.reject(err);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -117,7 +121,7 @@ const CreateEventPage = () => {
             ) : null}
           </Col>
           <Col xs={6}>
-            <CustomButton type="button" onClick={_next}>
+            <CustomButton type="button" submitting={submitting} onClick={_next}>
               {currentStep < 5 ? 'Next' : 'Submit'}
             </CustomButton>
           </Col>

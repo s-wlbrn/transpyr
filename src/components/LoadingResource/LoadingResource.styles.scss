@@ -1,14 +1,15 @@
 .loading {
   text-align: center;
   position: relative;
-  height: 100vh;
-}
+  height: 100%;
 
-.loading-spinner {
-  color: #00701a;
-  font-size: 1.25em;
-  position: relative;
-  top: 10rem;
+  &.loading-page {
+    height: 100vh;
+  }
+
+  .loading-spinner {
+    top: 10rem;
+  }
 }
 
 .loading-text {

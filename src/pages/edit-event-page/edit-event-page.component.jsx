@@ -27,6 +27,7 @@ const EditEventPage = () => {
   const [eventChanged, setEventChanged] = useState(false);
   const [dataFetched, setDataFetched] = useState(false);
   const [editStep, setEditStep] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
   const location = useLocation();
   const match = useRouteMatch();
   const history = useHistory();
@@ -36,6 +37,7 @@ const EditEventPage = () => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
+        setSubmitting(true);
         const response = await new API(token).getEvent(match.params.id);
         //handle unauthorized
         if (user._id !== response.organizer.id) {
@@ -62,6 +64,8 @@ const EditEventPage = () => {
         setDataFetched(true);
       } catch (err) {
         handleError(err);
+      } finally {
+        setSubmitting(false);
       }
     };
     fetchEvent();
@@ -168,7 +172,8 @@ const EditEventPage = () => {
     }
   };
 
-  if (!dataFetched) return <LoadingResource>Loading event...</LoadingResource>;
+  if (!dataFetched)
+    return <LoadingResource page={true}>Loading event...</LoadingResource>;
 
   return (
     <Container as="main" className="edit-event-page" fluid>
@@ -178,6 +183,7 @@ const EditEventPage = () => {
         handleSubmit={handleSubmit}
         handleDiscard={handleDiscard}
         response={response}
+        submitting={submitting}
       />
       {editStep ? (
         <form className="edit-event-form">

@@ -50,7 +50,8 @@ const UserProfilePage = ({ match }) => {
     fetchUser();
   }, [match.params.id, handleError]);
 
-  if (!dataFetched) return <LoadingResource>Loading user...</LoadingResource>;
+  if (!dataFetched)
+    return <LoadingResource page={true}>Loading user...</LoadingResource>;
 
   return (
     <Container fluid as="main" className="user-profile-page">
@@ -92,20 +93,18 @@ const UserProfilePage = ({ match }) => {
           </section>
         </Col>
         <Col as="section" xs={12} md={8} className="user-profile-content-links">
-          {userEvents.length ? (
+          {!!userEvents.length && (
             <div className="user-profile-events">
               <h2>Events</h2>
               <Link to={`${match.url}/events`} className="user-profile-see-all">
                 (See All)
               </Link>
-              <EventList events={userEvents} />
+              <EventList events={userEvents} dataFetched={dataFetched} />
             </div>
-          ) : (
-            <React.Fragment />
           )}
           <div className="user-profile-favorites">
             <h2>Favorites</h2>
-            {!!user.favorites.length && (
+            {!!user?.favorites?.length && (
               <Link
                 to={`${match.url}/favorites`}
                 className="user-profile-see-all"
@@ -115,7 +114,7 @@ const UserProfilePage = ({ match }) => {
             )}
             {user.favorites ? (
               user.favorites.length > 0 ? (
-                <EventList events={userFavorites} />
+                <EventList events={userFavorites} dataFetched={dataFetched} />
               ) : (
                 <p>This user has no favorite events.</p>
               )

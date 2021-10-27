@@ -5,6 +5,7 @@ import authContext from '../../auth/use-auth';
 import API from '../../api';
 import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessage.component';
 import { CustomButton } from '../CustomButton/CustomButton.component';
+import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner.component';
 
 import './PhotoUploadForm.styles.scss';
 
@@ -15,6 +16,7 @@ class PhotoUploadForm extends React.Component {
 
     this.state = {
       selectedFile: null,
+      submitting: false,
       response: { error: false, message: null },
       imageUrl: null,
     };
@@ -77,6 +79,7 @@ class PhotoUploadForm extends React.Component {
     formData.append('photo', selectedFile);
     //Call API
     try {
+      this.setState({ submitting: true });
       await new API(token).uploadPhoto(this.props.resource, id, formData);
 
       this.setState({
@@ -93,11 +96,13 @@ class PhotoUploadForm extends React.Component {
       this.setState({
         response: { error: true, message: err.message },
       });
+    } finally {
+      this.setState({ submitting: false });
     }
   };
 
   render() {
-    const { response } = this.state;
+    const { submitting, response } = this.state;
     return (
       <section className="photo-upload-container">
         {this.reader.result && <img src={this.reader.result} alt="resource" />}
@@ -117,7 +122,10 @@ class PhotoUploadForm extends React.Component {
             {this.props.cancel && (
               <CustomButton type="button">Cancel</CustomButton>
             )}
-            <CustomButton type="submit">Upload</CustomButton>
+
+            <CustomButton type="submit" submitting={submitting}>
+              Upload
+            </CustomButton>
           </div>
         </form>
         <ResponseMessage response={response} />

@@ -22,6 +22,7 @@ export const PublishEventPage = () => {
   const [refundPolicy, setRefundPolicy] = useState('');
   const [dataFetched, setDataFetched] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const handleError = useErrorHandler();
   const { response, createResponse } = useResponse();
   const publishForm = useRef(null);
@@ -50,6 +51,7 @@ export const PublishEventPage = () => {
     e.preventDefault();
 
     try {
+      setSubmitting(true);
       await validationSchema.validate(
         { feePolicy, refundPolicy },
         { abortEarly: false }
@@ -61,10 +63,13 @@ export const PublishEventPage = () => {
       navigateToEventPage();
     } catch (err) {
       createResponse(err);
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  if (!dataFetched) return <LoadingResource>Loading event...</LoadingResource>;
+  if (!dataFetched)
+    return <LoadingResource page={true}>Loading event...</LoadingResource>;
 
   return (
     <Container fluid as="main" className="publish-event-page">
@@ -91,7 +96,9 @@ export const PublishEventPage = () => {
             >
               Go back
             </CustomButton>
-            <CustomButton type="submit">Confirm submit</CustomButton>
+            <CustomButton type="submit" submitting={submitting}>
+              Confirm submit
+            </CustomButton>
           </div>
         </Alert>
         <Row>

@@ -49,7 +49,9 @@ const RefundRequestsPage = ({ fetchRefundRequests }) => {
   };
 
   if (!dataFetched)
-    return <LoadingResource>Loading refund requests...</LoadingResource>;
+    return (
+      <LoadingResource page={true}>Loading refund requests...</LoadingResource>
+    );
 
   return (
     <Container fluid as="main" className="refund-requests-page">

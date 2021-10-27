@@ -17,6 +17,7 @@ const EditProfilePage = () => {
   const [tagline, setTagline] = useState('');
   const [bio, setBio] = useState('');
   const [interests, setInterests] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const { user, token, refreshToken } = useAuth();
   const { response, createResponse } = useResponse();
 
@@ -32,12 +33,15 @@ const EditProfilePage = () => {
     e.preventDefault();
 
     try {
+      setSubmitting(true);
       await validationSchema.validate({ tagline, bio, interests });
       await new API(token).updateUser({ tagline, bio, interests });
       await refreshToken();
       createResponse({ message: 'Profile saved!' });
     } catch (err) {
       createResponse(err);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -112,8 +116,10 @@ const EditProfilePage = () => {
           </Col>
         </Row>
         <Row>
-          <Col xs={6} offset={6}>
-            <CustomButton type="submit">Submit</CustomButton>
+          <Col xs={12}>
+            <CustomButton type="submit" submitting={submitting}>
+              Submit
+            </CustomButton>
             <ResponseMessage response={response} />
           </Col>
         </Row>

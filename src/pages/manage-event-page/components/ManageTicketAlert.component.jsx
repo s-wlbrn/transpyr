@@ -8,6 +8,7 @@ export const ManageTicketAlert = ({
   response,
   clearTicket,
   cancelTicket,
+  submitting,
 }) => {
   return (
     <Alert variant="danger" show={!!showAlert}>
@@ -27,7 +28,12 @@ export const ManageTicketAlert = ({
           Go back
         </CustomButton>
         {showAlert === 'confirm' && (
-          <CustomButton type="submit" warning onClick={cancelTicket}>
+          <CustomButton
+            type="submit"
+            submitting={submitting}
+            warning
+            onClick={cancelTicket}
+          >
             Confirm cancel
           </CustomButton>
         )}

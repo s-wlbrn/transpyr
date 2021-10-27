@@ -33,7 +33,7 @@ const BookingPaymentSuccessPage = ({ match }) => {
   }, [match.params.id, handleError]);
 
   if (!bookings.length)
-    return <LoadingResource>Retrieving order...</LoadingResource>;
+    return <LoadingResource page={true}>Retrieving order...</LoadingResource>;
 
   const { email, event } = bookings[0];
   return (

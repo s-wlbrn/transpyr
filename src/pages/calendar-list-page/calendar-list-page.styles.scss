@@ -12,19 +12,6 @@
       display: flex;
       flex-direction: column;
       margin-top: 1rem;
-
-      .manage-events-list {
-        flex: 1 1 auto;
-        border: 1px solid black;
-        padding-top: 0.5rem;
-
-        .manage-events-none {
-          text-align: center;
-          top: 5rem;
-          position: relative;
-          font-size: 1.5em;
-        }
-      }
     }
 
     .highlighted {
@@ -38,14 +25,6 @@
     .my-events-content {
       flex-direction: row;
       flex-wrap: nowrap;
-
-      .my-events-list {
-        height: 75vh;
-        padding: 0;
-        margin-top: 57px;
-        margin-right: 15px;
-        overflow-x: hidden;
-      }
     }
   }
 }
