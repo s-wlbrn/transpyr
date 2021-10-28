@@ -53,13 +53,7 @@ const useProvideAuth = () => {
       setExpiresIn(null);
     }
     try {
-      //get refresh token from Local Storage
-      const refreshToken = localStorage.getItem('refreshToken');
-      if (!refreshToken) return false;
-
-      const response = await myAxios().post(`${baseUrl}/refresh-token`, {
-        refreshToken,
-      });
+      const response = await myAxios().post(`${baseUrl}/refresh-token`);
       //set user and JWT in app state
       setUser({ ...response.data.user });
       setToken(response.token);
