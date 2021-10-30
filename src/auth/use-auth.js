@@ -57,13 +57,13 @@ const useProvideAuth = () => {
       //set user and JWT in app state
       setUser({ ...response.data.user });
       setToken(response.token);
-      setRefreshed(true);
       setExpiresIn(response.expiresIn);
     } catch (err) {
       console.log('Error occured in refreshToken:', err);
       unmountUser();
-      setRefreshed(true);
       return Promise.reject(err);
+    } finally {
+      setRefreshed(true);
     }
   };
 
