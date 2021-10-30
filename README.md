@@ -5,7 +5,6 @@ The Transpyr front-end is a React application with access to all of Transpyr's u
 [**Live app**](https://transpyr.app)
 
 ## Features
----
 
 - Browsing, searching, and booking events in a user's area or online without creating an account.
 - User account creation and management: Changing names, password, and favorite events privacy.
@@ -17,7 +16,6 @@ The Transpyr front-end is a React application with access to all of Transpyr's u
 - 'My Events' shows an organizer's upcoming events on a calendar. Event management shows number of bookings for each ticket, estimated earnings, and the ability to cancel specific tickets or the entire event.
 
 ## Technologies
----
 
 The app is built with **JavaScript** and the [**React**](https://reactjs.org) framework. The project was bootstrapped with [**Create React App**](https://create-react-app.dev). It uses stylesheets compiled from [**SCSS**](https://sass-lang.com).
 
@@ -34,7 +32,6 @@ Other libraries used:
  
 
 ## Installation
----
 
 ### **Environment Variables**
 - **REACT_APP_GOOGLE_MAPS_APIKEY**:
@@ -48,7 +45,6 @@ Other libraries used:
   - **npm start** starts the development server on localhost:3001
 
 ## Credits
----
 
 Icons from [**Ionicons 5**](https://react-icons.github.io/react-icons/icons?name=io5)
 
@@ -60,7 +56,6 @@ Additional React components:
 - [**react-mde**](https://github.com/andrerpena/react-mde)
 
 ## License
----
 
 MIT License
 
