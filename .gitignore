@@ -25,6 +25,7 @@ yarn-debug.log*
 yarn-error.log*
 
 .prettierrc
+.prettierignore
 .eslintcache
 
 setupTests.js
