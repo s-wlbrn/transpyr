@@ -33,6 +33,7 @@ import { SearchPage } from './pages/search-page/search-page.component';
 
 import { TopNav } from './components/TopNav/TopNav.component';
 import { Footer } from './components/Footer/Footer.component';
+import { SemiPrivateRoute } from './auth/SemiPrivateRoute';
 
 const App = () => {
   const { user, token, expiresIn, refreshToken } = useAuth();
@@ -80,7 +81,9 @@ const App = () => {
             component={UploadEventPhotoPage}
           />
           <Route exact path="/events/id/:id/book" component={BookEventPage} />
-          <Route path="/events/id/:id" component={EventDetailsPage} />
+          <SemiPrivateRoute path="/events/id/:id">
+            <EventDetailsPage />
+          </SemiPrivateRoute>
           <PrivateRoute exact path="/events/create">
             <CreateEventPage />
           </PrivateRoute>
