@@ -110,34 +110,34 @@ export const EventDetails = ({
           )}
         </Col>
       </Row>
+      <Col
+        xs={12}
+        className={`event-book-button ${
+          eventBookable ? 'book-button-sticky' : ''
+        }`}
+        onClick={() => {
+          if (editMode) {
+            handleEditStep('ticketTiers');
+          } else if (eventBookable) {
+            handleBookNow();
+          }
+        }}
+      >
+        <CustomButton type="button" warning={canceled}>
+          {editMode
+            ? 'Ticket Types'
+            : soldOut
+            ? 'Sold Out'
+            : !published
+            ? 'Unpublished event'
+            : pastEvent
+            ? 'This is a past event.'
+            : canceled
+            ? 'Canceled'
+            : 'Book now'}
+        </CustomButton>
+      </Col>
       <Row as="section" className="event-details-body">
-        <Col
-          xs={12}
-          className={`event-book-button ${
-            eventBookable ? 'book-button-sticky' : ''
-          }`}
-          onClick={() => {
-            if (editMode) {
-              handleEditStep('ticketTiers');
-            } else if (eventBookable) {
-              handleBookNow();
-            }
-          }}
-        >
-          <CustomButton type="button" warning={canceled}>
-            {editMode
-              ? 'Ticket Types'
-              : soldOut
-              ? 'Sold Out'
-              : !published
-              ? 'Unpublished event'
-              : pastEvent
-              ? 'This is a past event.'
-              : canceled
-              ? 'Canceled'
-              : 'Book now'}
-          </CustomButton>
-        </Col>
         <Col
           xs={12}
           as="section"

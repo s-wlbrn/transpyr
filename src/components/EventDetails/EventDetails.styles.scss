@@ -83,7 +83,24 @@
     }
   }
 
+  .event-book-button {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+    height: 5rem;
+    background: white;
+
+    &.book-button-sticky {
+      position: sticky;
+      top: 1px;
+      z-index: 1;
+    }
+  }
+
   .event-details-body {
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem 0;
     flex: 1 0 auto;
 
     p {
@@ -101,6 +118,7 @@
 
     header {
       display: flex;
+      margin-bottom: 0.5rem;
 
       svg {
         position: relative;
@@ -112,19 +130,6 @@
     .event-details-past-event {
       color: darkred;
       font-weight: bold;
-    }
-
-    .event-book-button {
-      height: 5rem;
-      display: flex;
-      align-items: center;
-      background: white;
-
-      &.book-button-sticky {
-        position: sticky;
-        top: 1px;
-        z-index: 1;
-      }
     }
 
     .event-description {
