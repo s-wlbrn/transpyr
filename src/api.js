@@ -59,7 +59,7 @@ class API {
 
   //get own events
   getMyEvents = async (options = {}) => {
-    const response = await this.getAll('/events/me/managed', options.query);
+    const response = await this.getAll('/events/me', options.query);
     return response.data.data;
   };
 
@@ -119,14 +119,6 @@ class API {
       booking
     );
     return session;
-  };
-
-  //TEMPORARY: create bookings
-  createBookings = async (search) => {
-    const response = await myAxios().get(
-      `${this.host}/api/bookings/checkout-create-booking${search}}`
-    );
-    return response.data.data;
   };
 
   //get own bookings
