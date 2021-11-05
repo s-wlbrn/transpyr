@@ -59,8 +59,10 @@ const useProvideAuth = () => {
       setToken(response.token);
       setExpiresIn(response.expiresIn);
     } catch (err) {
-      console.log('Error occured in refreshToken:', err);
-      unmountUser();
+      console.log('Authentication refresh failed.');
+      if (user) {
+        unmountUser();
+      }
       return Promise.reject(err);
     } finally {
       setRefreshed(true);

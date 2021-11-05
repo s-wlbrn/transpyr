@@ -36,13 +36,13 @@ import { Footer } from './components/Footer/Footer.component';
 import { SemiPrivateRoute } from './auth/SemiPrivateRoute';
 
 const App = () => {
-  const { user, token, expiresIn, refreshToken } = useAuth();
+  const { user, token, expiresIn, refreshToken, refreshed } = useAuth();
 
   //Silent token refresh
   useEffect(() => {
     const silentRefresh = async () => {
       try {
-        if (!user) {
+        if (!user && !refreshed) {
           await refreshToken();
         } else if (expiresIn) {
           setTimeout(async () => {
@@ -54,7 +54,8 @@ const App = () => {
       }
     };
     silentRefresh();
-  }, [user, expiresIn, refreshToken]);
+    console.log(user, expiresIn, refreshToken);
+  }, [user, expiresIn, refreshToken, refreshed]);
 
   return (
     <div className="app">
