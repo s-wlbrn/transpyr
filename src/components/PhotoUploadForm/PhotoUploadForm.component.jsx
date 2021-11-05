@@ -5,7 +5,6 @@ import authContext from '../../auth/use-auth';
 import API from '../../api';
 import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessage.component';
 import { CustomButton } from '../CustomButton/CustomButton.component';
-import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner.component';
 
 import './PhotoUploadForm.styles.scss';
 
