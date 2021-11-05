@@ -3,9 +3,13 @@ import { format, formatISO, startOfDay, isToday, isSameDay } from 'date-fns';
 
 import { eventTypes } from '../../libs/eventTypes';
 import { eventCategories } from '../../libs/eventCategories';
+import {
+  noSpareTickets,
+  ticketCapacitiesWithinTotal,
+  uniqueTicketNames,
+} from './EventForm.validators';
 
 export const validationSchemaArray = [
-  //Name,
   yup.object().shape({
     name: yup
       .string()
@@ -96,28 +100,19 @@ export const validationSchemaArray = [
       .of(yup.object())
       .min(1, 'At least one ticket type is required.')
       .test(
+        'unique-ticket-names',
+        'Tickets names must be unique.',
+        uniqueTicketNames
+      )
+      .test(
         'capacities-not-over-max',
         "The sum of the individual ticket capacities cannot exceed the event's total.",
-        function (value) {
-          const ticketCapacities = value.reduce((acc, cur) => {
-            return acc + cur.capacity;
-          }, 0);
-          return ticketCapacities <= this.parent.totalCapacity;
-        }
+        ticketCapacitiesWithinTotal
       )
       .test(
         'no-spare-tickets',
         "All tickets currently have limited capacities, but they total fewer than the event's maximum. This will make some tickets unavailable. You can set one or more tickets to unlimited by leaving the capacity at 0.",
-        function (value) {
-          let allTicketsLimited = value.length ? true : false;
-          const ticketCapacities = value.reduce((acc, cur) => {
-            if (cur.capacity === 0) allTicketsLimited = false;
-            return acc + cur.capacity;
-          }, 0);
-          return !(
-            allTicketsLimited && ticketCapacities < this.parent.totalCapacity
-          );
-        }
+        noSpareTickets
       ),
   }),
   yup.object().shape({

@@ -30,12 +30,8 @@ export const TicketTiersForm = ({
   const [currentTier, setCurrentTier] = useState(initialCurrentTier);
   const [editMode, setEditMode] = useState(false);
   const [tierToEdit, setTierToEdit] = useState(null);
-  const [capacityAlert, setCapacityAlert] = useState(null);
+  const [validationAlert, setValidationAlert] = useState(null);
   const { response, createResponse, clearResponse } = useResponse();
-
-  const ticketNames = useMemo(() => {
-    return ticketTiers.map((tier) => tier.tierName.toLowerCase());
-  }, [ticketTiers]);
 
   //validate ticketTiers on every submit for displaying alert
   useEffect(() => {
@@ -45,9 +41,9 @@ export const TicketTiersForm = ({
           { ticketTiers, totalCapacity },
           { abortEarly: false }
         );
-        setCapacityAlert(null);
+        setValidationAlert(null);
       } catch (err) {
-        setCapacityAlert(err.errors.join(' '));
+        setValidationAlert(err.errors.join(' '));
       }
     };
     validateTicketTiers();
@@ -84,24 +80,19 @@ export const TicketTiersForm = ({
   const handleTierSubmit = async () => {
     try {
       const submittedTier = { ...currentTier };
-      //trim name whitespace
-      submittedTier.tierName = submittedTier.tierName.trim();
-      //name of new tier is unique if not included in tierNames array
-      const unique = !ticketNames.includes(
-        submittedTier.tierName.toLowerCase()
-      );
-      if (!unique && !editMode) {
-        throw new Error('Ticket name must be unique.');
-      }
-      if (submittedTier.capacity > totalCapacity) {
-        throw new Error('Ticket capacity cannot exceed the event maximum.');
-      }
 
-      //validate other fields
+      //validate tier
       await validationSchema.validate(
         { ...submittedTier },
         { abortEarly: false }
       );
+      if (!editMode) {
+        //validate ticketTiers
+        await validationSchemaArray[3].validate(
+          { ticketTiers: [...ticketTiers, submittedTier], totalCapacity },
+          { abortEarly: false }
+        );
+      }
 
       //add to ticketTiers
       const updatedTicketTiers = editMode
@@ -148,11 +139,11 @@ export const TicketTiersForm = ({
   } = currentTier;
   return (
     <Container fluid className="ticket-tiers-form">
-      {capacityAlert && (
+      {validationAlert && (
         <Row>
           <Col xs={12}>
             <Alert show={true} variant="warning">
-              {capacityAlert}
+              {validationAlert}
             </Alert>
           </Col>
         </Row>
