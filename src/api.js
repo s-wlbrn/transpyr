@@ -59,7 +59,7 @@ class API {
 
   //get own events
   getMyEvents = async (options = {}) => {
-    const response = await this.getAll('/events/me', options.query);
+    const response = await this.getAll('/events/me/managed', options.query);
     return response.data.data;
   };
 
