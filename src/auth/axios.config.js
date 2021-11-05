@@ -5,9 +5,11 @@ const myAxios = (token = null) => {
   const axiosInstance = axios.create();
 
   axiosInstance.interceptors.request.use((config) => {
+    //set Bearer token header if token was passed to axios instance
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
+    //always send credentials (secure cookie and token header if applicable)
     config.withCredentials = true;
     return config;
   });

@@ -10,6 +10,7 @@ export const SemiPrivateRoute = ({ children, ...rest }) => {
     <Route
       {...rest}
       render={({ location, match }) =>
+        //wait for result of token refresh before rendering route
         !refreshed ? (
           <LoadingResource page={true} />
         ) : (
