@@ -54,7 +54,6 @@ const App = () => {
       }
     };
     silentRefresh();
-    console.log(user, expiresIn, refreshToken);
   }, [user, expiresIn, refreshToken, refreshed]);
 
   return (
