@@ -53,7 +53,7 @@ const useProvideAuth = () => {
       setExpiresIn(null);
     }
     try {
-      const response = await myAxios().post(`${baseUrl}/refresh-token`);
+      const response = await myAxios().get(`${baseUrl}/refresh-token`);
       //set user and JWT in app state
       setUser({ ...response.data.user });
       setToken(response.token);
