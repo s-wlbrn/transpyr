@@ -64,7 +64,9 @@ class API {
   };
 
   //get events with active bookings
-  getBookedEvents = async (options = {}) => {
+  getBookedEvents = async (
+    options = { query: 'fields=name,dateTimeStart,photo' }
+  ) => {
     const response = await this.getAll('/events/me/booked', options.query);
     return response.data.data;
   };
@@ -85,8 +87,8 @@ class API {
 
   //publish event
   publishEvent = async (id, data) => {
-    await myAxios(this.token).put(
-      `${this.host}/api/events/${id}/publish-event`,
+    await myAxios(this.token).patch(
+      `${this.host}/api/events/${id}/publish`,
       data
     );
   };
