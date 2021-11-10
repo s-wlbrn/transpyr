@@ -14,8 +14,12 @@ export const TopNav = () => {
   const history = useHistory();
 
   const signOutAndGoHome = async () => {
-    await signOut();
-    history.push('/events');
+    try {
+      await signOut();
+      history.push('/events');
+    } catch (err) {
+      console.error('Error signing out!');
+    }
   };
 
   return (

@@ -71,7 +71,7 @@ const useProvideAuth = () => {
 
   const signOut = async () => {
     try {
-      await myAxios(token).delete(`${baseUrl}/revoke-token`, { refreshToken });
+      await myAxios(token).delete(`${baseUrl}/refresh-token`, { refreshToken });
       unmountUser();
     } catch (err) {
       return Promise.reject(err);
