@@ -26,7 +26,13 @@ export const SeeMoreModal = ({ resource }) => {
   const getEvents = async (page = 1) => {
     try {
       const user = await new API().getUserProfile(match.params.id, {
-        query: `fields=${resource}&paginate[page]=${page}&paginate[limit]=10`,
+        query: {
+          fields: resource,
+          paginate: {
+            page,
+            limit: 10,
+          },
+        },
       });
 
       if (user[resource].length) {
