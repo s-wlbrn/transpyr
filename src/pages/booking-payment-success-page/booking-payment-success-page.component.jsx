@@ -22,7 +22,6 @@ const BookingPaymentSuccessPage = ({ match }) => {
     const getOrderBookings = async () => {
       try {
         const bookings = await new API().getOrder(match.params.id);
-        console.log(bookings);
         setBookings(bookings);
       } catch (err) {
         handleError(err);

@@ -11,7 +11,7 @@ import { PageControl } from '../homepage/components/PageControl/PageControl.comp
 
 import './search-page.styles.scss';
 
-export const SearchPage = ({ location }) => {
+const SearchPage = ({ location }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [dataFetched, setDataFetched] = useState(false);
   const handleError = useErrorHandler();
@@ -68,3 +68,5 @@ export const SearchPage = ({ location }) => {
     </Container>
   );
 };
+
+export default SearchPage;

@@ -16,7 +16,7 @@ import { FormInputTextArea } from '../../components/FormInputTextArea/FormInputT
 
 import './publish-event-page.styles.scss';
 
-export const PublishEventPage = () => {
+const PublishEventPage = () => {
   const { user, token } = useAuth();
   const [feePolicy, setFeePolicy] = useState('');
   const [refundPolicy, setRefundPolicy] = useState('');
@@ -186,3 +186,5 @@ export const PublishEventPage = () => {
     </Container>
   );
 };
+
+export default PublishEventPage;
