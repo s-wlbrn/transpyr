@@ -119,7 +119,9 @@ class PhotoUploadForm extends React.Component {
           />
           <div className="photo-upload-controls">
             {this.props.cancel && (
-              <CustomButton type="button">Cancel</CustomButton>
+              <CustomButton type="button" onClick={this.props.cancel}>
+                Cancel
+              </CustomButton>
             )}
 
             <CustomButton type="submit" submitting={submitting}>
