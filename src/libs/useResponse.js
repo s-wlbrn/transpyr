@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 const initialState = {
   error: false,
@@ -8,8 +8,8 @@ const initialState = {
 export const useResponse = () => {
   const [response, setResponse] = useState(initialState);
 
-  const createResponse = (object) => {
-    const newResponse = { ...response };
+  const createResponse = useCallback((object) => {
+    const newResponse = { ...initialState };
     newResponse.message = object.message;
     newResponse.error = false;
 
@@ -22,11 +22,11 @@ export const useResponse = () => {
     }
 
     setResponse(newResponse);
-  };
+  }, []);
 
-  const clearResponse = () => {
+  const clearResponse = useCallback(() => {
     setResponse(initialState);
-  };
+  }, []);
 
   return {
     response,
