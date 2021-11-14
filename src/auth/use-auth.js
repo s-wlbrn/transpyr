@@ -57,21 +57,21 @@ const useProvideAuth = () => {
       //set user and JWT in app state
       setUser({ ...response.data.user });
       setToken(response.token);
+      setRefreshed(true);
       setExpiresIn(response.expiresIn);
     } catch (err) {
       console.log('Authentication refresh failed.');
       if (user) {
         unmountUser();
       }
-      return Promise.reject(err);
-    } finally {
       setRefreshed(true);
+      return Promise.reject(err);
     }
   };
 
   const signOut = async () => {
     try {
-      await myAxios(token).delete(`${baseUrl}/refresh-token`, { refreshToken });
+      await myAxios(token).delete(`${baseUrl}/refresh-token`);
       unmountUser();
     } catch (err) {
       return Promise.reject(err);
