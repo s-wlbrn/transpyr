@@ -53,7 +53,7 @@ const BookEventPage = ({ match, location }) => {
     } else {
       history.push(`/events/id/${match.params.id}`);
     }
-  }, [location.state, match, history]);
+  }, [location.state, match.params.id, history]);
 
   const handleCheckout = async (e) => {
     try {
@@ -66,16 +66,7 @@ const BookEventPage = ({ match, location }) => {
 
       //Book free event
       if (totals.total === '$0.00') {
-        const response = await new API(token).createCheckoutSession(
-          match.params.id,
-          booking
-        );
-        //clear location.state to prevent going back
-        location.state = undefined;
-
-        return history.push(
-          `/bookings/success/${response.data.bookings[0].orderId}`
-        );
+        return bookFreeEvent(booking);
       }
 
       //get stripe.js instance
@@ -96,6 +87,18 @@ const BookEventPage = ({ match, location }) => {
       setLoadingCheckout(false);
       createResponse(err);
     }
+  };
+
+  const bookFreeEvent = async (booking) => {
+    const response = await new API(token).createCheckoutSession(
+      match.params.id,
+      booking
+    );
+    //clear location.state to prevent going back
+    location.state = undefined;
+    return history.push(
+      `/bookings/success/${response.data.bookings[0].orderId}`
+    );
   };
 
   return (
