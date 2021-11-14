@@ -2197,10 +2197,10 @@
   resolved "https://registry.npmjs.org/@xtuc/long/-/long-4.2.2.tgz"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@zach.codes/react-calendar@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@zach.codes/react-calendar/-/react-calendar-0.2.0.tgz#9c4a35bbb1a1cf5128f1d36c0bd0cc443c15dab0"
-  integrity sha512-55sdJiXp+9fkAU7pXavnv/YDimsVvBNY/f2d+LzP0QNJHeLQvA2cK8swcDww0x21pZ1EGb6/4mPjEaW6T0CU0w==
+"@zach.codes/react-calendar@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@zach.codes/react-calendar/-/react-calendar-0.3.1.tgz#34d9acecd2ea8481691271ff3a712304141469ce"
+  integrity sha512-j6UFVYWwly1vqHX61tMiSjC/YFLpvQZzgn6aHt+jJdfRTq4FbW82XS+4CcuCtmbwOe6oga9wNj26E2LH1F+ERg==
 
 abab@^2.0.3:
   version "2.0.5"

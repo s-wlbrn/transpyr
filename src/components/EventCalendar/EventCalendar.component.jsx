@@ -5,9 +5,9 @@ import {
   MonthlyDay,
   MonthlyCalendar,
   MonthlyNav,
-  DefaultMonthlyEventItem,
 } from '@zach.codes/react-calendar';
 
+import '@zach.codes/react-calendar/dist/calendar-tailwind-no-reset.css';
 import './EventCalendar.styles.scss';
 
 export const EventCalendar = forwardRef(
@@ -27,24 +27,26 @@ export const EventCalendar = forwardRef(
         </div>
         <div className="calendar-body">
           <MonthlyBody events={events}>
-            <MonthlyDay
-              renderDay={(data) =>
-                data.map((item, index) => (
-                  <div
-                    onMouseOver={() => handleHover(item._id)}
-                    onMouseOut={() => handleHover(item._id)}
-                    ref={(r) => (ref.current[item._id] = r)}
-                  >
-                    <DefaultMonthlyEventItem
+            <div className="calendar-day">
+              <MonthlyDay
+                renderDay={(data) =>
+                  data.map((item, index) => (
+                    <li
                       key={index}
-                      title={item.title}
-                      // Format the date here to be in the format you prefer
-                      date={format(item.date, 'k:mm')}
-                    />
-                  </div>
-                ))
-              }
-            />
+                      className="calendar-event"
+                      onMouseOver={() => handleHover(item._id)}
+                      onMouseOut={() => handleHover(item._id)}
+                      ref={(r) => (ref.current[item._id] = r)}
+                    >
+                      <date className="calendar-event-time">
+                        {format(item.date, 'k:mm')}
+                      </date>
+                      <h3 className="calendar-event-title">{item.title}</h3>
+                    </li>
+                  ))
+                }
+              />
+            </div>
           </MonthlyBody>
         </div>
       </MonthlyCalendar>
