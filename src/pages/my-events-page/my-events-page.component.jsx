@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import API from '../../api';
 import { useAuth } from '../../auth/use-auth';
@@ -11,10 +11,17 @@ import './my-events-page.styles.scss';
 const MyEventsPage = () => {
   const { token } = useAuth();
 
+  const fetchEvents = useCallback(
+    async (options) => {
+      return await new API(token).getMyEvents(options);
+    },
+    [token]
+  );
+
   return (
     <CalendarListPage
       manageResource="events"
-      fetchEvents={new API(token).getMyEvents}
+      fetchEvents={fetchEvents}
       card={<MyEventsCard />}
     />
   );
