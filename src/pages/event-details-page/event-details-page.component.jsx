@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Route } from 'react-router';
 import { useHistory } from 'react-router-dom';
 import { useErrorHandler } from 'react-error-boundary';
@@ -18,6 +18,7 @@ import './event-details-page.styles.scss';
 const EventDetailsPage = ({ match }) => {
   const history = useHistory();
   const [event, setEvent] = useState(null);
+  const [dataFetched, setDataFetched] = useState(false);
   const { user, token } = useAuth();
   const handleError = useErrorHandler();
 
@@ -31,16 +32,18 @@ const EventDetailsPage = ({ match }) => {
         setEvent(event);
       } catch (err) {
         handleError(err);
+      } finally {
+        setDataFetched(true);
       }
     };
-    fetchEvent();
-  }, [handleError, history, match.params.id, user, token]);
+    if (!dataFetched) fetchEvent();
+  }, [handleError, match.params.id, dataFetched, token]);
 
-  const handleBookNow = () => {
+  const handleBookNow = useCallback(() => {
     history.push(`/events/id/${match.params.id}/tickets`);
-  };
+  }, [history, match.params.id]);
 
-  if (!event)
+  if (!dataFetched)
     return <LoadingResource page={true}>Loading event...</LoadingResource>;
 
   return (

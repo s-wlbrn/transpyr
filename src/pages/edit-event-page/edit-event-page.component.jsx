@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { splitDateTime, combineDateTime } from '../../libs/formatDateTime';
 import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import { Col, Container, Row } from 'react-bootstrap';
@@ -20,6 +20,14 @@ import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessag
 
 import './edit-event-page.styles.scss';
 
+const editStepMap = {
+  name: 1,
+  description: 2,
+  date: 3,
+  ticketTiers: 4,
+  location: 5,
+};
+
 const EditEventPage = () => {
   const { user, token } = useAuth();
   const [event, setEvent] = useState({});
@@ -37,7 +45,6 @@ const EditEventPage = () => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        setSubmitting(true);
         const response = await new API(token).getEvent(match.params.id);
         //handle unauthorized
         if (user._id !== response.organizer.id) {
@@ -64,35 +71,28 @@ const EditEventPage = () => {
         setDataFetched(true);
       } catch (err) {
         handleError(err);
-      } finally {
-        setSubmitting(false);
       }
     };
     fetchEvent();
   }, [handleError, match.params.id, user._id, token]);
 
-  const editStepMap = {
-    name: 1,
-    description: 2,
-    date: 3,
-    ticketTiers: 4,
-    location: 5,
-  };
+  const handleEditStep = useCallback(
+    (section) => {
+      if (section === 'photo')
+        history.push(`/events/id/${match.params.id}/upload-photo`);
+      if (event.published && section === 'ticketTiers')
+        return createResponse(
+          new AppError(
+            'Tickets must be managed from the "Manage Events" page when the event is published.',
+            400
+          )
+        );
 
-  const handleEditStep = (section) => {
-    if (section === 'photo')
-      history.push(`/events/id/${match.params.id}/upload-photo`);
-    if (event.published && section === 'ticketTiers')
-      return createResponse(
-        new AppError(
-          'Tickets must be managed from the "Manage Events" page when the event is published.',
-          400
-        )
-      );
-
-    setEditStep(section);
-    clearResponse();
-  };
+      setEditStep(section);
+      clearResponse();
+    },
+    [createResponse, clearResponse, event.published, history, match.params.id]
+  );
 
   const handleChange = ({ target: { name, value } }) => {
     setEventChanges({
@@ -112,9 +112,7 @@ const EditEventPage = () => {
       //validate step submitted
       await validationSchemaArray[editStepMap[editStep] - 1].validate(
         eventChanges,
-        {
-          abortEarly: false,
-        }
+        { abortEarly: false }
       );
       //recheck for onlineOnly if ticketTiers step was submitted
       if (editStep === 'ticketTiers') {
@@ -158,17 +156,19 @@ const EditEventPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setSubmitting(true);
       if (event.locationValid === false) {
         throw new Error('Please specify an event location.');
       }
-
       //validate ticketTiers again
       await validationSchemaArray[3].validate(event, { abortEarly: false });
-
+      //submit event
       await new API(token).editEvent(match.params.id, event);
       history.push(`/events/id/${match.params.id}`);
     } catch (err) {
       createResponse(err);
+    } finally {
+      setSubmitting(false);
     }
   };
 
