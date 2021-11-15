@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { ProvideAuth } from './auth/use-auth';
 
-//import reportWebVitals from './reportWebVitals';
+import '@fontsource/pt-sans';
+
 import App from './App';
 
 import './index.css';
