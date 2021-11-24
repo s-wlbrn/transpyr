@@ -1,16 +1,27 @@
 .event-card {
   min-height: 6.5rem;
-  border-bottom: 1px solid darkgray;
+  border-bottom: 1px solid #a9a9a9;
   margin: 0 1rem;
+  padding: 0 0.5rem;
+
+  .event-card-link {
+    display: flex;
+    flex: 1 1 auto;
+    flex-wrap: nowrap;
+  }
+
+  .event-card-photo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1 1 33%;
+    margin: 0;
+    padding-right: 1rem;
+  }
 
   [class*='col'] {
     display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-
-    &:first-child {
-      align-items: center;
-    }
+    padding: 0;
   }
 
   img {
@@ -22,11 +33,16 @@
   }
 
   .event-card-name-date {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex: 1 1 66%;
     font-weight: bold;
-    padding: 0 0 0 0.5rem;
   }
 
   .event-card-price-icons {
+    flex-direction: column;
+    justify-content: space-evenly;
     padding-left: 0.5rem;
 
     .event-card-price,

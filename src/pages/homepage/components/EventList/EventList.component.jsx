@@ -22,10 +22,6 @@ export const EventList = ({ dataFetched, events, filterOnline }) => {
     }
   }, [user]);
 
-  const handleClick = (id) => {
-    history.push(`/events/id/${id}`);
-  };
-
   const toggleFavorite = async (id) => {
     let updatedFavorites = [];
     if (favoritesMap[id]) {
@@ -41,7 +37,7 @@ export const EventList = ({ dataFetched, events, filterOnline }) => {
       user.favorites = response.user.favorites;
       setFavoritesMap(createMapFromArray(user.favorites));
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -56,7 +52,6 @@ export const EventList = ({ dataFetched, events, filterOnline }) => {
           <EventCard
             key={el.id}
             event={el}
-            handleClick={handleClick}
             toggleFavorite={toggleFavorite}
             favoritesMap={favoritesMap}
           />

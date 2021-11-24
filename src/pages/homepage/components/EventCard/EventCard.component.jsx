@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
@@ -12,23 +12,22 @@ import { EventStartDateShort } from '../../../../components/EventStartDateShort/
 
 import './EventCard.styles.scss';
 
-export const EventCard = ({
-  event,
-  handleClick,
-  toggleFavorite,
-  favoritesMap,
-}) => {
+export const EventCard = ({ event, toggleFavorite, favoritesMap }) => {
   const { _id, name, dateTimeStart, priceDisplay, photo, soldOut, canceled } =
     event;
 
   return (
-    <Row as="li" className="event-card" onClick={() => handleClick(_id)}>
-      <Col xs={3}>
-        <EventThumbnail id={photo} />
-      </Col>
-      <Col className="event-card-name-date" xs={6}>
-        <EventStartDateShort dateTimeStart={dateTimeStart} />
-        <div>{name}</div>
+    <Row as="li" className="event-card">
+      <Col xs={9}>
+        <Link to={`/events/id/${_id}`} className="event-card-link">
+          <figure className="event-card-photo">
+            <EventThumbnail id={photo} />
+          </figure>
+          <div className="event-card-name-date">
+            <EventStartDateShort dateTimeStart={dateTimeStart} />
+            <div>{name}</div>
+          </div>
+        </Link>
       </Col>
       <Col xs={3} className="event-card-price-icons">
         <Row>
