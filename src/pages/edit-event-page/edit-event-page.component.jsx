@@ -73,8 +73,8 @@ const EditEventPage = () => {
         handleError(err);
       }
     };
-    fetchEvent();
-  }, [handleError, match.params.id, user._id, token]);
+    if (!dataFetched) fetchEvent();
+  }, [dataFetched, handleError, match.params.id, user._id, token]);
 
   const handleEditStep = useCallback(
     (section) => {
