@@ -9,6 +9,7 @@ import AppError from '../../libs/AppError';
 import { useAuth } from '../../auth/use-auth';
 import { useResponse } from '../../libs/useResponse';
 import { isOnlineOnly } from '../../libs/isOnlineOnly';
+import { processEventOnlineOnly } from '../../libs/processEventOnlineOnly';
 import { validationSchemaArray } from '../../components/EventForm/EventForm.schema';
 
 import { EventDetails } from '../../components/EventDetails/EventDetails.component';
@@ -41,7 +42,7 @@ const EditEventPage = () => {
   const history = useHistory();
   const handleError = useErrorHandler();
   const { response, createResponse, clearResponse } = useResponse();
-
+  console.log(event);
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -108,33 +109,21 @@ const EditEventPage = () => {
   };
 
   const handleEditSubmit = async () => {
+    let submittedChanges = { ...eventChanges };
     try {
       //validate step submitted
       await validationSchemaArray[editStepMap[editStep] - 1].validate(
-        eventChanges,
+        submittedChanges,
         { abortEarly: false }
       );
       //recheck for onlineOnly if ticketTiers step was submitted
       if (editStep === 'ticketTiers') {
-        const onlineOnly = isOnlineOnly(eventChanges.ticketTiers);
-
-        setEventChanges({
-          ...eventChanges,
-          onlineOnly,
-          //clear location fields if event is online only
-          address: onlineOnly ? undefined : eventChanges.address,
-          location: onlineOnly
-            ? { type: 'Point', coordinates: [] }
-            : eventChanges.location,
-          locationValid:
-            event.onlineOnly !== onlineOnly && onlineOnly === false
-              ? false
-              : true,
-        });
+        submittedChanges = processEventOnlineOnly(submittedChanges);
+        setEventChanges(submittedChanges);
       }
-
       setEvent({
-        ...combineDateTime(eventChanges),
+        ...submittedChanges,
+        ...combineDateTime(submittedChanges),
       });
       setEventChanged(true);
       setEditStep(null);
@@ -163,7 +152,7 @@ const EditEventPage = () => {
       //validate ticketTiers again
       await validationSchemaArray[3].validate(event, { abortEarly: false });
       //submit event
-      await new API(token).editEvent(match.params.id, event);
+      await new API(token).editEvent(match.params.id, combineDateTime(event));
       history.push(`/events/id/${match.params.id}`);
     } catch (err) {
       createResponse(err);

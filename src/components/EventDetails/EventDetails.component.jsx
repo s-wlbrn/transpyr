@@ -215,7 +215,7 @@ export const EventDetails = memo(
             )}
           </Col>
         </Row>
-        {!editMode && location.coordinates.length ? (
+        {!editMode && location ? (
           <EventDetailsMap coordinates={location.coordinates} />
         ) : (
           <React.Fragment />

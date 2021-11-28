@@ -116,17 +116,6 @@ export const validationSchemaArray = [
       ),
   }),
   yup.object().shape({
-    address: yup.string(),
-    location: yup.object().shape({
-      type: yup
-        .string()
-        .required('Invalid location.')
-        .oneOf(['Point'], 'Invalid location.'),
-      coordnates: yup
-        .array()
-        .of(yup.number().required('Invalid location.'))
-        .length(2, 'Invalid location.'),
-    }),
     locationValid: yup
       .boolean()
       .required('Location must be valid.')

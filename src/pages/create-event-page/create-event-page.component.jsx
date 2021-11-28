@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useHistory, withRouter } from 'react-router-dom';
 
@@ -7,7 +7,7 @@ import { useAuth } from '../../auth/use-auth';
 import { combineDateTime } from '../../libs/formatDateTime';
 import { validationSchemaArray } from '../../components/EventForm/EventForm.schema';
 import { useResponse } from '../../libs/useResponse';
-import { isOnlineOnly } from '../../libs/isOnlineOnly';
+import { processEventOnlineOnly } from '../../libs/processEventOnlineOnly';
 
 import { EventForm } from '../../components/EventForm/EventForm.component';
 import { CustomButton } from '../../components/CustomButton/CustomButton.component';
@@ -20,11 +20,8 @@ const CreateEventPage = () => {
     name: '',
     description: '',
     ticketTiers: [],
-    address: '',
-    location: {
-      type: 'Point',
-      coordinates: [],
-    },
+    address: undefined,
+    location: undefined,
     dateStart: undefined,
     dateEnd: undefined,
     timeStart: undefined,
@@ -40,13 +37,6 @@ const CreateEventPage = () => {
   const { token } = useAuth();
   const history = useHistory();
   const { response, createResponse, clearResponse } = useResponse();
-
-  useEffect(() => {
-    setEvent((event) => ({
-      ...event,
-      onlineOnly: isOnlineOnly(event.ticketTiers) ? true : false,
-    }));
-  }, [event.ticketTiers]);
 
   const handleChange = (e) => {
     const { value, name } = e.target;
@@ -86,7 +76,13 @@ const CreateEventPage = () => {
       await validationSchemaArray[currentStep - 1].validate(event, {
         abortEarly: false,
       });
-
+      //check for onlineOnly if ticketTiers step
+      if (currentStep === 4) {
+        const updatedEvent = processEventOnlineOnly(event);
+        console.log(updatedEvent);
+        setEvent(updatedEvent);
+      }
+      //submit if last step, otherwise go to next step
       if (currentStep === 5) {
         await handleSubmit();
       } else {

@@ -53,7 +53,7 @@ export const LocationForm = ({
             disabled={onlineOnly ? true : false}
           />
         </Col>
-        {location.coordinates.length ? (
+        {location?.coordinates.length ? (
           <Col xs={12} className="location-map">
             <EventDetailsMap coordinates={location.coordinates} />
           </Col>
