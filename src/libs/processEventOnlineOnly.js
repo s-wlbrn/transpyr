@@ -1,9 +1,7 @@
 import { isOnlineOnly } from './isOnlineOnly';
 
 export const processEventOnlineOnly = (event) => {
-  debugger;
   const onlineOnly = isOnlineOnly(event.ticketTiers);
-  console.log(event.onlineOnly, onlineOnly, event.locationValid);
   return {
     ...event,
     onlineOnly,

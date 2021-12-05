@@ -42,7 +42,7 @@ const EditEventPage = () => {
   const history = useHistory();
   const handleError = useErrorHandler();
   const { response, createResponse, clearResponse } = useResponse();
-  console.log(event);
+
   useEffect(() => {
     const fetchEvent = async () => {
       try {
