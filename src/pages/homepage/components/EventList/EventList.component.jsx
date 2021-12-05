@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 
 import API from '../../../../api';
@@ -13,7 +12,6 @@ import './EventList.styles.scss';
 
 export const EventList = ({ dataFetched, events, filterOnline }) => {
   const [favoritesMap, setFavoritesMap] = useState(null);
-  const history = useHistory();
   const { user, token } = useAuth();
 
   useEffect(() => {
