@@ -10,6 +10,7 @@ import { PrivateRoute } from './auth/PrivateRoute';
 import AppError from './libs/AppError';
 import API from './api';
 
+import ErrorPage from './pages/error-page/error-page.component';
 import { TopNav } from './components/TopNav/TopNav.component';
 import { Footer } from './components/Footer/Footer.component';
 import { SemiPrivateRoute } from './auth/SemiPrivateRoute';
@@ -20,9 +21,6 @@ const Homepage = React.lazy(() =>
 );
 const EventDetailsPage = React.lazy(() =>
   import('./pages/event-details-page/event-details-page.component')
-);
-const ErrorPage = React.lazy(() =>
-  import('./pages/error-page/error-page.component')
 );
 const SignInSignUpPage = React.lazy(() =>
   import('./pages/signin-signup-page/signin-signup-page.component')
