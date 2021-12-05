@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useErrorHandler } from 'react-error-boundary';
+import { useHistory } from 'react-router';
 
 import API from '../../api';
 import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
@@ -14,14 +15,21 @@ import './search-page.styles.scss';
 const SearchPage = ({ location }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [dataFetched, setDataFetched] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(null);
+  const history = useHistory();
   const handleError = useErrorHandler();
   const { totalPages, setTotalPages, currentPage, handleChangePage } =
     usePagination();
 
-  const searchQuery = useMemo(() => {
+  //extract search query and redirect if not present
+  useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
-    return queryParams.get('q');
-  }, [location.search]);
+    const searchQuery = queryParams.get('q');
+    if (!searchQuery) {
+      return history.push('/');
+    }
+    setSearchQuery(searchQuery);
+  }, [location.search, history]);
 
   useEffect(() => {
     const getSearchResults = async () => {
@@ -35,10 +43,9 @@ const SearchPage = ({ location }) => {
         });
         setTotalPages(response.pages);
         setSearchResults(response.data);
+        setDataFetched(true);
       } catch (err) {
         handleError(err);
-      } finally {
-        setDataFetched(true);
       }
     };
     if (searchQuery) getSearchResults();
