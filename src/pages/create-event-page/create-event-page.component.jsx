@@ -79,7 +79,6 @@ const CreateEventPage = () => {
       //check for onlineOnly if ticketTiers step
       if (currentStep === 4) {
         const updatedEvent = processEventOnlineOnly(event);
-        console.log(updatedEvent);
         setEvent(updatedEvent);
       }
       //submit if last step, otherwise go to next step
