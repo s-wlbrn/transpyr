@@ -13,9 +13,9 @@ import { ConfirmBookingTicketCard } from './components/ConfirmBookingTicketCard/
 import { CustomButton } from '../../components/CustomButton/CustomButton.component';
 import { ResponseMessage } from '../../components/ResponseMessage/ResponseMessage.component';
 import { LoadingResource } from '../../components/LoadingResource/LoadingResource.component';
+import CustomTable from '../../components/CustomTable/CustomTable.component';
 
 import './book-event-page.styles.scss';
-import CustomTable from '../../components/CustomTable/CustomTable.component';
 
 const stripePromise = loadStripe(
   'pk_test_51Ibx4EH1QVoCyfVJzLIjeDhQcJ3im0gqgcVgT7cTjXKVrLyZKrYJwzJh9SROtNTemuuF3bIv7k3EqO8NFvoiK4pq005Yw7vnI0'
@@ -34,25 +34,25 @@ const BookEventPage = ({ match, location }) => {
   const { response, createResponse } = useResponse();
 
   useEffect(() => {
-    if (location.state) {
-      const subtotal = location.state.ticketKeys.reduce(
-        (acc, ticket) =>
-          acc +
-          location.state.ticketSelections[ticket] *
-            location.state.ticketTiersMap[ticket].price,
-        0
-      );
-      const fees = subtotal * 0.03;
-      const total = subtotal + fees;
-
-      setTotals({
-        subtotal: formatPriceUSD(subtotal),
-        fees: formatPriceUSD(fees),
-        total: formatPriceUSD(total),
-      });
-    } else {
-      history.push(`/events/id/${match.params.id}`);
+    if (!location.state) {
+      return history.push(`/events/id/${match.params.id}`);
     }
+
+    const subtotal = location.state.ticketKeys.reduce(
+      (acc, ticket) =>
+        acc +
+        location.state.ticketSelections[ticket] *
+          location.state.ticketTiersMap[ticket].price,
+      0
+    );
+    const fees = subtotal * 0.03;
+    const total = subtotal + fees;
+
+    setTotals({
+      subtotal: formatPriceUSD(subtotal),
+      fees: formatPriceUSD(fees),
+      total: formatPriceUSD(total),
+    });
   }, [location.state, match.params.id, history]);
 
   const handleCheckout = async (e) => {
@@ -63,26 +63,12 @@ const BookEventPage = ({ match, location }) => {
         email: user?.email || guest.email,
         tickets: location.state.ticketSelections,
       };
-
       //Book free event
       if (totals.total === '$0.00') {
         return bookFreeEvent(booking);
       }
-
-      //get stripe.js instance
-      const stripe = await stripePromise;
-      //create checkout session
-      const session = await new API(token).createCheckoutSession(
-        match.params.id,
-        booking
-      );
-      const result = await stripe.redirectToCheckout({
-        sessionId: session.id,
-      });
-      //handle Stripe redirectToCheckout error
-      if (result.error) {
-        throw new Error(result.error.message);
-      }
+      //create stripe checkout session
+      await createStripeCheckoutSession(booking);
     } catch (err) {
       setLoadingCheckout(false);
       createResponse(err);
@@ -99,6 +85,23 @@ const BookEventPage = ({ match, location }) => {
     return history.push(
       `/bookings/success/${response.data.bookings[0].orderId}`
     );
+  };
+
+  const createStripeCheckoutSession = async (booking) => {
+    //get stripe.js instance
+    const stripe = await stripePromise;
+    //create checkout session
+    const session = await new API(token).createCheckoutSession(
+      match.params.id,
+      booking
+    );
+    const result = await stripe.redirectToCheckout({
+      sessionId: session.id,
+    });
+    //handle Stripe redirectToCheckout error
+    if (result.error) {
+      throw new Error(result.error.message);
+    }
   };
 
   return (
