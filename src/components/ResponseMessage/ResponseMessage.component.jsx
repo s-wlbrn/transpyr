@@ -7,6 +7,7 @@ export const ResponseMessage = ({ response = {} }) => {
   return message ? (
     <div
       className={`response ${error ? 'response-error' : 'response-message'}`}
+      role={error ? 'alert' : 'status'}
     >
       {message}
     </div>

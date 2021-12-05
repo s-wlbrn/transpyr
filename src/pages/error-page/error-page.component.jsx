@@ -37,8 +37,8 @@ const ErrorPage = ({ error, resetErrorBoundary }) => {
   const { statusCode, message } = errorInfo;
   return (
     <Container as="main" className="error-page" fluid>
-      <Row className="error">
-        <Col xs={12}>
+      <Row as="section" className="error">
+        <Col xs={12} role="alert">
           <h1>{statusCode}</h1>
           <h2>Oops! There was an error:</h2>
           <p className="error-message">{message}</p>
