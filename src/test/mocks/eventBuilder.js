@@ -10,14 +10,16 @@ import { randomInteger } from '../utils/randomInteger';
 
 const ticketBuilder = build('Ticket', {
   fields: {
-    id: fake((f) => f.random.uuid()),
+    _id: fake((f) => f.random.uuid()),
     tierName: fake((f) => f.lorem.words()),
     tierDescription: fake((f) => f.lorem.paragraph(2)),
     price: fake((f) => f.random.number({ min: 0 })),
     online: fake((f) => f.random.boolean()),
     capacity: fake((f) => f.random.number({ min: 0, max: 5000 })),
+    canceled: false,
   },
   postBuild: (ticket) => {
+    ticket.id = ticket._id;
     //generate limitPerCustomer based on capacity
     ticket.limitPerCustomer = randomInteger(0, ticket.capacity);
     //generate numBookings based on capacity
@@ -40,7 +42,7 @@ const locationBuilder = build('Location', {
 
 export const eventBuilder = build('Event', {
   fields: {
-    id: fake((f) => f.random.uuid()),
+    _id: fake((f) => f.random.uuid()),
     name: fake((f) => f.lorem.words()),
     type: oneOf(
       'Lecture',
@@ -95,8 +97,13 @@ export const eventBuilder = build('Event', {
       )
     ),
     location: locationBuilder(),
+    published: perBuild(() => {
+      return true;
+    }),
+    canceled: false,
   },
   postBuild: (event) => {
+    event.id = event._id;
     //calculate dateTimeEnd based on random number of hours from start
     event.dateTimeEnd = addHours(event.dateTimeStart, randomInteger(1, 48));
     //generate convertedDescription

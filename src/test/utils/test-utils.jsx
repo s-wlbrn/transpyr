@@ -1,20 +1,27 @@
 import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { Router } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
 import authContext, { ProvideAuth } from '../../auth/use-auth';
 
-const customRender = (ui, { route = '/', auth, ...renderOptions } = {}) => {
+const customRender = (
+  ui,
+  { history = createBrowserHistory(), route = '/', auth, ...renderOptions } = {}
+) => {
+  history.replace(route);
   //pass custom auth provider if auth specified, otherwise use default
-  const AuthProvider = auth ? (
-    <authContext.Provider value={auth}>{ui}</authContext.Provider>
-  ) : (
-    ProvideAuth
-  );
+  const AuthProvider = (auth) => {
+    return auth.auth ? (
+      <authContext.Provider value={auth.auth}>{ui}</authContext.Provider>
+    ) : (
+      <ProvideAuth>{ui}</ProvideAuth>
+    );
+  };
   //wrap with BrowserRouter and AuthProvider
   const Wrapper = ({ children }) => {
     return (
-      <BrowserRouter>
-        <AuthProvider>{children}</AuthProvider>
-      </BrowserRouter>
+      <Router history={history}>
+        <AuthProvider auth={auth}>{children}</AuthProvider>
+      </Router>
     );
   };
 
