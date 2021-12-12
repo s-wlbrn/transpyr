@@ -9,6 +9,11 @@ import './MyEventsCard.styles.scss';
 
 export const MyEventsCard = forwardRef(
   ({ event, handleClick, handleHover }, ref) => {
+    const handleButtonClick = (e, route) => {
+      e.stopPropagation();
+      handleClick(route);
+    };
+
     const { id, name, photo, dateTimeStart, published } = event;
     return (
       <Row
@@ -44,19 +49,23 @@ export const MyEventsCard = forwardRef(
             {!published ? (
               <CustomButton
                 type="button"
-                onClick={() => handleClick(`/events/id/${id}/publish`)}
+                onClick={(e) =>
+                  handleButtonClick(e, `/events/id/${id}/publish`)
+                }
               >
                 Publish
               </CustomButton>
             ) : (
               <CustomButton
                 type="button"
-                onClick={() => handleClick(`/events/id/${id}/manage`)}
+                onClick={(e) => handleButtonClick(e, `/events/id/${id}/manage`)}
               >
                 Manage
               </CustomButton>
             )}
-            <CustomButton onClick={() => handleClick(`/events/id/${id}/edit`)}>
+            <CustomButton
+              onClick={(e) => handleButtonClick(e, `/events/id/${id}/edit`)}
+            >
               Edit
             </CustomButton>
           </Col>
