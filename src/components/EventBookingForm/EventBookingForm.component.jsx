@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import { Col, Row, Modal, Container } from 'react-bootstrap';
 import { useHistory, useRouteMatch } from 'react-router';
 import { useResponse } from '../../libs/useResponse';
-//import qs from 'qs';
 import { CustomButton } from '../CustomButton/CustomButton.component';
 import { ResponseMessage } from '../ResponseMessage/ResponseMessage.component';
 import { TicketTierCard } from '../TicketTierCard/TicketTierCard.component';
