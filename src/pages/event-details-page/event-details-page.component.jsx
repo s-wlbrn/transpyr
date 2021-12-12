@@ -52,7 +52,10 @@ const EventDetailsPage = ({ match }) => {
         ? user._id === event.organizer.id && <OwnEventControl event={event} />
         : null}
       <Route exact path={`${match.path}/tickets`}>
-        {!event.canceled && !event.soldOut ? (
+        {event.published &&
+        !event.pastEvent &&
+        !event.canceled &&
+        !event.soldOut ? (
           <EventBookingForm
             eventName={event.name}
             eventPath={`/events/id/${match.params.id}/tickets`}
