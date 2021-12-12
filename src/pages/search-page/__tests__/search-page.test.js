@@ -1,3 +1,4 @@
+import { createBrowserHistory } from 'history';
 import { render, screen, waitFor } from '../../../test/utils/test-utils';
 import SearchPage from '../search-page.component';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -24,15 +25,12 @@ test('displays no events found message when no results', async () => {
 });
 
 test('redirects when no search term is provided', () => {
-  render(<SearchPage location={{}} />);
-  expect(window.history.length).toBe(2);
+  render(<SearchPage location={{}} />, { path: '/search' });
   expect(window.location.pathname).toBe('/');
 });
 
 test('throws error when API call fails', async () => {
-  const consoleError = jest
-    .spyOn(console, 'error')
-    .mockImplementation(() => {});
+  jest.spyOn(console, 'error').mockImplementation(() => {});
 
   render(
     <ErrorBoundary FallbackComponent={ErrorPage}>
