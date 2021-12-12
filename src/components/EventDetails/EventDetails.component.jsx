@@ -124,7 +124,11 @@ export const EventDetails = memo(
             }
           }}
         >
-          <CustomButton type="button" warning={canceled}>
+          <CustomButton
+            type="button"
+            disabled={soldOut || !published || canceled || pastEvent}
+            warning={canceled}
+          >
             {editMode
               ? 'Ticket Types'
               : soldOut
@@ -205,11 +209,11 @@ export const EventDetails = memo(
             </header>
 
             {address ? (
-              <React.Fragment>
+              <>
                 {online && <p>Online and</p>}
                 <p className="event-details-address">{address}</p>
                 {!editMode && <a href="#event-map">See Map</a>}
-              </React.Fragment>
+              </>
             ) : (
               <p className="event-details-online">This is an online event.</p>
             )}
