@@ -65,7 +65,7 @@ class API {
 
   //get events with active bookings
   getBookedEvents = async (
-    options = { query: 'fields=name,dateTimeStart,photo' }
+    options = { query: 'fields=name,organizer,dateTimeStart,photo,published' }
   ) => {
     const response = await this.getAll('/events/me/booked', options.query);
     return response.data.data;
@@ -156,7 +156,8 @@ class API {
   //resolve refund request
   resolveRefundRequest = async (id, status) => {
     await myAxios(this.token).patch(
-      `${this.host}/api/bookings/refund-requests/${id}?status=${status}`
+      `${this.host}/api/bookings/refund-requests/${id}`,
+      { status }
     );
   };
 
