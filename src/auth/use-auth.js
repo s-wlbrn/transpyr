@@ -80,7 +80,7 @@ const useProvideAuth = () => {
 
   const updatePassword = async (password, newPassword, newPasswordConfirm) => {
     try {
-      await myAxios(token).patch(`${baseUrl}/update-password`, {
+      await myAxios(token).patch(`${baseUrl}/password`, {
         password,
         newPassword,
         newPasswordConfirm,
