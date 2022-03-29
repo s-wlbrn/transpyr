@@ -21,7 +21,7 @@ const Homepage = (props) => {
   const [query, setQuery] = useState({
     sort: 'dateTimeStart',
     fields:
-      '_id,name,dateTimeStart,dateTimeEnd,photo,ticketTiers,totalBookings,totalCapacity,soldOut,canceled',
+      '_id,name,organizer,dateTimeStart,dateTimeEnd,photo,published,ticketTiers,totalBookings,totalCapacity,soldOut,canceled',
     online: true,
     'dateTimeStart[gte]': Date.now(),
   });
@@ -37,10 +37,13 @@ const Homepage = (props) => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
+        // ensure spinner displayed before every fetch
+        setDataFetched(false);
         const response = await new API().getEvents({
           calculateEventInfo: true,
           query: { ...query, paginate: { page: currentPage, limit: 8 } },
         });
+
         setTotalPages(response.pages);
         setEvents(response.data);
         setDataFetched(true);
