@@ -9,7 +9,7 @@ export const HomepageHero = () => {
     <section className="homepage-hero-unit">
       <div className="homepage-hero-overlay">
         <span className="homepage-hero-text">It's happening now.</span>
-        <span className="homepage-hero-credit">Josh Sorenson</span>
+        <span className="homepage-hero-credit">Photo: Josh Sorenson</span>
       </div>
 
       <img
