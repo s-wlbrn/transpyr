@@ -9,11 +9,15 @@
     line-height: 62px;
     font-weight: bold;
     color: var(--color-dark);
+  }
 
-    span {
-      height: 100%;
-      width: 50%;
-    }
+  button {
+    height: 100%;
+    width: 50%;
+    border: none;
+    background: none;
+    font-weight: bold;
+    color: var(--color-dark);
   }
 
   .page-control-page {
