@@ -68,7 +68,7 @@ registerRoute(
 registerRoute(
   ({ url }) => {
     const splitUrl = url.pathname.split('/');
-    return splitUrl.length === 3 && splitUrl[1] === 'events';
+    return splitUrl.length === 4 && splitUrl[2] === 'events';
   },
   new StaleWhileRevalidate({
     cacheName: 'events',

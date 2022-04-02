@@ -18,7 +18,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "https://transpyr.app",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#43a047",
   "background_color": "#ffffff"
