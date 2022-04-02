@@ -64,32 +64,6 @@ registerRoute(
   })
 );
 
-//cache event images
-registerRoute(
-  ({ url }) =>
-    url.pathname.endsWith('.jpeg') && url.pathname.includes('/events/'),
-  new StaleWhileRevalidate({
-    cacheName: 'eventImages',
-    plugins: [new ExpirationPlugin({ maxEntries: 50 })],
-  })
-);
-
-//cache single event data
-registerRoute(
-  ({ url }) => {
-    const splitUrl = url.pathname.split('/');
-    return (
-      splitUrl.length === 4 &&
-      splitUrl[2] === 'events' &&
-      !url.pathname.endsWith('.jpeg')
-    );
-  },
-  new StaleWhileRevalidate({
-    cacheName: 'events',
-    plugins: [new ExpirationPlugin({ maxEntries: 50 })],
-  })
-);
-
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
 self.addEventListener('message', (event) => {
