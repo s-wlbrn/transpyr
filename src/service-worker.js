@@ -55,12 +55,22 @@ registerRoute(
     url.origin === self.location.origin &&
     imageExts.some((ext) => url.pathname.endsWith(ext)), // Customize this strategy as needed, e.g., by changing to CacheFirst.
   new StaleWhileRevalidate({
-    cacheName: 'images',
+    cacheName: 'staticImages',
     plugins: [
       // Ensure that once this runtime cache reaches a maximum size the
       // least-recently used images are removed.
-      new ExpirationPlugin({ maxEntries: 50 }),
+      new ExpirationPlugin({ maxEntries: 10 }),
     ],
+  })
+);
+
+//cache event images
+registerRoute(
+  ({ url }) =>
+    url.pathname.endsWith('.jpeg') && url.pathname.includes('/events/'),
+  new StaleWhileRevalidate({
+    cacheName: 'eventImages',
+    plugins: [new ExpirationPlugin({ maxEntries: 50 })],
   })
 );
 
@@ -68,7 +78,11 @@ registerRoute(
 registerRoute(
   ({ url }) => {
     const splitUrl = url.pathname.split('/');
-    return splitUrl.length === 4 && splitUrl[2] === 'events';
+    return (
+      splitUrl.length === 4 &&
+      splitUrl[2] === 'events' &&
+      !url.pathname.endsWith('.jpeg')
+    );
   },
   new StaleWhileRevalidate({
     cacheName: 'events',
