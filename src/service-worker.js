@@ -67,7 +67,7 @@ registerRoute(
 //cache single event data
 registerRoute(
   ({ url }) => {
-    const splitUrl = url.split('/');
+    const splitUrl = url.pathname.split('/');
     return splitUrl.length === 3 && splitUrl[1] === 'events';
   },
   new StaleWhileRevalidate({
