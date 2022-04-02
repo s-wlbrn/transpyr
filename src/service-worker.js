@@ -47,11 +47,13 @@ registerRoute(
 );
 
 // An example runtime caching route for requests that aren't handled by the
-// precache, in this case same-origin .png requests like those from in public/
-const imageExts = [".jpeg", ".png"];
+// precache, in this case same-origin .png and .jpeg requests like those from in public/
+const imageExts = ['.jpeg', '.jpg', '.png'];
 registerRoute(
   // Add in any other file extensions or routing criteria as needed.
-  ({ url }) => url.origin === self.location.origin && imageExts.some((ext) => url.pathname.endsWith(ext)), // Customize this strategy as needed, e.g., by changing to CacheFirst.
+  ({ url }) =>
+    url.origin === self.location.origin &&
+    imageExts.some((ext) => url.pathname.endsWith(ext)), // Customize this strategy as needed, e.g., by changing to CacheFirst.
   new StaleWhileRevalidate({
     cacheName: 'images',
     plugins: [
@@ -59,6 +61,18 @@ registerRoute(
       // least-recently used images are removed.
       new ExpirationPlugin({ maxEntries: 50 }),
     ],
+  })
+);
+
+//cache single event data
+registerRoute(
+  ({ url }) => {
+    const splitUrl = url.split('/');
+    return splitUrl.length === 3 && splitUrl[1] === 'events';
+  },
+  new StaleWhileRevalidate({
+    cacheName: 'events',
+    plugins: [new ExpirationPlugin({ maxEntries: 50 })],
   })
 );
 
